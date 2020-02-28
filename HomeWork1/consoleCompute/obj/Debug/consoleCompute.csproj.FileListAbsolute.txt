@@ -1,0 +1,14 @@
+E:\VS DATA\csharpe\csharpe\bin\Debug\csharpe.exe.config
+E:\VS DATA\csharpe\csharpe\bin\Debug\csharpe.exe
+E:\VS DATA\csharpe\csharpe\bin\Debug\csharpe.pdb
+E:\VS DATA\csharpe\csharpe\obj\Debug\consoleCompute.csprojAssemblyReference.cache
+E:\VS DATA\csharpe\csharpe\obj\Debug\consoleCompute.csproj.CoreCompileInputs.cache
+E:\VS DATA\csharpe\csharpe\obj\Debug\csharpe.exe
+E:\VS DATA\csharpe\csharpe\obj\Debug\csharpe.pdb
+E:\VS DATA\cSharp\consoleCompute\bin\Debug\csharpe.exe.config
+E:\VS DATA\cSharp\consoleCompute\bin\Debug\csharpe.exe
+E:\VS DATA\cSharp\consoleCompute\bin\Debug\csharpe.pdb
+E:\VS DATA\cSharp\consoleCompute\obj\Debug\consoleCompute.csprojAssemblyReference.cache
+E:\VS DATA\cSharp\consoleCompute\obj\Debug\consoleCompute.csproj.CoreCompileInputs.cache
+E:\VS DATA\cSharp\consoleCompute\obj\Debug\csharpe.exe
+E:\VS DATA\cSharp\consoleCompute\obj\Debug\csharpe.pdb
