@@ -1,0 +1,7 @@
+E:\VS DATA\cSharp\primeCatch\bin\Debug\primeCatch.exe.config
+E:\VS DATA\cSharp\primeCatch\bin\Debug\primeCatch.exe
+E:\VS DATA\cSharp\primeCatch\bin\Debug\primeCatch.pdb
+E:\VS DATA\cSharp\primeCatch\obj\Debug\primeCatch.csprojAssemblyReference.cache
+E:\VS DATA\cSharp\primeCatch\obj\Debug\primeCatch.csproj.CoreCompileInputs.cache
+E:\VS DATA\cSharp\primeCatch\obj\Debug\primeCatch.exe
+E:\VS DATA\cSharp\primeCatch\obj\Debug\primeCatch.pdb

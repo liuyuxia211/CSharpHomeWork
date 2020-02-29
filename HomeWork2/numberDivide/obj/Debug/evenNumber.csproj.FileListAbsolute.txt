@@ -1,0 +1,7 @@
+E:\VS DATA\cSharp\evenNumber\bin\Debug\evenNumber.exe.config
+E:\VS DATA\cSharp\evenNumber\bin\Debug\evenNumber.exe
+E:\VS DATA\cSharp\evenNumber\bin\Debug\evenNumber.pdb
+E:\VS DATA\cSharp\evenNumber\obj\Debug\evenNumber.csprojAssemblyReference.cache
+E:\VS DATA\cSharp\evenNumber\obj\Debug\evenNumber.csproj.CoreCompileInputs.cache
+E:\VS DATA\cSharp\evenNumber\obj\Debug\evenNumber.exe
+E:\VS DATA\cSharp\evenNumber\obj\Debug\evenNumber.pdb

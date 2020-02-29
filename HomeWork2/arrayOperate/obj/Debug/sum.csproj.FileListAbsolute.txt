@@ -1,0 +1,7 @@
+E:\VS DATA\cSharp\sum\bin\Debug\sum.exe.config
+E:\VS DATA\cSharp\sum\bin\Debug\sum.exe
+E:\VS DATA\cSharp\sum\bin\Debug\sum.pdb
+E:\VS DATA\cSharp\sum\obj\Debug\sum.csproj.CoreCompileInputs.cache
+E:\VS DATA\cSharp\sum\obj\Debug\sum.exe
+E:\VS DATA\cSharp\sum\obj\Debug\sum.pdb
+E:\VS DATA\cSharp\sum\obj\Debug\sum.csprojAssemblyReference.cache
