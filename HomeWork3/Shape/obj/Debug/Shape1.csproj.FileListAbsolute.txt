@@ -1,0 +1,7 @@
+E:\VS DATA\cSharp\Shape1\bin\Debug\Shape1.exe.config
+E:\VS DATA\cSharp\Shape1\bin\Debug\Shape1.exe
+E:\VS DATA\cSharp\Shape1\bin\Debug\Shape1.pdb
+E:\VS DATA\cSharp\Shape1\obj\Debug\Shape1.csprojAssemblyReference.cache
+E:\VS DATA\cSharp\Shape1\obj\Debug\Shape1.csproj.CoreCompileInputs.cache
+E:\VS DATA\cSharp\Shape1\obj\Debug\Shape1.exe
+E:\VS DATA\cSharp\Shape1\obj\Debug\Shape1.pdb
