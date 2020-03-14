@@ -1,0 +1,7 @@
+E:\VS DATA\cSharp\Clock\bin\Debug\Clock.exe.config
+E:\VS DATA\cSharp\Clock\bin\Debug\Clock.exe
+E:\VS DATA\cSharp\Clock\bin\Debug\Clock.pdb
+E:\VS DATA\cSharp\Clock\obj\Debug\Clock.csproj.CoreCompileInputs.cache
+E:\VS DATA\cSharp\Clock\obj\Debug\Clock.exe
+E:\VS DATA\cSharp\Clock\obj\Debug\Clock.pdb
+E:\VS DATA\cSharp\Clock\obj\Debug\Clock.csprojAssemblyReference.cache

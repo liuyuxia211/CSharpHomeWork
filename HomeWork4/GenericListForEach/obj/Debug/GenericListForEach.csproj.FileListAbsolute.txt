@@ -1,0 +1,7 @@
+E:\VS DATA\cSharp\GenericListForEach\bin\Debug\GenericListForEach.exe.config
+E:\VS DATA\cSharp\GenericListForEach\bin\Debug\GenericListForEach.exe
+E:\VS DATA\cSharp\GenericListForEach\bin\Debug\GenericListForEach.pdb
+E:\VS DATA\cSharp\GenericListForEach\obj\Debug\GenericListForEach.csprojAssemblyReference.cache
+E:\VS DATA\cSharp\GenericListForEach\obj\Debug\GenericListForEach.csproj.CoreCompileInputs.cache
+E:\VS DATA\cSharp\GenericListForEach\obj\Debug\GenericListForEach.exe
+E:\VS DATA\cSharp\GenericListForEach\obj\Debug\GenericListForEach.pdb
