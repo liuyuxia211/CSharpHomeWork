@@ -1,0 +1,7 @@
+E:\VS DATA\cSharp\Order\bin\Debug\Order.exe.config
+E:\VS DATA\cSharp\Order\bin\Debug\Order.exe
+E:\VS DATA\cSharp\Order\bin\Debug\Order.pdb
+E:\VS DATA\cSharp\Order\obj\Debug\Order.csprojAssemblyReference.cache
+E:\VS DATA\cSharp\Order\obj\Debug\Order.csproj.CoreCompileInputs.cache
+E:\VS DATA\cSharp\Order\obj\Debug\Order.exe
+E:\VS DATA\cSharp\Order\obj\Debug\Order.pdb
