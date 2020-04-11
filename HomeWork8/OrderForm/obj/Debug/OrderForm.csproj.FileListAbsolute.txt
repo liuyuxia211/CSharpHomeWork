@@ -1,0 +1,16 @@
+E:\VS DATA\HomeWork\HomeWork8\OrderForm\bin\Debug\OrderForm.exe.config
+E:\VS DATA\HomeWork\HomeWork8\OrderForm\bin\Debug\OrderForm.exe
+E:\VS DATA\HomeWork\HomeWork8\OrderForm\bin\Debug\OrderForm.pdb
+E:\VS DATA\HomeWork\HomeWork8\OrderForm\bin\Debug\HomeWork8.exe
+E:\VS DATA\HomeWork\HomeWork8\OrderForm\bin\Debug\HomeWork8.pdb
+E:\VS DATA\HomeWork\HomeWork8\OrderForm\bin\Debug\HomeWork8.exe.config
+E:\VS DATA\HomeWork\HomeWork8\OrderForm\obj\Debug\OrderForm.csprojAssemblyReference.cache
+E:\VS DATA\HomeWork\HomeWork8\OrderForm\obj\Debug\OrderForm.Form1.resources
+E:\VS DATA\HomeWork\HomeWork8\OrderForm\obj\Debug\OrderForm.Properties.Resources.resources
+E:\VS DATA\HomeWork\HomeWork8\OrderForm\obj\Debug\OrderForm.csproj.GenerateResource.cache
+E:\VS DATA\HomeWork\HomeWork8\OrderForm\obj\Debug\OrderForm.csproj.CoreCompileInputs.cache
+E:\VS DATA\HomeWork\HomeWork8\OrderForm\obj\Debug\OrderForm.csproj.CopyComplete
+E:\VS DATA\HomeWork\HomeWork8\OrderForm\obj\Debug\OrderForm.exe
+E:\VS DATA\HomeWork\HomeWork8\OrderForm\obj\Debug\OrderForm.pdb
+E:\VS DATA\HomeWork\HomeWork8\OrderForm\obj\Debug\OrderForm.AddModifyForm2.resources
+E:\VS DATA\HomeWork\HomeWork8\OrderForm\obj\Debug\OrderForm.SearchIDForm.resources
