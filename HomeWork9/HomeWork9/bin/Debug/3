@@ -1,0 +1,491 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="最近有一个云服务器和数据库的迁移任务，踩坑爬坑无数次，觉得必须要记录一下。大家瓜子花生准备好，听我慢慢讲故事#手动笑哭#。 故事背景 公司是做电商业务的，在天猫有几家旗舰店数据量也很大。阿里有一个称为" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>.NetCore&amp;Linux&amp;Docker&amp;Portainer踩坑历险记 - balahoho - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=BKtyzabbeYJEVOaELkxmRjHbp7LT-v37GzrU5S24bJk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/simplememory/bundle-simplememory.min.css?v=OL4qeo1LNGlN1rKIhv5UctANvt0M6Nx6kLzr_ffx3Xk" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/hohoa/custom.css?v=bvCfrzb5j5f5sKZquyvoKkCcF8w=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/hohoa/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/hohoa/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/hohoa/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=VSP5rTXbJNpNidklGdgoLgwCGyUPITrcsmlgoaMKz3w"></script>
+    <script>
+        var currentBlogId = 294354;
+        var currentBlogApp = 'hohoa';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'SimpleMemory';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    <div id="page_begin_html">
+        <script src="https://files.cnblogs.com/files/hohoa/TweenMax.min.js" defer></script>
+<a href="https://github.com/hey-hoho" target="_blank"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://files.cnblogs.com/files/hohoa/github.ico" alt="Fork me on GitHub" data-evernote-hover-show="true"></a>
+    </div>
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/hohoa/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/hohoa/">HOHO</a>
+</h1>
+<h2>
+你简单，世界就是童话；心复杂，世界就是迷宫。
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/hohoa/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/balahoho">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/hohoa/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+19&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+220</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/hohoa/p/10743552.html">.NetCore&amp;Linux&amp;Docker&amp;Portainer踩坑历险记</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body ">
+    <p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">最近有一个云服务器和数据库的迁移任务，踩坑爬坑无数次，觉得必须要记录一下。大家瓜子花生准备好，听我慢慢讲故事#手动笑哭#。</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: '微软雅黑 Light', sans-serif; font-size: 14px;">&nbsp;</span></p>
+<p style="text-align: justify; text-justify: inter-ideograph; line-height: 150%;"><strong><span style="font-family: '微软雅黑 Light', sans-serif; font-size: 16px;">故事背景</span></strong></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-size: 14px; font-family: 'Microsoft YaHei';">公司是做电商业务的，在天猫有几家旗舰店数据量也很大。阿里有一个称为聚石塔的平台，专门给这些ISV提供各种云资源，强制绑定了一些业务，原本我们在聚石塔中有一台ECS和一台RDS部署在华东杭州节点，本月初突然收到阿里的邮件说是要整体迁移到张北节点，华东节点将会在9月底全部停止服务，并附带发了一份迁移文档，要我们尽快迁移。好在我们用到的资源不多，最初觉得迁移过程并不会太复杂，实际还是太天真了。像我这样只有一台服务器和一台数据库的用户迁移过程都谓之艰辛，对于那些有几十甚至上百实例的ISV，那真是欲哭无泪了。每天看着迁移群里大家的各种吐槽、抱怨、焦急、无可奈何，还有那几位一整天都在被艾特的阿里技术支持，说起来都是泪。</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">于是接下来制定好迁移计划，发邮件购买要用到的资源，等过了两天东西到位，就撸起袖子开干了。</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">忘了说了，这些东西原先是由另外一位同事负责，然而年后他就开溜了，上级指示我扛过大旗（guo）。</span></p>
+<p style="text-indent: 28px; line-height: 150%;"> <span style="font-family: '微软雅黑 Light', sans-serif; font-size: 14px;"><br /></span>
+</p>
+<p style="text-align: justify; text-justify: inter-ideograph; line-height: 150%;">
+    <strong><span style="font-family: '微软雅黑 Light', sans-serif; font-size: 16px;">开胃菜</span></strong>
+</p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">
+    我们的RDS是SQL Server 08 R2版本，阿里在迁移通知中专门提到了这个产品，而且用到了重要提示字样，大意是说微软已经对这个版本的数据库停止了安全更新，所以张北节点已经不再售卖这个版本的实例，要先在当前节点完成版本升级后再迁移。看了下他的迁移手册，觉得异常复杂和危险重重，于是果断放弃官方方案，决定在张北节点买好2016版本数据库，直接切换数据推送，后来找阿里的技术支持咨询了这个方案，也表示可以执行。当然了，我能这样做是有一个前提的，我们的这个库是只读库，用来接收阿里的数据推送然后给业务系统查询，可以理解为只是一个过渡不存储实际的业务数据，对安全性要求不高，就算丢失也能通过淘宝开放平台的API去查询。如果是业务库，那就只能老老实实的按官方文档摸着石头过河了，看群里的反馈，这道开胃菜不好吃，我也算是幸运跳过了第一个坑。
+</span></p>
+<p style="text-indent: 28px; line-height: 150%;">
+    <span style="font-family: '微软雅黑 Light', sans-serif; font-size: 14px;">&nbsp;</span>
+</p>
+<p style="text-align: justify; text-justify: inter-ideograph; line-height: 150%;">
+    <strong><span style="font-family: '微软雅黑 Light', sans-serif; font-size: 16px;">初进坑</span></strong>
+</p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-size: 14px; font-family: 'Microsoft YaHei';">
+    RDS处理完毕，那就着手开始折腾服务器，这是一台Linux的机器，系统是Centos7，主要跑了3个服务：上文提到的RDS数据查询API（一个dotnetcore2.1的程序）、Rabbitmq实例和它的管理工具、Portainer，由Docker统一管理，而Docker又由Portainer来管理。按照官方文档，先在原服务器上创建镜像，经过漫长的等待（大概40分钟吧，有的人反映等了大半天最后生成失败的，心态崩&hellip;），然后把镜像复制到张北节点，然后通过镜像生成实例，按理说新机器和原机器是完全一样的，各项服务都应该运行正常，并且专门找技术支持确认了，可实际真的不是这样。
+</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">
+    聚石塔的服务器只开放30001-30005这几个端口，于是尝试访问一下Portainer所在的30003端口。浏览器输入地址再回车，等了几十秒后显示超时无法访问，一脸懵逼。Ping了一下服务器IP，没毛病，又登录服务器查看docker和container的运行状态以及端口映射，都没问题，又查看端口监听和防火墙，还是正常，二脸懵逼。
+</span></p>
+<p style="text-align: left; text-indent: 32px; line-height: 150%;"><img src="https://img2018.cnblogs.com/blog/614524/201904/614524-20190421012314640-614878568.png" alt="" /></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">
+    查一下container的日志，提示运行正常，三脸懵逼。</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><img src="https://img2018.cnblogs.com/blog/614524/201904/614524-20190421002054699-2120468095.png" alt="" /></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei';">我的招已经用完了，没办法转向群里咨询技术支持，回复说这几个端口要走工单申请开通，WTF&hellip;&hellip;老实写工单提交再到群里艾特帮忙快点处理，又陷入漫长的等待中，当时大概2点钟的样子。下午5点多工单状态更新了说正在转给技术处理请耐心等待，然后，就没有然后了接着等，到7点还是没消息决定先下班。</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">
+    第二天上班发现还是没有消息，又去群里艾特技术支持，几分钟后回复叫我去给ECS绑定一个安全组，照做后再次访问30003端口依然不行，长叹一口气。又尝试访问了一下webapi所在的30001端口，神奇般的成功了#手动黑人问号脸#。咨询了公司运维，教我几个命令简单排查了下，后来因为太忙没回复我了，后来又一顿百度谷歌无果，陷入僵局。心理暗自把这个锅丢给了阿里，觉得是他们哪里配置有问题。
+</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: '微软雅黑 Light', sans-serif; font-size: 14px;"><img src="https://img2018.cnblogs.com/blog/614524/201904/614524-20190421002144464-1797044976.gif" alt="" width="204" height="204" /></span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">
+    事情不能就这样僵着啊，Portainer起不来程序不能更新，于是打算直接在宿主机上跑一下修改后的dotnetcore程序看数据库访问是否正常。按照微软文档安装对应版本的SDK：</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><img src="https://img2018.cnblogs.com/blog/614524/201904/614524-20190421012205106-1129394463.png" alt="" width="1113" height="497" /></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">
+    安装好后把发布文件上传到服务器，然后用dotnet命令启动了程序，一切正常。访问我的测试入口：
+</span></p>
+<div class="cnblogs_code">
+<pre>Curl http:<span style="color: #008000;">//</span><span style="color: #008000;">locahost:5000/api/values/testdb/123</span></pre>
+</div>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">看到返回了数据库的测试数据，信心重拾。回过头重新折腾docker，发现docker死活起不来了，囧：</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><img src="https://img2018.cnblogs.com/blog/614524/201904/614524-20190421012136745-1765088399.png" alt="" /></p>
+<p style="text-indent: 28px; line-height: 150%;"><img src="https://img2018.cnblogs.com/blog/614524/201904/614524-20190421012114138-2097157348.png" alt="" /></p>
+<p>　　<img src="https://img2018.cnblogs.com/blog/614524/201904/614524-20190421012041055-1352939901.png" alt="" /></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">拿着错误信息又是一顿百度谷歌，不断的照网上改配置重启系统，几个小时过去依然不行，决定卸载docker重装。于是依次执行：</span></p>
+<div class="cnblogs_code">
+<pre>yum remove docker*<span style="color: #000000;">
+
+reboot
+
+yum install docker
+
+docker version
+
+systemctl start docker</span></pre>
+</div>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">然而启动的时候问题依旧，又是长叹一口气。仔细回想了一下，只有yum update对系统做了大的改动，难道是这个问题么？不知不觉又到了晚上7点多，脑子懵的很决定先下班第二天接着搞。</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">真所谓一波未平一波又起。</span></p>
+<p style="text-indent: 28px; line-height: 150%;"> <span style="font-family: '微软雅黑 Light', sans-serif; font-size: 14px;"><br /></span>
+</p>
+<p style="text-align: justify; text-justify: inter-ideograph; line-height: 150%;">
+    <strong><span style="font-family: '微软雅黑 Light', sans-serif; font-size: 16px;">再进坑</span></strong>
+</p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">
+    早上到公司和微信群的小伙伴吐糟着遭遇，大家劝我重装系统，我一边发着捂脸笑哭的表情，一边默默地上聚石塔后台点了磁盘初始化，docker启动不了的问题就算翻篇了，一切从头再来。
+</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">
+    依然还是端口的问题，实在没辙了只有给阿里提工单问为什么端口不通，阿里工程师先后叫我排查了iptables、端口监听情况、清除iptables等等还是不行，最后要了我的服务器账号上去排查，在工单中看到阿里的工程师晚上11点多还在帮我排查问题，也真不容易。
+</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><img src="https://img2018.cnblogs.com/blog/614524/201904/614524-20190421011924002-2062378243.png" alt="" /></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">
+    终于，在阿里后面的回复中事情迎来了转机，给了我非常大的提示：
+</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><img src="https://img2018.cnblogs.com/blog/614524/201904/614524-20190421011954772-1736180794.png" alt="" /></p>
+<p style="line-height: 1.5em; text-indent: 2em;">
+    <span style="font-family: 'Microsoft YaHei'; font-size: 14px; text-indent: 28px; background-color: #ffffff;">从中我捕捉到了2个重要信息，一个是容器的IP，一个是路由解析问题。我马上百度如何查容器的IP地址，然后试着去ping容器的IP，发现30001端口绑定的容器（172.22.0网段）正常，30003端口绑定的容器（192.168.0网段）无法访问，那么这就说明是宿主机和容器网络不通导致的问题。又查看了系统的路由表：</span>
+</p>
+<p style="text-indent: 28px; line-height: 150%;"><img src="https://img2018.cnblogs.com/blog/614524/201904/614524-20190421002551009-1145893886.png" alt="" /></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">
+    这个路由表有个奇怪的现象，就是192.168.0这个网段指向了2个不同的网卡，分别是eth0和docker0。我知道，eth0是宿主机默认的网关，docker0是docker启动时自动创建的虚拟网关，但是还不清楚这样的配置会有什么影响，于是百度了一下Linux路由的详细介绍，得知相同的配置会有优先级的问题，又尝试着删除eth0的配置：
+</span></p>
+<div class="cnblogs_Highlighter">
+<pre class="brush:bash;gutter:true;">route del -net 192.168.0.0 netmask 255.255.255.0</pre>
+</div>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">再次用公网访问30003端口，成功了！！！终于看到了熟悉的页面：</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><img src="https://img2018.cnblogs.com/blog/614524/201904/614524-20190421010543688-287475544.png" alt="" width="989" height="407" /></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: '微软雅黑 Light', sans-serif; font-size: 14px;">&nbsp;</span></p>
+<p style="text-align: justify; text-justify: inter-ideograph; line-height: 150%;"><strong><span style="font-family: '微软雅黑 Light', sans-serif; font-size: 16px;">没那么简单</span></strong></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">以为事情就此告一段落后面都是平坦大道，想不到问题又来了。通过docker run我新镜像后发现容器总是自动退出，于是寻找各种让容器持续运行的办法，一阵折腾没有效果，去微信群问小伙伴，问我是不是程序抛异常了，我顿时一种柳暗花明的感觉，立马查看容器日志：</span></p>
+<div class="cnblogs_Highlighter">
+<pre class="brush:bash;gutter:true;">docker logs topapi</pre>
+</div>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">果然是报错了：</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><img src="https://img2018.cnblogs.com/blog/614524/201904/614524-20190421002727509-1653643628.png" alt="" width="611" height="117" /></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">很显然，是说我的framework版本不对，但是我的dockerfile中确实引入的2.1版本运行时：</span></p>
+<div class="cnblogs_code">
+<pre><span style="color: #008080;">FROM</span> microsoft/dotnet:2.1<span style="color: #000000;">-runtime
+
+</span><span style="color: #008080;">COPY</span><span style="color: #000000;"> . /app
+
+</span><span style="color: #008080;">WORKDIR</span><span style="color: #000000;"> /app
+
+</span><span style="color: #008080;">EXPOSE</span> 5000 80
+
+<span style="color: #008080;">ENTRYPOINT</span> ["dotnet", "DRP.API.dll"]</pre>
+</div>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">退一万步说，宿主机我也已经安装过SDK，而且直接在宿主机上运行都是可以的，为什么通过docker来运行就挂了，百思不得解。只能按照提示中的信息排查是不是少装了什么组件，一阵yum install下来还是失败：</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><img src="https://img2018.cnblogs.com/blog/614524/201904/614524-20190421002804753-732202702.png" alt="" width="595" height="204" /></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">去广州微软.net俱乐部的微信群请教别人，两位大佬给我分析解答了一下，一位说是我的dockerfile在copy文件时漏了一些引用文件，要我重新修改dockerfile，不过经过多次调整测试依然无效，不得不采用第二位的办法，就是把运行时改为2.2版本：</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><img src="https://img2018.cnblogs.com/blog/614524/201904/614524-20190421002818926-1356968979.png" alt="" /></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">修改dockerfile为如下内容：</span></p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;"># 添加基础镜像
+</span><span style="color: #008080;">FROM</span> microsoft/dotnet:2.2<span style="color: #000000;">-aspnetcore-runtime
+
+#容器中系统的工作空间
+</span><span style="color: #008080;">WORKDIR</span><span style="color: #000000;"> /app
+
+#拷贝当前文件夹下的文件到容器中系统的工作空间
+</span><span style="color: #008080;">COPY</span><span style="color: #000000;"> . /app
+
+#设置Docker容器对外暴露的端口
+</span><span style="color: #008080;">EXPOSE</span> 5000 80<span style="color: #000000;">
+
+#运行应用程序
+</span><span style="color: #008080;">ENTRYPOINT</span> ["dotnet", "DRP.API.dll"]</pre>
+</div>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">重新打包镜像，然后run起来，这次一切都是那么的自然，docker ps查看容器已经状态是up了。欣喜若狂，以为即将看到胜利的曙光，接着用浏览器打开我的测试入口：</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;"><a href="http://xxx.xxx.xxx.xxxx:30001/api/values/testdb/123">http://xxx.xxx.xxx.xxx:30001/api/values/testdb/123</a></span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">尴尬的报了500，心中万马奔腾&hellip;.</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">这次学机灵了，第一时间docker logs，发现是数据库报错了：</span></p>
+<div class="cnblogs_code">
+<pre>fail: Microsoft.AspNetCore.Server.Kestrel[<span style="color: #800080;">13</span><span style="color: #000000;">]
+      </span>=&gt; ConnectionId:0HLM4DDINAGJC =&gt; RequestId:0HLM4DDINAGJC:<span style="color: #800080;">00000001</span> RequestPath:/api/values/testdb/<span style="color: #800080;">123</span><span style="color: #000000;">
+      Connection id </span><span style="color: #800000;">"</span><span style="color: #800000;">0HLM4DDINAGJC</span><span style="color: #800000;">"</span>, Request id <span style="color: #800000;">"</span><span style="color: #800000;">0HLM4DDINAGJC:00000001</span><span style="color: #800000;">"</span><span style="color: #000000;">: An unhandled exception was thrown by the application.
+SqlSugar.UtilExceptions: English Message : Connection open error . A network</span>-related or instance-specific error occurred <span style="color: #0000ff;">while</span> establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name <span style="color: #0000ff;">is</span> correct and that SQL Server <span style="color: #0000ff;">is</span> configured to allow remote connections. (provider: TCP Provider, error: <span style="color: #800080;">40</span> -<span style="color: #000000;"> Could not open a connection to SQL Server)
+Chinese Message :  连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确，实在找不到原因请先Google错误信息：A network</span>-related or instance-specific error occurred <span style="color: #0000ff;">while</span> establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name <span style="color: #0000ff;">is</span> correct and that SQL Server <span style="color: #0000ff;">is</span> configured to allow remote connections. (provider: TCP Provider, error: <span style="color: #800080;">40</span> -<span style="color: #000000;"> Could not open a connection to SQL Server).
+   at SqlSugar.AdoProvider.GetDataReader(String sql, SugarParameter[] parameters)
+   at SqlSugar.QueryableProvider`</span><span style="color: #800080;">1</span>.GetData[TResult](KeyValuePair`<span style="color: #800080;">2</span><span style="color: #000000;"> sqlObj)
+   at SqlSugar.QueryableProvider`</span><span style="color: #800080;">1</span>._ToList[TResult]()</pre>
+</div>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">很明显是数据库连接不上，检查连接字符串，没毛病，再次进入僵局。</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">正在苦恼时，突然想起前面删掉的那条路由，尝试重启网络恢复路由：</span></p>
+<div class="cnblogs_code">
+<pre>service network restart</pre>
+</div>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">再次访问测试地址，确实成功了。可问题又进入了死循环，容器内的应用无法访问。</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: '微软雅黑 Light', sans-serif; font-size: 14px;">&nbsp;</span></p>
+<p style="text-align: justify; text-justify: inter-ideograph; line-height: 150%;"><strong><span style="font-family: '微软雅黑 Light', sans-serif; font-size: 16px;">终见天日</span></strong></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">经过以上的种种分析后，最终把问题定在了路由这儿。既然是因为同一网段有2个网关，那么我修改一下docker的默认网段不就可以了吗？再次面向百度编程，得到两种方案：</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">第一种方案，创建新的的网关和路由，然后分配给docker：</span></p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">service docker stop
+
+ip addr add </span>192.168.1.1/24<span style="color: #000000;"> dev bridge0
+
+ip link set dev bridge0 up
+
+vim </span>/etc/docker/daemon.json</pre>
+</div>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">加上<strong>"bridge": "bridge0"</strong>节点并保存退出，再重启docker：</span></p>
+<div class="cnblogs_code">
+<pre>service docker start</pre>
+</div>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">第二种方案，直接修改docker0的默认网段：</span></p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">service docker stop
+
+vim </span>/etc/docker/daemon.json</pre>
+</div>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">加上<strong>"bip": "192.168.1.1/24"</strong>节点并保存退出，再重启docker即可。</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">我这里采用第二种方式，修改后的路由表为：</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><img src="https://img2018.cnblogs.com/blog/614524/201904/614524-20190421003059054-1253214752.png" alt="" /></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">重新访问各种服务，全部都正常运行，到此总算是拨开云雾见青天。</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">有个小细节不知大家是否发现，也是我当时存在的一个疑惑，就是前面有提过两个容器的网段不一样，按理说通过docker run来的容器应该都是相同的网段，为什么会这样呢？后来在折腾Portainer的时候找到了这个问题。</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-size: 14px; font-family: 'Microsoft YaHei';">Portainer是一款docker管理工具，简而言之的说就是把用命令操作的东西可视化，当然功能远不止这些。Portainer中有一个Stack功能，我并不清楚这是干什么用的，只是看到旧的Portainer中的容器绑定了一个stack所以想依葫芦画瓢也搞一个：</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><img src="https://img2018.cnblogs.com/blog/614524/201904/614524-20190421011843513-1631052499.png" alt="" /></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">于是拿stack的配置文件新创建一个，没想到居然报错，提示已存在相同名称的容器。我马上意识到这个特殊的容器应该是通过stack创建，我删掉已存在的容器再次创建stack，这次成功了。出于好奇，仔细分析了stack的配置文件：</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><img src="https://img2018.cnblogs.com/blog/614524/201904/614524-20190421003122937-1184496978.png" alt="" width="586" height="332" /></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">发现里面主要是定义了镜像名、容器名、网络模式、端口映射这些，而其中vhnet这个网络配置让我很感兴趣，转而查看docker已经配置好的网关：</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><img src="https://img2018.cnblogs.com/blog/614524/201904/614524-20190421011809615-1558244852.png" alt="" /></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">看到这里，一种恍然大悟的感觉，你懂的。</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">除此之外，从前任留下的文档里可以知道，stack有一种类似热更新的功能，修改配置文件中的镜像名后update stack就能实现对应的容器更新，不用起新的容器，这点确实很不错。更多强大的功能日后也会慢慢学习。</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: '微软雅黑 Light', sans-serif; font-size: 14px;">&nbsp;</span></p>
+<p style="text-align: justify; text-justify: inter-ideograph; line-height: 150%;"><strong><span style="font-family: '微软雅黑 Light', sans-serif; font-size: 16px;">我的收获</span></strong></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">经过前面几天的折腾，我更加熟悉了docker的各种基本操作和配置，也学会了使用新的命令，像docker inspect查看容器信息、docker attach进入容器内部，也加深了在Linux上排查问题的思路理解，学到了新的操作命令。也实际使用docker在Linux上部署了一次dotnetcore的生产环境，收获颇丰。</span></p>
+<p style="text-indent: 28px; line-height: 150%;"> <span style="font-family: '微软雅黑 Light', sans-serif; font-size: 14px;"><br /></span>
+</p>
+<p style="text-align: justify; text-justify: inter-ideograph; line-height: 150%;">
+    <strong><span style="font-family: '微软雅黑 Light', sans-serif; font-size: 16px;">遗留的问题</span></strong>
+</p>
+<p class="MsoListParagraph" style="margin-left: 24px; line-height: 150%;"><span style="font-size: 14px; font-family: 'Microsoft YaHei';">
+    1、<span style="font-style: normal; font-variant: normal; font-weight: normal; font-stretch: normal; font-size: 9px; line-height: normal;">&nbsp;&nbsp;&nbsp;&nbsp; </span>yum update后到底经历了什么让docker跪地不起，报错原因至今没搞明白。
+</span></p>
+<p class="MsoListParagraph" style="margin-left: 24px; line-height: 150%;"><span style="font-size: 14px; font-family: 'Microsoft YaHei';">
+    2、<span style="font-style: normal; font-variant: normal; font-weight: normal; font-stretch: normal; font-size: 9px; line-height: normal;">&nbsp;&nbsp;&nbsp; </span>为什么2.1的dotnetcore程序在2.1运行时跑不起来，换成2.2版本就可以。</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; text-indent: 0px;">3、stack是怎么实现修改镜像后容器就能生效的呢？</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; text-indent: 0px;">有知道的大佬还请多多指导。</span></p>
+<p style="text-indent: 28px; line-height: 150%;">
+    <span style="font-family: '微软雅黑 Light', sans-serif; font-size: 14px;">&nbsp;</span>
+</p>
+<p style="text-align: left; line-height: 150%;">
+    <strong><span style="font-family: '微软雅黑 Light', sans-serif; font-size: 16px;">总结</span></strong>
+</p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">
+    表面上全篇都在讲才踩坑的事，但追根究底还是因为自己在Linux方面的知识欠缺和经验不足。还是那句话，多踩坑，会让你记忆深刻，会让你学到意想不到的东西，会让你的身体变得足够大，下次碰到坑能一脚踏过去。
+</span></p>
+<p style="text-indent: 28px; line-height: 150%;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">
+    故事讲完了，大家周末愉快~
+</span></p>
+<p>
+    <br />
+</p>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2019-04-21 23:38</span>&nbsp;
+<a href="https://www.cnblogs.com/hohoa/">balahoho</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=10743552" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(10743552);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 294354, cb_blogApp = 'hohoa', cb_blogUserGuid = '86b892cb-79ae-e311-8d02-90b11c0b17d6';
+    var cb_entryId = 10743552, cb_entryCreatedDate = '2019-04-21 23:38', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 balahoho
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <!-- 右侧图标返回顶部 -->
+<span id="gotop1"><img src="https://files.cnblogs.com/files/hohoa/huojian.ico" alt="返回顶部"></span>
+<script src="https://cdn.bootcss.com/bootstrap/3.2.0/js/transition.js"></script>
+<script src="https://blog-static.cnblogs.com/files/hohoa/zoom.js"></script>
+ <!--鼠标特效-->
+ <script src="https://blog-static.cnblogs.com/files/zouwangblog/mouse-click.js"></script>
+ <canvas width="1777" height="841" style="position: fixed; left: 0px; top: 0px; z-index: 2147483647; pointer-events: none;"></canvas>
+ <!--鼠标特效 end-->
+<script>
+   $('#cnblogs_post_body img').attr('data-action', 'zoom');
+    // scroll body to 0px on click
+    $('#gotop1').click(function() {
+       TweenMax.to(window, 1.5, {scrollTo:0, ease: Expo.easeInOut});
+      var huojian = new TimelineLite();
+      huojian.to("#gotop1", 1, {rotationY:720, scale:0.6, y:"+=40", ease:  Power4.easeOut})
+	.to("#gotop1", 1, {y:-1000, opacity:0, ease:  Power4.easeOut}, 0.6)
+	.to("#gotop1", 1, {y:0, rotationY:0, opacity:1, scale:1, ease: Expo.easeOut, clearProps: "all"}, "1.4");
+        $('body,html').animate({
+            scrollTop: 0
+        }, 1500);
+        return false;
+    });
+    window.onload = function () {
+        if ($("#div_digg") != null) {
+            //添加快速评论按钮
+            $("#div_digg").append("<a href='#tbCommentAuthor' id='quickReply'>快速评论</a>");
+            //快速评论动画
+            $('#quickReply').click(function () {
+                $('html, body').animate({
+                    scrollTop: $($.attr(this, 'href')).offset().top
+                }, 500);
+                return false;
+            });
+        }
+    }
+</script>
+    </div>
+</body>
+</html>

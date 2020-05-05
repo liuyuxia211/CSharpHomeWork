@@ -1,0 +1,355 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="发现问题 需求很简单，大致就是要批量往数据库写数据，于是打算用Parallel并行的方式写入，希望能利用计算机多核特性加快程序执行速度。想的很美好，于是快速撸了类似下面的一串代码： 可意外的是竟然无情" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>在Parallel中使用DbSet.Add()发现的一系列多线程问题和解决过程 - balahoho - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=BKtyzabbeYJEVOaELkxmRjHbp7LT-v37GzrU5S24bJk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/simplememory/bundle-simplememory.min.css?v=OL4qeo1LNGlN1rKIhv5UctANvt0M6Nx6kLzr_ffx3Xk" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/hohoa/custom.css?v=bvCfrzb5j5f5sKZquyvoKkCcF8w=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/hohoa/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/hohoa/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/hohoa/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=VSP5rTXbJNpNidklGdgoLgwCGyUPITrcsmlgoaMKz3w"></script>
+    <script>
+        var currentBlogId = 294354;
+        var currentBlogApp = 'hohoa';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'SimpleMemory';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    <div id="page_begin_html">
+        <script src="https://files.cnblogs.com/files/hohoa/TweenMax.min.js" defer></script>
+<a href="https://github.com/hey-hoho" target="_blank"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://files.cnblogs.com/files/hohoa/github.ico" alt="Fork me on GitHub" data-evernote-hover-show="true"></a>
+    </div>
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/hohoa/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/hohoa/">HOHO</a>
+</h1>
+<h2>
+你简单，世界就是童话；心复杂，世界就是迷宫。
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/hohoa/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/balahoho">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/hohoa/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+19&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+220</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/hohoa/p/6060228.html">在Parallel中使用DbSet.Add()发现的一系列多线程问题和解决过程</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body ">
+    <h2 style="line-height: 1.5em;"><span style="font-family: 'Microsoft YaHei';"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">发现问题</span></span></h2>
+<p style="line-height: 1.75em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">需求很简单，大致就是要批量往数据库写数据，于是打算用Parallel并行的方式写入，希望能利用计算机多核特性加快程序执行速度。想的很美好，于是快速撸了类似下面的一串代码：</span></p>
+<div class="cnblogs_code">
+<pre>                <span style="color: #0000ff;">using</span> (<span style="color: #0000ff;">var</span> db = <span style="color: #0000ff;">new</span><span style="color: #000000;"> SmsEntities())
+                {
+                    Parallel.For(</span><span style="color: #800080;">0</span>, <span style="color: #800080;">1000</span>, (i) =&gt;<span style="color: #000000;">
+                    {
+                        db.MemberCard.Add(</span><span style="color: #0000ff;">new</span><span style="color: #000000;"> MemberCard()
+                        {
+                            CardNo </span>= <span style="color: #800000;">"</span><span style="color: #800000;">NO_</span><span style="color: #800000;">"</span> +<span style="color: #000000;"> i.ToString(),
+                            Banlance </span>= <span style="color: #800080;">0</span><span style="color: #000000;">,
+                            CreateTime </span>=<span style="color: #000000;"> DateTime.Now,
+                            Name </span>= <span style="color: #800000;">"</span><span style="color: #800000;">Test_</span><span style="color: #800000;">"</span> +<span style="color: #000000;"> i.ToString(),
+                            Status </span>= <span style="color: #800080;">1</span><span style="color: #000000;">
+                        });
+                    });
+                    db.SaveChanges();
+                }</span></pre>
+</div>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 'Microsoft YaHei';">可意外的是竟然无情的报错了:</span></p>
+<p style="line-height: 1.75em;"><img src="https://images2015.cnblogs.com/blog/614524/201611/614524-20161113220941420-663444693.png" alt="" width="600" height="206" /></p>
+<p style="line-height: 1.75em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">奇葩的是当我再次刷新的时候异常又不一样了，于是连着刷新好多次，总结出现过的异常有下面这些：</span></p>
+<p style="margin-left: 24px; line-height: 1.75em;"><span style="font-family: 宋体; font-size: 13px;">1、<span style="font-stretch: normal;">&nbsp; </span><span style="background: white;">未将对象引用设置到对象的实例。</span></span></p>
+<p style="margin-left: 24px; line-height: 1.75em;"><span style="font-family: 宋体; font-size: 13px;">2、<span style="font-stretch: normal;">&nbsp; </span><span style="background: white;">已添加了具有相同键的项。</span></span></p>
+<p style="margin-left: 24px; line-height: 1.75em;"><span style="font-family: 宋体; font-size: 13px;">3、<span style="font-stretch: normal;">&nbsp; </span><span style="background: white;">集合已修改；可能无法执行枚举操作。</span></span></p>
+<p style="margin-left: 24px; line-height: 1.75em;"><span style="font-family: 宋体; font-size: 13px;">4、<span style="font-stretch: normal;">&nbsp; </span><span style="background: white;">一个</span><span style="background: white;"> EdmType </span><span style="background: white;">不能多次映射到</span><span style="background: white;"> CLR </span><span style="background: white;">类。</span><span style="background: white;">EdmType&ldquo;SmsModel.MemberCard&rdquo;</span><span style="background: white;">映射了一次以上。</span></span></p>
+<p style="line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">其中1和2是出现最多的，而且所有异常都是出现在Add的时候，各种吃瓜表情~没办法，接着一一断点调试，还是没找出原因，出于进度考虑，换成了另一种方案，也就是用DbSet的AddRange方法。先在Parallel中累加出一个实体List，然后一次性添加到DbSet中，代码演变为:</span></p>
+<div class="cnblogs_code">
+<pre>            List&lt;MemberCard&gt; list = <span style="color: #0000ff;">new</span> List&lt;MemberCard&gt;<span style="color: #000000;">();
+            </span><span style="color: #0000ff;">using</span> (<span style="color: #0000ff;">var</span> db = <span style="color: #0000ff;">new</span><span style="color: #000000;"> SmsEntities())
+            {
+                </span><span style="color: #0000ff;">var</span> result = Parallel.For(<span style="color: #800080;">0</span>, <span style="color: #800080;">1000</span>, (i) =&gt;<span style="color: #000000;">
+                  {
+                      list.Add(</span><span style="color: #0000ff;">new</span><span style="color: #000000;"> MemberCard()
+                      {
+                          CardNo </span>= <span style="color: #800000;">"</span><span style="color: #800000;">NO_</span><span style="color: #800000;">"</span> +<span style="color: #000000;"> i.ToString(),
+                          Banlance </span>= <span style="color: #800080;">0</span><span style="color: #000000;">,
+                          CreateTime </span>=<span style="color: #000000;"> DateTime.Now,
+                          Name </span>= <span style="color: #800000;">"</span><span style="color: #800000;">Test_</span><span style="color: #800000;">"</span> +<span style="color: #000000;"> i.ToString(),
+                          Status </span>= <span style="color: #800080;">1</span><span style="color: #000000;">
+                      });
+                  });
+                </span><span style="color: #0000ff;">if</span><span style="color: #000000;"> (result.IsCompleted)
+                {
+                    db.MemberCard.AddRange(list);
+                    db.SaveChanges();
+                }
+            }</span></pre>
+</div>
+<p style="line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">然后编译、测试，没问题，就先放着了。</span></p>
+<p style="line-height: 1.75em;">&nbsp;</p>
+<h2 style="line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei';">分析问题</span></h2>
+<p style="line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">第二天到公司心里还在纠结这个问题，于是打开页面输入生成的数据量1000（真实项目中的循环次数是手动输入的），点按钮提交，嗯，又吃瓜般的异常了&hellip;：</span></p>
+<p style="line-height: 1.75em;"><img src="https://images2015.cnblogs.com/blog/614524/201611/614524-20161113221217202-2032100146.png" alt="" width="628" height="250" /></p>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 'Microsoft YaHei';">心想昨天测试都好好的啊（其实昨天输入的是10，心虚脸...），没办法，上断点吧，一看吓一跳：</span></p>
+<p style="line-height: 1.75em;"><img src="https://images2015.cnblogs.com/blog/614524/201611/614524-20161113221316780-134672510.png" alt="" /></p>
+<p style="line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei';">明明循环1000次，结果只有971条数据，而且里面还有为null的，经过多次调试发现这是一个随机现象，Count是随机的null也是随机的，有时出现有时没有，初步判断这是一个在多线程情况下引发的一个资源调配异常。So，上MSDN看了一下List的介绍，最后面&ldquo;线程安全&rdquo;写着：</span></p>
+<p style="line-height: 1.75em;"><img src="https://images2015.cnblogs.com/blog/614524/201611/614524-20161113221505436-1809010901.png" alt="" /></p>
+<p style="line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei';">一切貌似都清楚了，于是打算验证一下结果，加上了锁，测试结果为：</span></p>
+<p style="line-height: 1.75em;"><img src="https://images2015.cnblogs.com/blog/614524/201611/614524-20161113221549077-1110865619.png" alt="" /></p>
+<p style="line-height: 1.5em;"><span style="font-family: 'Microsoft YaHei';">list里面也没有再出现null了，确认是因为多线程安全引起的异常。于是想起昨天那个问题是否也是同样的问题，再上MSDN搜了一下DbContext类和DbSet类，都是这样说的：</span></p>
+<p style="line-height: 1.75em;"><img src="https://images2015.cnblogs.com/blog/614524/201611/614524-20161113221613952-647793367.png" alt="" /></p>
+<p style="line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei';">接着就给dbcontext上了锁，测试，这次总算如我所料，完美运行。但是不解的是最初那几个异常是如何产生的，List中虽然数量不够也存在为null的对象，但是并没有直接爆出异常。现在只知道是线程问题，再详细的也搞不清楚，有知道的大神还麻烦指点一下。</span></p>
+<p style="line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei';">&nbsp;&nbsp;</span></p>
+<h2 style="line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei';"><span>寻找解决方案并验证结论</span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></h2>
+<p style="line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei';">也想过用Partitioner分区来做，但是仔细一想，虽然分区内部是单线程，但是区与区之间还是多线程的，如果分的太细也就失去了Parallel的意义，只得另寻出路。还好Framework为我们也提供了一些线程安全的泛型集合（比如ConcurrentBag、ConcurrentQueue等），不过其本质还是用了锁【<strong>这里更正下错误：本质并不是用锁而是原子操作，感谢评论中的园友指正</strong>】，于是就综合做了一下单线程list、多线程list加锁、多线程ConcurrentBag、多线程ConcurrentQueue的性能对比，结果如下：</span></p>
+<p style="line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei';">循环1000次时：</span></p>
+<p style="line-height: 1.75em;"><img src="https://images2015.cnblogs.com/blog/614524/201611/614524-20161113221658874-140366689.png" alt="" /></p>
+<p style="line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei';">循环10000次时：</span></p>
+<p style="line-height: 1.75em;"><img src="https://images2015.cnblogs.com/blog/614524/201611/614524-20161113221727420-39620213.png" alt="" /></p>
+<p style="line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei';">循环100000次时：</span></p>
+<p style="line-height: 1.75em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><img src="https://images2015.cnblogs.com/blog/614524/201611/614524-20161113221734249-144185710.png" alt="" />&nbsp;</span></p>
+<ul>
+<li style="line-height: 1.75em;"><em><span style="font-family: 微软雅黑, 'Microsoft YaHei';">得出结论就是，在执行次数超大时用线程安全类型会更慢，在执行次数较少时线程安全类型也没什么优势。</span></em></li>
+<li style="line-height: 1.75em;"><em><strong><span style="font-family: 微软雅黑, 'Microsoft YaHei';">List和DbSet是非线程安全的。</span></strong></em></li>
+</ul>
+<p style="line-height: 1.75em;">&nbsp;</p>
+<h2 style="line-height: 1.75em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">解决问题</span></h2>
+<p style="line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei';">最后在经过仔细测试验证和考虑项目实际需求（几乎不可能一次10000）后，去繁从简，回归原始，用最简单直白的写法单线程循环来完成。虽然一番折腾下来还是回到最初，但是这过程中让我发现了意料之外问题，然后找到了原因，然后测试验证，最终得到了最优解决方案。还是那句话，填完坑，你就比之前更强大了！</span></p>
+<p> <br />
+</p>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2016-11-13 23:36</span>&nbsp;
+<a href="https://www.cnblogs.com/hohoa/">balahoho</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=6060228" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(6060228);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 294354, cb_blogApp = 'hohoa', cb_blogUserGuid = '86b892cb-79ae-e311-8d02-90b11c0b17d6';
+    var cb_entryId = 6060228, cb_entryCreatedDate = '2016-11-13 23:36', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 balahoho
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <!-- 右侧图标返回顶部 -->
+<span id="gotop1"><img src="https://files.cnblogs.com/files/hohoa/huojian.ico" alt="返回顶部"></span>
+<script src="https://cdn.bootcss.com/bootstrap/3.2.0/js/transition.js"></script>
+<script src="https://blog-static.cnblogs.com/files/hohoa/zoom.js"></script>
+ <!--鼠标特效-->
+ <script src="https://blog-static.cnblogs.com/files/zouwangblog/mouse-click.js"></script>
+ <canvas width="1777" height="841" style="position: fixed; left: 0px; top: 0px; z-index: 2147483647; pointer-events: none;"></canvas>
+ <!--鼠标特效 end-->
+<script>
+   $('#cnblogs_post_body img').attr('data-action', 'zoom');
+    // scroll body to 0px on click
+    $('#gotop1').click(function() {
+       TweenMax.to(window, 1.5, {scrollTo:0, ease: Expo.easeInOut});
+      var huojian = new TimelineLite();
+      huojian.to("#gotop1", 1, {rotationY:720, scale:0.6, y:"+=40", ease:  Power4.easeOut})
+	.to("#gotop1", 1, {y:-1000, opacity:0, ease:  Power4.easeOut}, 0.6)
+	.to("#gotop1", 1, {y:0, rotationY:0, opacity:1, scale:1, ease: Expo.easeOut, clearProps: "all"}, "1.4");
+        $('body,html').animate({
+            scrollTop: 0
+        }, 1500);
+        return false;
+    });
+    window.onload = function () {
+        if ($("#div_digg") != null) {
+            //添加快速评论按钮
+            $("#div_digg").append("<a href='#tbCommentAuthor' id='quickReply'>快速评论</a>");
+            //快速评论动画
+            $('#quickReply').click(function () {
+                $('html, body').animate({
+                    scrollTop: $($.attr(this, 'href')).offset().top
+                }, 500);
+                return false;
+            });
+        }
+    }
+</script>
+    </div>
+</body>
+</html>

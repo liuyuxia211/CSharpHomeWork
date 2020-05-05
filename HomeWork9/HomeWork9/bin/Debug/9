@@ -1,0 +1,613 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="never" />
+    <meta property="og:description" content="决定从这篇文章开始，开一个读源码系列，不限制平台语言或工具，任何自己感兴趣的都会写。前几天碰到一个小问题又读了一遍ConcurrentQueue的源码，那就拿C 中比较常用的并发队列Concurren" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>[一起读源码]走进C#并发队列ConcurrentQueue的内部世界 - balahoho - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=BKtyzabbeYJEVOaELkxmRjHbp7LT-v37GzrU5S24bJk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/simplememory/bundle-simplememory.min.css?v=OL4qeo1LNGlN1rKIhv5UctANvt0M6Nx6kLzr_ffx3Xk" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/hohoa/custom.css?v=bvCfrzb5j5f5sKZquyvoKkCcF8w=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/hohoa/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/hohoa/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/hohoa/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=VSP5rTXbJNpNidklGdgoLgwCGyUPITrcsmlgoaMKz3w"></script>
+    <script>
+        var currentBlogId = 294354;
+        var currentBlogApp = 'hohoa';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'SimpleMemory';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    <div id="page_begin_html">
+        <script src="https://files.cnblogs.com/files/hohoa/TweenMax.min.js" defer></script>
+<a href="https://github.com/hey-hoho" target="_blank"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://files.cnblogs.com/files/hohoa/github.ico" alt="Fork me on GitHub" data-evernote-hover-show="true"></a>
+    </div>
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/hohoa/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/hohoa/">HOHO</a>
+</h1>
+<h2>
+你简单，世界就是童话；心复杂，世界就是迷宫。
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/hohoa/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/balahoho">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/hohoa/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+19&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+220</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/hohoa/p/12622459.html">[一起读源码]走进C#并发队列ConcurrentQueue的内部世界</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+    <p>决定从这篇文章开始，开一个读源码系列，不限制平台语言或工具，任何自己感兴趣的都会写。前几天碰到一个小问题又读了一遍ConcurrentQueue的源码，那就拿C#中比较常用的并发队列ConcurrentQueue作为开篇来聊一聊它的实现原理。</p>
+<p>话不多说，直奔主题。</p>
+<blockquote>
+<p>要提前说明下的是，本文解析的源码是基于.NET Framework 4.8版本，地址是：<a href="https://referencesource.microsoft.com/#mscorlib/system/Collections/Concurrent/ConcurrentQueue.cs">https://referencesource.microsoft.com/#mscorlib/system/Collections/Concurrent/ConcurrentQueue.cs</a><br>
+本来是打算用.NET Core版本的，但是找了一下竟然没找到：<a href="https://github.com/dotnet/runtime/tree/master/src/libraries/System.Collections.Concurrent/src/System/Collections/Concurrent">https://github.com/dotnet/runtime/tree/master/src/libraries/System.Collections.Concurrent/src/System/Collections/Concurrent</a><br>
+不知道是我找错位置了还是咋回事，有知道的大佬告知一下。不过我觉得实现原理应该类似吧，后面找到了我对比一下，不同的话再写一篇来分析。</p>
+</blockquote>
+<br />
+<h3 id="带着问题出发">带着问题出发</h3>
+<p>如果是自己实现一个简单的队列功能，我们该如何设计它的存储结构呢？一般来说有这两种方式：数组或者链表，先来简单分析下。</p>
+<p>我们都知道，数组是固定空间的集合，意味着初始化的时候要指定数组大小，但是队列的长度是随时变化的，超出数组大小了怎么办？这时候就必须要对数组进行扩容。问题又来了，扩容要扩多少呢，少了不够用多了浪费内存空间。与之相反的，链表是动态空间类型的数据结构，元素之间通过指针相连，不需要提前分配空间，需要多少分配多少。但随之而来的问题是，大量的出队入队操作伴随着大量对象的创建销毁，GC的压力又变得非常大。<br>
+事实上，在C#的普通队列<code>Queue</code>类型中选择使用数组进行实现，它实现了一套扩容机制，这里不再详细描述，有兴趣的直接看<a href="https://referencesource.microsoft.com/#System/compmod/system/collections/generic/queue.cs">源码</a>，比较简单。</p>
+<p>回到主题，要实现一个高性能的线程安全队列，我们试着回答以下问题：</p>
+<ul>
+<li>存储结构是怎样的</li>
+<li>如何初始化（初始容量给多少比较好？）</li>
+<li>常用操作（入队出队）如何实现</li>
+<li>线程安全是如何保证的</li>
+</ul>
+<br />
+<h3 id="存储结构">存储结构</h3>
+<p>通过源码可以看到<code>ConcurrentQueue</code>采用了数组+链表的组合模式，充分吸收了2种结构的优点。</p>
+<p>具体来说，它的总体结构是一个链表，链表的每个节点是一个包含数组的特殊对象，我们称之为<strong>Segment</strong>（段或节，原话是<code>a queue is a linked list of small arrays, each node is called a segment.</code>），它里面的数组是存储真实数据的地方，容量固定大小是32，每一个Segment有指向下一个Segment的的指针，以此形成链表结构。而队列中维护了2个特殊的指针，他们分别指向队列的首段（head segment）和尾段（tail segment），他们对入队和出队有着重要的作用。用一张图来解释队列的内部结构：<br>
+<img src="https://imgkr.cn-bj.ufileos.com/f5a591f9-d964-4add-8be4-9df15ec663e0.png" alt="construction"></p>
+<blockquote>
+<p>嗯，画图画到这里突然联想到，搞成双向链表的话是不是就神似B+树的叶子节点？技术就是这么奇妙~</p>
+</blockquote>
+<p>段的核心定义为：</p>
+<pre><code class="language-c#">/// &lt;summary&gt;
+/// private class for ConcurrentQueue. 
+/// 链表节点（段）
+/// &lt;/summary&gt;
+private class Segment
+{
+    //实际存储数据的容器
+    internal volatile T[] m_array;
+
+    //存储对应位置数据的状态，当数据的对应状态位标记为true时该数据才是有效的
+    internal volatile VolatileBool[] m_state;
+
+    //下一段的指针
+    private volatile Segment m_next;
+
+    //当前段在队列中的索引
+    internal readonly long m_index;
+
+    //两个位置指针
+    private volatile int m_low;
+    private volatile int m_high;
+
+    //所属的队列实例
+    private volatile ConcurrentQueue&lt;T&gt; m_source;
+}
+</code></pre>
+<p>队列的核心定义为：</p>
+<pre><code class="language-c#">/// &lt;summary&gt;
+/// 线程安全的先进先出集合，
+/// &lt;/summary&gt;
+public class ConcurrentQueue&lt;T&gt; : IProducerConsumerCollection&lt;T&gt;, IReadOnlyCollection&lt;T&gt;
+{
+    //首段
+    [NonSerialized]
+    private volatile Segment m_head;
+
+    //尾段
+    [NonSerialized]
+    private volatile Segment m_tail;
+ 
+    //每一段的大小
+    private const int SEGMENT_SIZE = 32;
+ 
+    //截取快照的操作数量
+    [NonSerialized]
+    internal volatile int m_numSnapshotTakers = 0;
+}
+</code></pre>
+<br />
+<h3 id="常规操作">常规操作</h3>
+<p>先从初始化一个队列开始看起。</p>
+<h4 id="创建队列实例">创建队列实例</h4>
+<p>与普通<code>Queue</code>不同的是，<code>ConcurrentQueue</code>不再支持初始化时指定队列大小（capacity），仅仅提供一个无参构造函数和一个<code>IEnumerable&lt;T&gt;</code>参数的构造函数。</p>
+<pre><code class="language-c#">/// &lt;summary&gt;
+/// Initializes a new instance of the &lt;see cref=&quot;ConcurrentQueue{T}&quot;/&gt; class.
+/// &lt;/summary&gt;
+public ConcurrentQueue()
+{
+    m_head = m_tail = new Segment(0, this);
+}
+</code></pre>
+<p>无参构造函数很简单，创建了一个Segment实例并把首尾指针都指向它，此时队列只包含一个Segment，它的索引是0，队列容量是32。<br>
+继续看一下Segment是如何被初始化的：</p>
+<pre><code class="language-c#">/// &lt;summary&gt;
+/// Create and initialize a segment with the specified index.
+/// &lt;/summary&gt;
+internal Segment(long index, ConcurrentQueue&lt;T&gt; source)
+{
+    m_array = new T[SEGMENT_SIZE];
+    m_state = new VolatileBool[SEGMENT_SIZE]; //all initialized to false
+    m_high = -1;
+    Contract.Assert(index &gt;= 0);
+    m_index = index;
+    m_source = source;
+}
+</code></pre>
+<p>Segment只提供了一个构造函数，接受的参数分别是队列索引和队列实例，它创建了一个长度为32的数组，并创建了与之对应的状态数组，然后初始化了位置指针（m_low=0，m_high=-1，此时表示一个空的Segment）。<br>
+到这里，一个并发队列就创建好了。</p>
+<blockquote>
+<p>使用集合创建队列的过程和上面类似，只是多了两个步骤：入队和扩容，下面会重点描述这两部分所以这里不再过多介绍。</p>
+</blockquote>
+<br />
+<h4 id="元素入队">元素入队</h4>
+<p>先亮出源码：</p>
+<pre><code class="language-c#">/// &lt;summary&gt;
+/// Adds an object to the end of the &lt;see cref=&quot;ConcurrentQueue{T}&quot;/&gt;.
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;item&quot;&gt;The object to add to the end of the &lt;see
+/// cref=&quot;ConcurrentQueue{T}&quot;/&gt;. The value can be a null reference
+/// (Nothing in Visual Basic) for reference types.
+/// &lt;/param&gt;
+public void Enqueue(T item)
+{
+    SpinWait spin = new SpinWait();
+    while (true)
+    {
+        Segment tail = m_tail;
+        if (tail.TryAppend(item))
+            return;
+        spin.SpinOnce();
+    }
+}
+</code></pre>
+<p>通过源码可以看到，入队操作是在队尾（m_tail）进行的，它尝试在最后一个Segment中追加指定的元素，如果成功了就直接返回，失败的话就自旋等待，直到成功为止。那什么情况下会失败呢？这就要继续看看是如何追加元素的：</p>
+<pre><code class="language-c#">internal bool TryAppend(T value)
+{
+    //先判断一下高位指针有没有达到数组边界（也就是数组是否装满了）
+    if (m_high &gt;= SEGMENT_SIZE - 1)
+    {
+        return false;
+    }
+    int newhigh = SEGMENT_SIZE; 
+    try
+    { }
+    finally
+    {
+        //使用原子操作让高位指针加1
+        newhigh = Interlocked.Increment(ref m_high);
+        //如果数组还有空位
+        if (newhigh &lt;= SEGMENT_SIZE - 1)
+        {
+            //把数据放到数组中，同时更新状态
+            m_array[newhigh] = value;
+            m_state[newhigh].m_value = true;
+        }
+        //数组满了要触发扩容
+        if (newhigh == SEGMENT_SIZE - 1)
+        {
+            Grow();
+        }
+    }
+    return newhigh &lt;= SEGMENT_SIZE - 1;
+}
+</code></pre>
+<p><strong>所以，只有当尾段m_tail装满的情况下追加元素才会失败，这时候必须要等待下一个段产生，也就是扩容（细细品一下Grow这个词真的很妙），自旋就是在等扩容完成才能有地方放数据。而在保存数据的时候，通过原子自增操作保证了同一个位置只会有一个数据被写入，从而实现了线程安全。</strong></p>
+<blockquote>
+<p>注意：这里的装满并不是指数组每个位置都有数据，而是指最后一个位置已被使用。</p>
+</blockquote>
+<p>继续看一下扩容是怎么一个过程：</p>
+<pre><code class="language-c#">/// &lt;summary&gt;
+/// Create a new segment and append to the current one
+/// Update the m_tail pointer
+/// This method is called when there is no contention
+/// &lt;/summary&gt;
+internal void Grow()
+{
+    //no CAS is needed, since there is no contention (other threads are blocked, busy waiting)
+    Segment newSegment = new Segment(m_index + 1, m_source);  //m_index is Int64, we don't need to worry about overflow
+    m_next = newSegment;
+    Contract.Assert(m_source.m_tail == this);
+    m_source.m_tail = m_next;
+}
+</code></pre>
+<p><strong>在普通队列中，扩容是通过创建一个更大的数组然后把数据拷贝过去实现扩容的，这个操作比较耗时。而在并发队列中就非常简单了，首先创建一个新Segment，然后把当前Segment的next指向它，最后挂到队列的末尾去就可以了，全部是指针操作非常高效。</strong>而且从代码注释中可以看到，这里不会出现线程竞争的情况，因为其他线程都因为位置不够被阻塞都在自旋等待中。</p>
+<br />
+<h4 id="元素出队">元素出队</h4>
+<p>还是先亮出源码：</p>
+<pre><code class="language-c#">public bool TryDequeue(out T result)
+{
+    while (!IsEmpty)
+    {
+        Segment head = m_head;
+        if (head.TryRemove(out result))
+            return true;
+        //since method IsEmpty spins, we don't need to spin in the while loop
+    }
+    result = default(T);
+    return false;
+}
+</code></pre>
+<p>可以看到只有在队列不为空（IsEmpty==false）的情况下才会尝试出队操作，而出队是在首段上进行操作的。关于如何判断队列是否为空总结就一句话：<strong>当首段m_head不包含任何数据且没有下一段的时候队列才为空</strong>，详细的判断过程源码注释中写的很清楚，限于篇幅不详细介绍。</p>
+<p>出队的本质是从首段中移除低位指针所指向的元素，看一下具体实现步骤：</p>
+<pre><code class="language-c#">internal bool TryRemove(out T result)
+{
+    SpinWait spin = new SpinWait();
+    int lowLocal = Low, highLocal = High;
+    //判断当前段是否为空
+    while (lowLocal &lt;= highLocal)
+    {
+        //判断低位指针位置是否可以移除
+        if (Interlocked.CompareExchange(ref m_low, lowLocal + 1, lowLocal) == lowLocal)
+        {
+            SpinWait spinLocal = new SpinWait();
+            //判断元素是否有效
+            while (!m_state[lowLocal].m_value)
+            {
+                spinLocal.SpinOnce();
+            }
+            //取出元素
+            result = m_array[lowLocal];
+            //释放引用关系
+            if (m_source.m_numSnapshotTakers &lt;= 0)
+            {
+                m_array[lowLocal] = default(T); 
+            }
+            //判断当前段的元素是否全部被移除了，要丢弃它
+            if (lowLocal + 1 &gt;= SEGMENT_SIZE)
+            {
+                spinLocal = new SpinWait();
+                while (m_next == null)
+                {
+                    spinLocal.SpinOnce();
+                }
+                Contract.Assert(m_source.m_head == this);
+                m_source.m_head = m_next;
+            }
+            return true;
+        }
+        else
+        {
+            //线程竞争失败，自旋等待并重置
+            spin.SpinOnce();
+            lowLocal = Low; highLocal = High;
+        }
+    }//end of while
+    result = default(T);
+    return false;
+}
+</code></pre>
+<p><strong>首先，只有当前Segment不为空的情况下才尝试移除元素，否则就直接返回false。然后通过一个原子操作<code>Interlocked.CompareExchange</code>判断当前低位指针上是否有其他线程同时也在移除，如果有那就进入自旋等待，没有的话就从这个位置取出元素并把低位指针往前推进一位。如果当前队列没有正在进行截取快照的操作，那取出元素后还要把这个位置给释放掉。当这个Segment的所有元素都被移除掉了，这时候要把它丢弃，简单来说就是让队列的首段指针指向它的下一段即可，丢弃的这一段等着GC来收拾它。</strong></p>
+<p>这里稍微提一下Interlocked.CompareExchange，它的意思是比较和交换，也就是更为大家所熟悉的CAS（Compare-and-Swap），它主要做了以下2件事情：</p>
+<ul>
+<li>比较m_low和lowLocal的值是否相等</li>
+<li>如果相等则m_low=lowLocal+1，如果不相等就什么都不做，不管是否相等，始终返回m_low的原始值</li>
+</ul>
+<p>整个操作是原子性的，对CPU而言就是一条指令，这样就可以保证当前位置只有一个线程执行出队操作。</p>
+<blockquote>
+<p>还有一个<code>TryPeek()</code>方法和出队类似，它是从队首获取一个元素但是无需移除该元素，可以看做Dequeue的简化版，不再详细介绍。</p>
+</blockquote>
+<br />
+<h4 id="获取队列中元素的数量">获取队列中元素的数量</h4>
+<p>与普通<code>Queue</code>不同的是，<code>ConcurrentQueue</code>并没有维护一个表示队列中元素个数的计数器，那就意味着要得到这个数量必须实时去计算。我们看一下计算过程：</p>
+<pre><code class="language-c#">public int Count
+{
+    get
+    {
+        Segment head, tail;
+        int headLow, tailHigh;
+        GetHeadTailPositions(out head, out tail, out headLow, out tailHigh);
+
+        if (head == tail)
+        {
+            return tailHigh - headLow + 1;
+        }
+
+        int count = SEGMENT_SIZE - headLow;
+        count += SEGMENT_SIZE * ((int)(tail.m_index - head.m_index - 1));
+        count += tailHigh + 1;
+
+        return count;
+    }
+}
+</code></pre>
+<p>大致思路是，先计算（GetHeadTailPositions）出首段的低位指针和尾段的高位指针，这中间的总长度就是我们要的数量，然后分成3节依次累加每一个Segment包含的元素个数得到最终的队列长度，可以看到这是一个开销比较大的操作。<br>
+<strong>正因为如此，微软官方推荐使用<code>IsEmpty</code>属性来判断队列是否为空，而不是使用队列长度<code>Count==0</code>来判断，使用<code>ConcurrentStack</code>也是一样。</strong></p>
+<br />
+<h4 id="截取快照（take-snapshot）">截取快照（take snapshot）</h4>
+<p>所谓的take snapshot就是指一些格式转换的操作，例如<code>ToArray()</code>、<code>ToList()</code>、<code>GetEnumerator()</code>这种类型的方法。在前面队列的核心定义中我们提到有一个<code>m_numSnapshotTakers</code>字段，这时候就派上用场了。下面以比较典型的<code>ToList()</code>源码举例说明：</p>
+<pre><code class="language-c#">private List&lt;T&gt; ToList()
+{
+    // Increments the number of active snapshot takers. This increment must happen before the snapshot is 
+    // taken. At the same time, Decrement must happen after list copying is over. Only in this way, can it
+    // eliminate race condition when Segment.TryRemove() checks whether m_numSnapshotTakers == 0. 
+    Interlocked.Increment(ref m_numSnapshotTakers);
+
+    List&lt;T&gt; list = new List&lt;T&gt;();
+    try
+    {
+        Segment head, tail;
+        int headLow, tailHigh;
+        GetHeadTailPositions(out head, out tail, out headLow, out tailHigh);
+
+        if (head == tail)
+        {
+            head.AddToList(list, headLow, tailHigh);
+        }
+        else
+        {
+            head.AddToList(list, headLow, SEGMENT_SIZE - 1);
+            Segment curr = head.Next;
+            while (curr != tail)
+            {
+                curr.AddToList(list, 0, SEGMENT_SIZE - 1);
+                curr = curr.Next;
+            }
+            tail.AddToList(list, 0, tailHigh);
+        }
+    }
+    finally
+    {
+        // This Decrement must happen after copying is over. 
+        Interlocked.Decrement(ref m_numSnapshotTakers);
+    }
+    return list;
+}
+</code></pre>
+<p>可以看到，ToList的逻辑和Count非常相似，都是先计算出两个首尾位置指针，然后把队列分为3节依次遍历处理，最大的不同之处在于方法的开头和结尾分别对<code>m_numSnapshotTakers</code>做了一个原子操作。<br>
+在方法的第一行，使用<code>Interlocked.Increment</code>做了一次递增，这时候表示队列正在进行一次截取快照操作，在处理完后又在finally中用<code>Interlocked.Decrement</code>做了一次递减表示当前操作已完成，这样确保了在进行快照时不被出队影响。感觉这块很难描述的特别好，所以保留了原始的英文注释，大家慢慢体会。</p>
+<p>到这里，基本把ConcurrentQueue的核心说清楚了。</p>
+<br />
+<h3 id="总结一下">总结一下</h3>
+<p>回到文章开头提出的几个问题，现在应该有了很清晰的答案：</p>
+<ul>
+<li>存储结构 -- 采用数组和链表的组合形式</li>
+<li>如何初始化 -- 创建固定大小的段，无需指定初始容量</li>
+<li>常用操作如何实现 -- 尾段入队，首段出队</li>
+<li>线程安全问题 -- 使用SpinWait自旋等待和原子操作实现</li>
+</ul>
+<p>以上所述均是个人理解，如果有错误的地方还请不吝指正，以免误导他人。</p>
+<p>推荐相关阅读，篇篇都是干货：<a href="https://www.cnblogs.com/lucifer1982/category/126755.html">https://www.cnblogs.com/lucifer1982/category/126755.html</a></p>
+<br />
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2020-04-07 09:02</span>&nbsp;
+<a href="https://www.cnblogs.com/hohoa/">balahoho</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12622459" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(12622459);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 294354, cb_blogApp = 'hohoa', cb_blogUserGuid = '86b892cb-79ae-e311-8d02-90b11c0b17d6';
+    var cb_entryId = 12622459, cb_entryCreatedDate = '2020-04-07 09:02', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 balahoho
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <!-- 右侧图标返回顶部 -->
+<span id="gotop1"><img src="https://files.cnblogs.com/files/hohoa/huojian.ico" alt="返回顶部"></span>
+<script src="https://cdn.bootcss.com/bootstrap/3.2.0/js/transition.js"></script>
+<script src="https://blog-static.cnblogs.com/files/hohoa/zoom.js"></script>
+ <!--鼠标特效-->
+ <script src="https://blog-static.cnblogs.com/files/zouwangblog/mouse-click.js"></script>
+ <canvas width="1777" height="841" style="position: fixed; left: 0px; top: 0px; z-index: 2147483647; pointer-events: none;"></canvas>
+ <!--鼠标特效 end-->
+<script>
+   $('#cnblogs_post_body img').attr('data-action', 'zoom');
+    // scroll body to 0px on click
+    $('#gotop1').click(function() {
+       TweenMax.to(window, 1.5, {scrollTo:0, ease: Expo.easeInOut});
+      var huojian = new TimelineLite();
+      huojian.to("#gotop1", 1, {rotationY:720, scale:0.6, y:"+=40", ease:  Power4.easeOut})
+	.to("#gotop1", 1, {y:-1000, opacity:0, ease:  Power4.easeOut}, 0.6)
+	.to("#gotop1", 1, {y:0, rotationY:0, opacity:1, scale:1, ease: Expo.easeOut, clearProps: "all"}, "1.4");
+        $('body,html').animate({
+            scrollTop: 0
+        }, 1500);
+        return false;
+    });
+    window.onload = function () {
+        if ($("#div_digg") != null) {
+            //添加快速评论按钮
+            $("#div_digg").append("<a href='#tbCommentAuthor' id='quickReply'>快速评论</a>");
+            //快速评论动画
+            $('#quickReply').click(function () {
+                $('html, body').animate({
+                    scrollTop: $($.attr(this, 'href')).offset().top
+                }, 500);
+                return false;
+            });
+        }
+    }
+</script>
+    </div>
+</body>
+</html>

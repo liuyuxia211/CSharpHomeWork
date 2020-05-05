@@ -1,0 +1,398 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="正如我们在《依赖注入：控制反转》提到过的，很多人将IoC理解为一种“面向对象的设计模式”，实际上IoC不仅与面向对象没有必然的联系，它自身甚至算不上是一种设计模式。一般来讲，设计模式提供了一种解决某种" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>[ASP.NET Core 3框架揭秘] 依赖注入[2]：IoC模式 - Artech - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=BKtyzabbeYJEVOaELkxmRjHbp7LT-v37GzrU5S24bJk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/custom/bundle-custom.min.css?v=1ssrnY3Il79Ok472qeVrpxlSprSXcHhYPgZC5S3wtVM" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/artech/custom.css?v=leU/goGCZP8MalVXSCwwWQ/6Ask=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/custom/bundle-custom-mobile.min.css?v=-Yh290MhQyDeXLmvKTSses9H6-49lqbpXFh55zvS0w8" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/artech/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/artech/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/artech/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=VSP5rTXbJNpNidklGdgoLgwCGyUPITrcsmlgoaMKz3w"></script>
+    <script>
+        var currentBlogId = 22886;
+        var currentBlogApp = 'artech';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'Custom';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    <div id="page_begin_html">
+        <script>loadPageBeginHtml();</script>
+    </div>
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/artech/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/artech/"><img style="margin:0px auto 10px auto" style="width:94px; height:42px" src="http://images.cnblogs.com/cnblogs_com/artech/158198/o_ArtechLogo.png" alt="Artech" /></a>
+</h1>
+<h2>
+
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/artech/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/Artech">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/artech/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+750&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+25627</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-02.html">[ASP.NET Core 3框架揭秘] 依赖注入[2]：IoC模式</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+    <div id="cnblogs_post_description" style="display: none">
+        <img src="http://images.cnblogs.com/cnblogs_com/artech/158198/o_.netcore.png" class="desc_img">正如我们在《依赖注入：控制反转》提到过的，很多人将IoC理解为一种“面向对象的设计模式”，实际上IoC不仅与面向对象没有必然的联系，它自身甚至算不上是一种设计模式。一般来讲，设计模式提供了一种解决某种具体问题的方案，但是IoC既没有一个针对性的问题领域，其自身也没有提供一种可操作性的解决方案，所以我们更加倾向于将IoC视为一种设计原则。很多我们熟悉的设计模式背后都采用了IoC原则，接下来我们就来介绍几种典型的“设计模式”。
+    </div>
+<div id="cnblogs_post_body" class="blogpost-body ">
+    <p>正如我们在《<a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-01.html">依赖注入：控制反转</a>》提到过的，很多人将IoC理解为一种“面向对象的设计模式”，实际上IoC不仅与面向对象没有必然的联系，它自身甚至算不上是一种设计模式。一般来讲，设计模式提供了一种解决某种具体问题的方案，但是IoC既没有一个针对性的问题领域，其自身也没有提供一种可操作性的解决方案，所以我们更加倾向于将IoC视为一种设计原则。很多我们熟悉的设计模式背后都采用了IoC原则，接下来我们就来介绍几种典型的“设计模式”。</p><h1><font size="4">一、模板方法</font></h1><p>提到IoC，很多人首先想到的是依赖注入，但是在我看来与IoC联系得最为紧密的倒是另一种被称为“<strong>模板方法（Template Method）</strong>”的设计模式。模板方法模式与IoC的意图可以说不谋而合，该模式主张将一个可复用的工作流程或者由多个步骤组成的算法定义成模板方法，组成这个流程或者算法的单一步骤则实现在相应的虚方法之中，模板方法根据预先编排的流程去调用这些虚方法。这些方法均定义在一个类中，我们可以通过派生该类并重写相应的虚方法的方式达到对流程定制的目的。</p><p>对于前面我们演示的这个MVC的例子，我们可以将整个请求处理流程实现在一个MvcEngine类中。如下面的代码片段所示，我们将请求的监听与接收、目标Controller的激活与执行以及View的呈现分别定义在5个受保护的虚方法中，模板方法StartAsync根据预定义的请求处理流程先后调用这5个方法。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid rgb(204, 204, 204); border-image: none; background-color: rgb(245, 245, 245);"><pre><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> MvcEngine
+{
+    </span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">async</span><span style="color: rgb(0, 0, 0);"> Task StartAsync(Uri address)
+    {
+        </span><span style="color: rgb(0, 0, 255);">await</span><span style="color: rgb(0, 0, 0);"> ListenAsync(address);
+        </span><span style="color: rgb(0, 0, 255);">while</span> (<span style="color: rgb(0, 0, 255);">true</span><span style="color: rgb(0, 0, 0);">)
+        {
+            </span><span style="color: rgb(0, 0, 255);">var</span> request = <span style="color: rgb(0, 0, 255);">await</span><span style="color: rgb(0, 0, 0);"> ReceiveAsync();
+            </span><span style="color: rgb(0, 0, 255);">var</span> controller = <span style="color: rgb(0, 0, 255);">await</span><span style="color: rgb(0, 0, 0);"> CreateControllerAsync(request);
+            </span><span style="color: rgb(0, 0, 255);">var</span> view = <span style="color: rgb(0, 0, 255);">await</span><span style="color: rgb(0, 0, 0);"> ExecuteControllerAsync(controller);
+            </span><span style="color: rgb(0, 0, 255);">await</span><span style="color: rgb(0, 0, 0);"> RenderViewAsync(view);
+        }
+    }
+    </span><span style="color: rgb(0, 0, 255);">protected</span> <span style="color: rgb(0, 0, 255);">virtual</span><span style="color: rgb(0, 0, 0);"> Task ListenAsync(Uri address);
+    </span><span style="color: rgb(0, 0, 255);">protected</span> <span style="color: rgb(0, 0, 255);">virtual</span> Task&lt;Request&gt;<span style="color: rgb(0, 0, 0);"> ReceiveAsync();
+    </span><span style="color: rgb(0, 0, 255);">protected</span> <span style="color: rgb(0, 0, 255);">virtual</span> Task&lt;Controller&gt;<span style="color: rgb(0, 0, 0);"> CreateControllerAsync(Request request);
+    </span><span style="color: rgb(0, 0, 255);">protected</span> <span style="color: rgb(0, 0, 255);">virtual</span> Task&lt;View&gt;<span style="color: rgb(0, 0, 0);"> ExecuteControllerAsync(Controller controller);
+    </span><span style="color: rgb(0, 0, 255);">protected</span> <span style="color: rgb(0, 0, 255);">virtual</span><span style="color: rgb(0, 0, 0);"> Task RenderViewAsync(View view);
+}</span></pre></div><p>对于具体的应用程序来说，如果定义在MvcEngine中针对请求的处理方式完全符合要求，它只需要创建一个MvcEngine对象，然后指定一个监听地址调用模板方法StartAsync开启这个MVC引擎即可。如果该MVC引擎处理请求的某个环节不能满足要求，我们可以创建MvcEngine的派生类，并重写实现该环节的相应虚方法即可。比如说定义在某个应用程序中的Controller都是无状态的，它希望采用单例（Singleton）的方式重用已经激活的Controller对象以提高性能，那么它就可以按照如下的方式创建一个自定义的FoobarMvcEngine并按照自己的方式重写CreateControllerAsync方法即可。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid rgb(204, 204, 204); border-image: none; background-color: rgb(245, 245, 245);"><pre><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> FoobarMvcEngine : MvcEngine
+{
+    </span><span style="color: rgb(0, 0, 255);">protected</span> <span style="color: rgb(0, 0, 255);">override</span> Task&lt;View&gt;<span style="color: rgb(0, 0, 0);"> CreateControllerAsync (Request request)
+    {
+        </span>&lt;&lt;省略实现&gt;&gt;<span style="color: rgb(0, 0, 0);">
+    }
+}</span></pre></div><h1><font size="4">二、工厂方法</font></h1><p>对于一个复杂的流程来说，我们倾向于将组成该流程的各个环节实现在相应的组件之中，那么针对流程的定制就可以通过提供相应组件的形式来实现。我们知道23种设计模式之中有一种重要的类型，那就是“创建型模式”，比如常用的“工厂方法”和“抽象工厂”，IoC所体现的针对流程的共享与定制同样可以通过这些设计模式来完成。</p><p>所谓的工厂方法，说白了就是在某个类中定义用来提供所需服务对象的方法，这个方法可以是一个单纯的虚方法，也可以是具有默认实现的虚方法。至于方法声明的返回类型，可以是一个接口或者抽象类，也可以是未封闭（Sealed）的具体类型。作为它的派生类型，可以实现或者重写工厂方法以提供所需的服务对象。</p><p>同样以我们的MVC框架为例，我们让独立的组件来完成整个请求处理流程的几个核心环节。具体来说，我们为这些核心组件定义了如下几个对应的接口。IWebListener接口用来监听、接收和响应请求（针对请求的响应由ReceiveAsync方法返回的HttpContext上下文来完成），IControllerActivator接口用于根据当前HttpContext上下文激活目标Controller对象，并在Controller对象执行后做一些释放回收工作。至于IControllerExecutor和IViewRender接口则分别用来完成针对Controller的执行和针对View的呈现。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid rgb(204, 204, 204); border-image: none; background-color: rgb(245, 245, 245);"><pre><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">interface</span><span style="color: rgb(0, 0, 0);"> IWebListener
+{
+    Task ListenAsync(Uri address);
+    Task</span>&lt;HttpContext&gt;<span style="color: rgb(0, 0, 0);"> ReceiveAsync();
+}
+
+</span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">interface</span><span style="color: rgb(0, 0, 0);"> IControllerActivator
+{
+    Task</span>&lt;Controller&gt;<span style="color: rgb(0, 0, 0);"> CreateControllerAsync(HttpContext httpContext);
+    Task ReleaseAsync(Controller controller);
+}
+
+</span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">interface</span><span style="color: rgb(0, 0, 0);"> IControllerExecutor
+{
+    Task</span>&lt;View&gt;<span style="color: rgb(0, 0, 0);"> ExecuteAsync(Controller controller, HttpContext httpContext);
+}
+
+</span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">interface</span><span style="color: rgb(0, 0, 0);"> IViewRenderer
+{
+    Task RenderAsync(View view, HttpContext httpContext);
+}</span></pre></div><p>我们在作为MVC引擎的MvcEngine中定义了四个工厂方法（GetWebListener、GetControllerActivator、GetControllerExecutor和GetViewRenderer）来提供上述这四种组件。这四个工厂方法均为具有默认实现的虚方法，我们可以利用它们提供默认的组件。在用于启动引擎的StartAsync方法中，我们利用这些工厂方法提供的对象来具体完成整个请求处理流程。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid rgb(204, 204, 204); border-image: none; background-color: rgb(245, 245, 245);"><pre><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> MvcEngine
+{
+    </span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">async</span><span style="color: rgb(0, 0, 0);"> Task StartAsync(Uri address)
+    {
+        </span><span style="color: rgb(0, 0, 255);">var</span> listener =<span style="color: rgb(0, 0, 0);"> GetWebListener();
+        </span><span style="color: rgb(0, 0, 255);">var</span> activator =<span style="color: rgb(0, 0, 0);"> GetControllerActivator();
+        </span><span style="color: rgb(0, 0, 255);">var</span> executor =<span style="color: rgb(0, 0, 0);"> GetControllerExecutor();
+        </span><span style="color: rgb(0, 0, 255);">var</span> renderer =<span style="color: rgb(0, 0, 0);"> GetViewRender();
+
+        </span><span style="color: rgb(0, 0, 255);">await</span><span style="color: rgb(0, 0, 0);"> listener.ListenAsync(address);
+        </span><span style="color: rgb(0, 0, 255);">while</span> (<span style="color: rgb(0, 0, 255);">true</span><span style="color: rgb(0, 0, 0);">)
+        {
+            </span><span style="color: rgb(0, 0, 255);">var</span> httpContext = <span style="color: rgb(0, 0, 255);">await</span><span style="color: rgb(0, 0, 0);"> listener.ReceiveAsync();
+            </span><span style="color: rgb(0, 0, 255);">var</span> controller = <span style="color: rgb(0, 0, 255);">await</span><span style="color: rgb(0, 0, 0);"> activator.CreateControllerAsync(httpContext);
+            </span><span style="color: rgb(0, 0, 255);">try</span><span style="color: rgb(0, 0, 0);">
+            {
+                </span><span style="color: rgb(0, 0, 255);">var</span> view = <span style="color: rgb(0, 0, 255);">await</span><span style="color: rgb(0, 0, 0);"> executor.ExecuteAsync(controller, httpContext);
+                </span><span style="color: rgb(0, 0, 255);">await</span><span style="color: rgb(0, 0, 0);"> renderer.RendAsync(view, httpContext);
+            }
+            </span><span style="color: rgb(0, 0, 255);">finally</span><span style="color: rgb(0, 0, 0);">
+            {
+                </span><span style="color: rgb(0, 0, 255);">await</span><span style="color: rgb(0, 0, 0);"> activator.ReleaseAsync(controller);
+            }
+        }
+    }
+    </span><span style="color: rgb(0, 0, 255);">protected</span> <span style="color: rgb(0, 0, 255);">virtual</span><span style="color: rgb(0, 0, 0);"> IWebLister GetWebListener(); 
+    </span><span style="color: rgb(0, 0, 255);">protected</span> <span style="color: rgb(0, 0, 255);">virtual</span><span style="color: rgb(0, 0, 0);"> IControllerActivator GetControllerActivator();
+    </span><span style="color: rgb(0, 0, 255);">protected</span> <span style="color: rgb(0, 0, 255);">virtual</span><span style="color: rgb(0, 0, 0);"> IControllerExecutor GetControllerExecutor();
+    </span><span style="color: rgb(0, 0, 255);">protected</span> <span style="color: rgb(0, 0, 255);">virtual</span><span style="color: rgb(0, 0, 0);"> IViewRender GetViewRender();
+}</span></pre></div><p>对于具体的应用程序来说，如果需要对请求处理的某个环节进行定制，它需要将定制的操作实现在对应接口的实现类中。在MvcEngine的派生类中，我们需要重写对应的工厂方法来提供被定制的对象即可。 比如上面提及的以单例模式提供目标Controller对象的实现就定义在SingletonControllerActivator类中，我们在派生于MvcEngine的FoobarMvcEngine类中重写了工厂方法GetControllerActivator使其返回一个SingletonControllerActivator对象。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid rgb(204, 204, 204); border-image: none; background-color: rgb(245, 245, 245);"><pre><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> SingletonControllerActivator : IControllerActivator
+{         
+    </span><span style="color: rgb(0, 0, 255);">public</span> Task&lt;Controller&gt;<span style="color: rgb(0, 0, 0);"> CreateControllerAsync(HttpContext httpContext)
+    {
+        </span>&lt;&lt;省略实现&gt;&gt;<span style="color: rgb(0, 0, 0);">
+    }
+    </span><span style="color: rgb(0, 0, 255);">public</span> Task ReleaseAsync(Controller controller) =&gt;<span style="color: rgb(0, 0, 0);"> Task.CompletedTask;
+}
+
+</span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> FoobarMvcEngine : MvcEngine
+{
+    </span><span style="color: rgb(0, 0, 255);">protected</span> <span style="color: rgb(0, 0, 255);">override</span> ControllerActivator GetControllerActivator() =&gt; <span style="color: rgb(0, 0, 255);">new</span><span style="color: rgb(0, 0, 0);"> SingletonControllerActivator();
+}</span></pre></div><h1><font size="4">三、抽象工厂</font></h1><p>虽然工厂方法和抽象工厂均提供了一个“生产”对象实例的工厂，但是两者在设计上却有本质的不同。工厂方法利用定义在某个类型的抽象方法或者虚方法完成了针对“<strong>单一对象</strong>”的提供，而抽象工厂则利用一个独立的接口或者抽象类来提供“<strong>一组相关的对象</strong>”。</p><p>具体来说，我们需要定义一个独立的工厂接口或者抽象工厂类，并在其中定义多个工厂方法来提供“<strong>同一系列</strong>”的多个相关对象。如果希望抽象工厂具有一组默认的“产出”，我们也可以将一个未被封闭类型作为抽象工厂，以虚方法形式定义的工厂方法将默认的对象作为返回值。在具体的应用开发中，我们可以通过实现工厂接口或者继承抽象工厂类（不一定是抽象类）的方式来定义具体工厂类，并利用它来提供一组定制的对象系列。</p><p>现在我们采用抽象工厂模式来改造我们的MVC框架。如下面的代码片段所示，我们定义了一个名为IMvcEngineFactory的接口作为抽象工厂，并在其中定义了四个方法来提供请求监听和处理过程使用到的四种核心对象。如果MVC提供了针对这四种核心组件的默认实现，我们可以按照如下的方式为这个抽象工厂提供一个默认实现（MvcEngineFactory）。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid rgb(204, 204, 204); border-image: none; background-color: rgb(245, 245, 245);"><pre><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">interface</span><span style="color: rgb(0, 0, 0);"> IMvcEngineFactory
+{
+    IWebLister GetWebListener();
+    IControllerActivator GetControllerActivator();
+    IControllerExecutor GetControllerExecutor();
+    IViewRender GetViewRender();
+}
+
+</span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> MvcEngineFactory： IMvcEngineFactory
+{
+    </span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">virtual</span><span style="color: rgb(0, 0, 0);"> IWebListener GetWebListener();
+    </span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">virtual</span><span style="color: rgb(0, 0, 0);"> IControllerActivator GetControllerActivator();
+    </span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">virtual</span><span style="color: rgb(0, 0, 0);"> IControllerExecutor GetControllerExecutor();
+    </span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">virtual</span><span style="color: rgb(0, 0, 0);"> IViewRenderer GetViewRenderer();
+}</span></pre></div><p>现在我们采用抽象工厂模式来改造我们的MVC框架。我们在创建MvcEngine对象的时候提供一个具体的IMvcEngineFactory对象，如果没有显式指定，MvcEngine会默认使用EngineFactory对象。在用于启动引擎的StartAsync方法中，MvcEngine利用IMvcEngineFactory对象来获取相应的对象来完成对请求的处理流程。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid rgb(204, 204, 204); border-image: none; background-color: rgb(245, 245, 245);"><pre><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> MvcEngine
+{
+    </span><span style="color: rgb(0, 0, 255);">public</span> IMvcEngineFactory EngineFactory { <span style="color: rgb(0, 0, 255);">get</span><span style="color: rgb(0, 0, 0);">; }
+    </span><span style="color: rgb(0, 0, 255);">public</span> MvcEngine(IMvcEngineFactory engineFactory = <span style="color: rgb(0, 0, 255);">null</span>)  =&gt; EngineFactory = engineFactory ?? <span style="color: rgb(0, 0, 255);">new</span><span style="color: rgb(0, 0, 0);"> MvcEngineFactory();
+        
+    </span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">async</span><span style="color: rgb(0, 0, 0);"> Task StartAsync(Uri address)
+    {
+        </span><span style="color: rgb(0, 0, 255);">var</span> listener =<span style="color: rgb(0, 0, 0);"> EngineFactory.GetWebListener();
+        </span><span style="color: rgb(0, 0, 255);">var</span> activator =<span style="color: rgb(0, 0, 0);"> EngineFactory.GetControllerActivator();
+        </span><span style="color: rgb(0, 0, 255);">var</span> executor =<span style="color: rgb(0, 0, 0);"> EngineFactory.GetControllerExecutor();
+        </span><span style="color: rgb(0, 0, 255);">var</span> renderer=<span style="color: rgb(0, 0, 0);"> EngineFactory.GetViewRenderer();
+
+        </span><span style="color: rgb(0, 0, 255);">await</span><span style="color: rgb(0, 0, 0);"> listener.ListenAsync(address);
+        </span><span style="color: rgb(0, 0, 255);">while</span> (<span style="color: rgb(0, 0, 255);">true</span><span style="color: rgb(0, 0, 0);">)
+        {
+            </span><span style="color: rgb(0, 0, 255);">var</span> httpContext = <span style="color: rgb(0, 0, 255);">await</span><span style="color: rgb(0, 0, 0);"> listener.ReceiveAsync();
+            </span><span style="color: rgb(0, 0, 255);">var</span> controller = <span style="color: rgb(0, 0, 255);">await</span><span style="color: rgb(0, 0, 0);"> activator.CreateControllerAsync(httpContext);
+            </span><span style="color: rgb(0, 0, 255);">try</span><span style="color: rgb(0, 0, 0);">
+            {
+                </span><span style="color: rgb(0, 0, 255);">var</span> view = <span style="color: rgb(0, 0, 255);">await</span><span style="color: rgb(0, 0, 0);"> executor.ExecuteAsync(controller, httpContext);
+                </span><span style="color: rgb(0, 0, 255);">await</span><span style="color: rgb(0, 0, 0);"> render.RendAsync(view, httpContext);
+            }
+            </span><span style="color: rgb(0, 0, 255);">finally</span><span style="color: rgb(0, 0, 0);">
+            {
+                </span><span style="color: rgb(0, 0, 255);">await</span><span style="color: rgb(0, 0, 0);"> activator.ReleaseAsync(controller);
+            }
+        }
+    }        
+}</span></pre></div><p>如果具体的应用程序需要采用前面定义的SingletonControllerActivator以单例的模式来激活目标Controller对对象，可以按照如下的方式定义一个具体的工厂类FoobarEngineFactory。最终的应用程序将利用这个FoobarEngineFactory对象来创建作为引擎的MvcEngine对象即可。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid rgb(204, 204, 204); border-image: none; background-color: rgb(245, 245, 245);"><pre><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> FoobarEngineFactory : EngineFactory
+{
+    </span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">override</span><span style="color: rgb(0, 0, 0);"> ControllerActivator GetControllerActivator()
+    {
+        </span><span style="color: rgb(0, 0, 255);">return</span> <span style="color: rgb(0, 0, 255);">new</span><span style="color: rgb(0, 0, 0);"> SingletonControllerActivator();
+    }
+}
+
+</span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> App
+{
+    </span><span style="color: rgb(0, 0, 255);">static</span> <span style="color: rgb(0, 0, 255);">async</span><span style="color: rgb(0, 0, 0);"> Task Main()
+    {
+        </span><span style="color: rgb(0, 0, 255);">var</span> address = <span style="color: rgb(0, 0, 255);">new</span> Uri(<span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(128, 0, 0);">http://0.0.0.0:8080/mvcapp</span><span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(0, 0, 0);">);
+        </span><span style="color: rgb(0, 0, 255);">var</span> engine = <span style="color: rgb(0, 0, 255);">new</span> MvcEngine(<span style="color: rgb(0, 0, 255);">new</span><span style="color: rgb(0, 0, 0);"> FoobarEngineFactory());
+        </span><span style="color: rgb(0, 0, 255);">await</span><span style="color: rgb(0, 0, 0);"> engine.StartAsync(address);
+        ...
+    }
+}</span></pre></div><p><br></p><p><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-01.html">[ASP.NET Core 3框架揭秘] 依赖注入[1]：控制反转</a><br><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-02.html">[ASP.NET Core 3框架揭秘] 依赖注入[2]：IoC模式</a><br><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-03.html">[ASP.NET Core 3框架揭秘] 依赖注入[3]：依赖注入模式</a><br><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-04.html">[ASP.NET Core 3框架揭秘] 依赖注入[4]：一个迷你版DI框架</a><br><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-05.html">[ASP.NET Core 3框架揭秘] 依赖注入[5]：利用容器提供服务</a><br><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-06.html">[ASP.NET Core 3框架揭秘] 依赖注入[6]：服务注册</a><br><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-07.html">[ASP.NET Core 3框架揭秘] 依赖注入[7]：服务消费</a><br><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-08.html">[ASP.NET Core 3框架揭秘] 依赖注入[8]：服务实例的生命周期</a><br><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-09.html">[ASP.NET Core 3框架揭秘] 依赖注入[9]：实现概述</a><br><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-10.html">[ASP.NET Core 3框架揭秘] 依赖注入[10]：与第三方依赖注入框架的适配</a>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2019-10-17 05:41</span>&nbsp;
+<a href="https://www.cnblogs.com/artech/">Artech</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=11689757" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(11689757);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 22886, cb_blogApp = 'artech', cb_blogUserGuid = '9f65360b-63cf-dd11-9e4d-001cf0cd104b';
+    var cb_entryId = 11689757, cb_entryCreatedDate = '2019-10-17 05:41', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 Artech
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <script type="text/javascript">
+    $(document).ready(function () {
+        var html = '作者：蒋金楠 <br />微信公众账号：大内老A<br/>微博：<a href="http://www.weibo.com/artech">www.weibo.com/artech</a><br/>如果你想及时得到个人撰写文章以及著作的消息推送，或者想看看个人推荐的技术资料，可以扫描左边二维码（或者长按识别二维码）关注个人公众号）。<br/>本文版权归作者和博客园共有，欢迎转载，但未经作者同意必须保留此段声明，且在文章页面明显位置给出原文连接，否则保留追究法律责任的权利。<div style="clear:both"/>';
+        $("body").prepend($("#div_digg").css({ "position": "fixed", "right": "0px", "bottom": "0px", "z-index": "10", "background-color": "white", "margin": "10px", "padding": "10px", "border": "1px solid #cccccc" }));
+        if ($("#cnblogs_post_body").next().attr("id") == "MySignature") {
+            $("#cnblogs_post_body #MySignature").hide();
+            $("#cnblogs_post_body").next().show().html(html);
+        }
+        else {
+            $("#cnblogs_post_body #MySignature").show().html(html);
+        }
+    });
+</script>
+    </div>
+</body>
+</html>

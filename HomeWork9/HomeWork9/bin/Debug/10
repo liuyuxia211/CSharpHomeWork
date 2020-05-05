@@ -1,0 +1,442 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="写在前面 最近在读一本来自淘宝技术团队大牛的书，名字叫《大型网站系统与Java中间件实践》。开篇的章节详细地介绍了一个网站架构由小变大不断演进的过程，其中从单机架构升级到集群架构的过程中着重介绍了关于" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>分布式web架构中对session同步的常用处理方法以及优缺点 - balahoho - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=BKtyzabbeYJEVOaELkxmRjHbp7LT-v37GzrU5S24bJk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/simplememory/bundle-simplememory.min.css?v=OL4qeo1LNGlN1rKIhv5UctANvt0M6Nx6kLzr_ffx3Xk" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/hohoa/custom.css?v=bvCfrzb5j5f5sKZquyvoKkCcF8w=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/hohoa/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/hohoa/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/hohoa/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=VSP5rTXbJNpNidklGdgoLgwCGyUPITrcsmlgoaMKz3w"></script>
+    <script>
+        var currentBlogId = 294354;
+        var currentBlogApp = 'hohoa';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'SimpleMemory';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    <div id="page_begin_html">
+        <script src="https://files.cnblogs.com/files/hohoa/TweenMax.min.js" defer></script>
+<a href="https://github.com/hey-hoho" target="_blank"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://files.cnblogs.com/files/hohoa/github.ico" alt="Fork me on GitHub" data-evernote-hover-show="true"></a>
+    </div>
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/hohoa/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/hohoa/">HOHO</a>
+</h1>
+<h2>
+你简单，世界就是童话；心复杂，世界就是迷宫。
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/hohoa/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/balahoho">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/hohoa/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+19&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+220</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/hohoa/p/7256758.html">分布式web架构中对session同步的常用处理方法以及优缺点</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body ">
+    <h3><span style="font-family: 'Microsoft YaHei';">写在前面</span></h3>
+<p style="text-indent: 2em; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">最近在读一本来自淘宝技术团队大牛的书，名字叫《大型网站系统与Java中间件实践》。开篇的章节详细地介绍了一个网站架构由小变大不断演进的过程，其中从单机架构升级到集群架构的过程中着重介绍了关于session同步问题， 这也是很多人在聊到分布式时绕不过去的话题。下面就整理下书中的内容，也算是做个读书笔记，方便以后参考。</span></p>
+<h3> <span style="font-family: 'Microsoft YaHei'; font-size: 14px;"><br /></span><span style="font-family: 'Microsoft YaHei';">问题从哪来</span>
+</h3>
+<p style="text-indent: 2em; line-height: 1.75em;">
+    <span style="font-family: 'Microsoft YaHei'; font-size: 14px;">做web开发的同学应该对session再熟悉不过，它是服务器分配给客户端的会话标识，浏览器每次请求会带上这个标识来告诉服务器我是谁，服务器会在内存中存储这些不同的会话信息，由此来分辨请求来自哪个会话。在单机部署的环境总，因为web服务器和session都是在同一台机器上，所以必然能找到对应的会话数据。但如果有2台web服务器（A和B）提供服务，假如第一次请求落到A上并创建了session，那么如何保证下次落到B的请求能读到session数据？</span>
+</p>
+<p style="text-align: center;">
+    <span style="font-family: 'Microsoft YaHei'; font-size: 14px;"><img src="https://images2017.cnblogs.com/blog/614524/201707/614524-20170729175519191-1374723625.png" alt="" width="313" height="317" /></span></p>
+<h3>
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei';">解决方案</span>
+</h3>
+<p style="text-indent: 2em; line-height: 1.75em;">
+    <span style="font-family: 'Microsoft YaHei'; font-size: 14px;">有以下4中常见的解决方案。</span>
+</p>
+<p style="text-indent: 2em; line-height: 1.75em;">
+    <strong><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">1、Session Sticky</span></strong>
+</p>
+<p style="text-indent: 2em; line-height: 1.75em;">
+    <span style="font-family: 'Microsoft YaHei'; font-size: 14px;">这是最简单粗暴的 方法，核心思路就是让同一会话的请求都落地到同一台服务器上，这样处理起来就和单机一样了，我们可以在负载均衡上做一些身份识别并控制转发来达到这个目的。这样做的优势是能像单机一样简化对session处理，也方便做本地缓存，但缺点也是很明显的：</span>
+</p>
+<ul class=" list-paddingleft-2" style="list-style-type: disc;">
+<li>
+<p style="text-indent: 2em; line-height: 1.75em;">
+            <span style="font-family: 'Microsoft YaHei'; font-size: 14px;">如果这台服务器宕机或重启了，那么所以的会话数据都会丢失，失去了分布式集群带来的高可用特性。</span>
+        </p>
+
+
+
+    </li>
+<li>
+<p style="text-indent: 2em; line-height: 1.75em;">
+            <span style="font-family: 'Microsoft YaHei'; font-size: 14px;">增加了负载均衡器的负担，使它变得有状态了，而且资源消耗会更大，容易成为性能瓶颈。</span>
+        </p>
+
+
+
+    </li>
+
+
+
+</ul>
+<p style="text-indent: 2em; line-height: 1.75em;">
+    <strong><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">2、Session Replication</span></strong>
+</p>
+<p style="text-indent: 2em; line-height: 1.75em;">
+    <span style="font-family: 'Microsoft YaHei'; font-size: 14px;">顾名思义，这是一种session复制的方案，核心思路就是通过在服务器之间增加session同步机制来保证数据一致。</span></p>
+<p style="text-indent: 2em; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;"><img style="display: block; margin-left: auto; margin-right: auto;" src="https://images2017.cnblogs.com/blog/614524/201708/614524-20170805165548740-1503996093.png" alt="" width="318" height="336" /></span></p>
+<p style="text-indent: 2em; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">看起来比第一种简单了很多，也没有第一种带来的缺陷，但在某些应用场景下还是会有比较严重的问题：</span>
+</p>
+<ul class=" list-paddingleft-2">
+<li>
+<p style="text-indent: 2em; line-height: 1.75em;">
+            <span style="font-family: 'Microsoft YaHei'; font-size: 14px;">服务器之间的数据同步带来了额外的网络消耗，随着机器数量和数据量的上升，网络带宽将会有很大的压力，也必然会带来延时问题。</span>
+        </p>
+
+
+
+    </li>
+<li>
+<p style="text-indent: 2em; line-height: 1.75em;">
+            <span style="font-family: 'Microsoft YaHei'; font-size: 14px;">每台服务器上都要存储所有的会话数据，如果会话数量很大会占用服务器大部分内存空间。</span>
+        </p>
+
+
+
+    </li>
+
+
+
+</ul>
+<p style="text-indent: 2em; line-height: 1.75em;">
+    <span style="font-family: 'Microsoft YaHei'; font-size: 14px;">目前很多应用容器都支持这种同步方式，所以在集群规模和数据量比较小的时候还是一种很好的解决方案。</span>
+</p>
+<p style="text-indent: 2em; line-height: 1.75em;">
+    <strong><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">3、Session集中存储</span></strong>
+</p>
+<p style="text-indent: 2em; line-height: 1.75em;">
+    <span style="font-family: 'Microsoft YaHei'; font-size: 14px;">这种方式的思路就是把所有的会话数据统一存储和管理，所有应用服务器需要对session进行读写都要通过session服务器来操作：</span>
+</p>
+<p style="text-align: center;">
+    <span style="font-family: 'Microsoft YaHei'; font-size: 14px;"><img src="https://images2017.cnblogs.com/blog/614524/201708/614524-20170805141336881-630707377.png" alt="" width="268" height="368" /></span>
+</p>
+<p style="text-indent: 2em; line-height: 1.75em;">
+    <span style="font-family: 'Microsoft YaHei'; font-size: 14px;">这种方案的好处是独立了session的管理，职责单一化，session服务器采用什么方式存储（内存、数据库、文档、NoSql等等），什么方式对外提供服务都是透明的。不会给应用系统和负载均衡带来额外的开销，不需要进行数据同步就能保证一致性，看起来应该是非常完美了，不过也有自己的一些小缺陷：</span>
+</p>
+<ul class=" list-paddingleft-2">
+<li>
+<p style="text-indent: 2em; line-height: 1.75em;">
+            <span style="font-family: 'Microsoft YaHei'; font-size: 14px;">对session读写需要网络操作，相比较session直接存储在web服务器的时候增加了时延和不稳定性，好在session服务器和web服务器一般是部署在局域网中，可以最大化减少这个问题。</span>
+        </p>
+
+
+
+    </li>
+<li>
+<p style="text-indent: 2em; line-height: 1.75em;">
+            <span style="font-family: 'Microsoft YaHei'; font-size: 14px;">session服务器出现问题将影响所有web服务，如果采用多机部署同时也会带来数据一致性问题。</span>
+        </p>
+
+
+
+    </li>
+
+
+
+</ul>
+<p style="text-indent: 2em; line-height: 1.75em;">
+    <span style="font-family: 'Microsoft YaHei'; font-size: 14px;">每种方案带有它独特的优势，同时也会带来相应的新问题，正所谓没有十全十美，只有适合才是最好的。总体来说，这种方案在应用服务器和会话数据量都很大的时候还是非常有优势的。</span>
+</p>
+<p style="line-height: 1.75em; text-indent: 2em;">
+    <strong><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">4、Cookie Base</span></strong>
+</p>
+<p style="line-height: 1.75em; text-indent: 2em;">
+    <span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;这种方案是基于cookie的传输来实现的，核心思想很简单，就是把完整的会话数据经过处理后写入到客户端cookie，以后客户端每次请求都带上这个cookie，然后服务端通过解析cookie数据来获取会话信息，如下图所示：</span>
+</p>
+<p style="text-align: center; line-height: 1.75em; text-indent: 2em;">
+    <span style="font-family: 'Microsoft YaHei'; font-size: 14px;"><img src="https://images2017.cnblogs.com/blog/614524/201708/614524-20170805150546365-752609439.png" alt="" width="351" height="365" /></span>
+</p>
+<p style="line-height: 1.75em; text-indent: 2em;">
+    <span style="font-family: 'Microsoft YaHei'; font-size: 14px;">这种方案简单明了，也没有前面几种方案带来的问题，但劣势也非常明显：</span>
+</p>
+<ul class=" list-paddingleft-2">
+<li>
+<p style="line-height: 1.75em; text-indent: 2em;">
+            <span style="font-family: 'Microsoft YaHei'; font-size: 14px;">首先通过cookie来传递关键数据肯定是不安全的，即便是采用了特殊的加密手段。</span>
+        </p>
+
+
+
+    </li>
+<li>
+<p style="line-height: 1.75em; text-indent: 2em;">
+            <span style="font-family: 'Microsoft YaHei'; font-size: 14px;">如果客户端禁用了cookie，将直接导致服务不可用。</span>
+        </p>
+
+
+
+    </li>
+<li>
+<p style="line-height: 1.75em; text-indent: 2em;">
+            <span style="font-family: 'Microsoft YaHei'; font-size: 14px;">cookie的数据是有大小限制的，如果传递的数据超出限制大小，将会导致数据异常。</span>
+        </p>
+
+
+
+    </li>
+<li>
+<p style="line-height: 1.75em; text-indent: 2em;">
+            <span style="font-family: 'Microsoft YaHei'; font-size: 14px;">在http请求中携带大量的数据进行传输会增加网络负担，同样，服务端响应大量数据会导致请求变慢，并发量大的时候会非常可怕。</span>
+        </p>
+
+
+
+    </li>
+
+
+
+</ul>
+<h3>
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei';">总结</span>
+</h3>
+<p style="text-indent: 2em; line-height: 1.75em;">
+    <span style="font-family: 'Microsoft YaHei'; font-size: 14px;">以上4种方案都是可行的方案，正如前面所说，每种方案各有优劣，不会十全十美，实际应用中要根据需求做权衡和取舍。这些都是属于比较通用的方案，我相信在真正的实践和落地过程中还会有其他问题出现，有经验的过来人或许会有一些另辟蹊径的&ldquo;<span style="font-family: 'Microsoft YaHei'; font-size: 14px;">套路</span>&rdquo;，欢迎讨论交流。</span>
+</p>
+<p>
+    &nbsp;
+</p>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2017-08-06 10:10</span>&nbsp;
+<a href="https://www.cnblogs.com/hohoa/">balahoho</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=7256758" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(7256758);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 294354, cb_blogApp = 'hohoa', cb_blogUserGuid = '86b892cb-79ae-e311-8d02-90b11c0b17d6';
+    var cb_entryId = 7256758, cb_entryCreatedDate = '2017-08-06 10:10', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 balahoho
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <!-- 右侧图标返回顶部 -->
+<span id="gotop1"><img src="https://files.cnblogs.com/files/hohoa/huojian.ico" alt="返回顶部"></span>
+<script src="https://cdn.bootcss.com/bootstrap/3.2.0/js/transition.js"></script>
+<script src="https://blog-static.cnblogs.com/files/hohoa/zoom.js"></script>
+ <!--鼠标特效-->
+ <script src="https://blog-static.cnblogs.com/files/zouwangblog/mouse-click.js"></script>
+ <canvas width="1777" height="841" style="position: fixed; left: 0px; top: 0px; z-index: 2147483647; pointer-events: none;"></canvas>
+ <!--鼠标特效 end-->
+<script>
+   $('#cnblogs_post_body img').attr('data-action', 'zoom');
+    // scroll body to 0px on click
+    $('#gotop1').click(function() {
+       TweenMax.to(window, 1.5, {scrollTo:0, ease: Expo.easeInOut});
+      var huojian = new TimelineLite();
+      huojian.to("#gotop1", 1, {rotationY:720, scale:0.6, y:"+=40", ease:  Power4.easeOut})
+	.to("#gotop1", 1, {y:-1000, opacity:0, ease:  Power4.easeOut}, 0.6)
+	.to("#gotop1", 1, {y:0, rotationY:0, opacity:1, scale:1, ease: Expo.easeOut, clearProps: "all"}, "1.4");
+        $('body,html').animate({
+            scrollTop: 0
+        }, 1500);
+        return false;
+    });
+    window.onload = function () {
+        if ($("#div_digg") != null) {
+            //添加快速评论按钮
+            $("#div_digg").append("<a href='#tbCommentAuthor' id='quickReply'>快速评论</a>");
+            //快速评论动画
+            $('#quickReply').click(function () {
+                $('html, body').animate({
+                    scrollTop: $($.attr(this, 'href')).offset().top
+                }, 500);
+                return false;
+            });
+        }
+    }
+</script>
+    </div>
+</body>
+</html>

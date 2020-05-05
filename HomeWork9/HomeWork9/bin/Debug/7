@@ -1,0 +1,428 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="背后的故事 随着项目需求的逐步增加，后端开发框架在我手上也慢慢重构为组件开发模式，整体结构类似于NopCommence。在这种结构中，每个组件所在的类库项目其实是生成到网站项目里指定的一个目录的，然后" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>【小试插件开发】给Visual Studio装上自己定制的功能来提高代码调试效率 - balahoho - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=BKtyzabbeYJEVOaELkxmRjHbp7LT-v37GzrU5S24bJk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/simplememory/bundle-simplememory.min.css?v=OL4qeo1LNGlN1rKIhv5UctANvt0M6Nx6kLzr_ffx3Xk" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/hohoa/custom.css?v=bvCfrzb5j5f5sKZquyvoKkCcF8w=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/hohoa/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/hohoa/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/hohoa/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=VSP5rTXbJNpNidklGdgoLgwCGyUPITrcsmlgoaMKz3w"></script>
+    <script>
+        var currentBlogId = 294354;
+        var currentBlogApp = 'hohoa';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'SimpleMemory';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    <div id="page_begin_html">
+        <script src="https://files.cnblogs.com/files/hohoa/TweenMax.min.js" defer></script>
+<a href="https://github.com/hey-hoho" target="_blank"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://files.cnblogs.com/files/hohoa/github.ico" alt="Fork me on GitHub" data-evernote-hover-show="true"></a>
+    </div>
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/hohoa/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/hohoa/">HOHO</a>
+</h1>
+<h2>
+你简单，世界就是童话；心复杂，世界就是迷宫。
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/hohoa/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/balahoho">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/hohoa/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+19&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+220</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/hohoa/p/6617619.html">【小试插件开发】给Visual Studio装上自己定制的功能来提高代码调试效率</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body ">
+    <h3 style="line-height: 1.75em; text-indent: 2em;"> <span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 18px;">背后的故事</span><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;"><br /></span>
+</h3>
+<p style="line-height: 1.75em; text-indent: 2em;">
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">随着项目需求的逐步增加，后端开发框架在我手上也慢慢重构为组件开发模式，整体结构类似于<a href="https://github.com/nopSolutions/nopCommerce" target="_blank">NopCommence</a>。在这种结构中，每个组件所在的类库项目其实是生成到网站项目里指定的一个目录的，然后随之而来的就有一个不痛不痒的问题一直挥之不去。那就是每次在组件内修改代码后都要清理解决方案，然后重新生成一下才能开始调试。如果不重新生成的话，修改后的代码根本看不到效果，但是重新生成会替换上一次生成的程序集，这时候程序集有可能正在被iis express的进程占用就会生成失败，这时候就要先清理解决方案。</span>
+</p>
+<p style="line-height: 1.75em; text-indent: 2em;">
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">对于那种只在视图里改了一个文字的情况还要重新生成简直是不能忍，所以特别怀念之前<span style="font-size: 14px; font-family: Arial, sans-serif;">web</span>开发中保存文件后刷新浏览器就能看到效果的日子。虽然说操作上也不是很复杂，可是由于项目众多，每次先清理再编译一次特别浪费时间，最重要的是修改前端代码完全不需要去编译啊，于是就有了下面的想法。</span>
+</p>
+<p style="line-height: 1.75em; text-indent: 2em;">
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">因为生成项目的时候本质上对静态文件是一个复制过程，就想着有没有办法通过一个操作把组件内的视图文件复制到指定目录下去？</span>
+</p>
+<p style="line-height: 1.75em; text-indent: 2em;">
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">既然有了这个想法，那也不能塞回去吧，就只有一个字了：干！</span>
+</p>
+<p style="line-height: 1.75em; text-indent: 2em;">
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;"><br /></span>
+</p>
+<h3 style="line-height: 1.75em; text-indent: 2em;">
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 18px;">把想法付诸实践</span><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;"><br /></span>
+</h3>
+<p style="line-height: 1.75em; text-indent: 2em;">
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">既然想给VS添加自己想要的功能，那就得给VS开发一个插件了。记得以前看过<span style="font-size: 14px; font-family: Arial, sans-serif;">VS</span>插件开发的帖子，估计用的上，照猫画狗加上百度一番，终于把想要的东西实现了。</span>
+</p>
+<p style="line-height: 1.75em; text-indent: 2em;">
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">&nbsp;先创建一个插件项目：</span>
+</p>
+<p style="line-height: 1.75em; text-indent: 2em;"><img src="https://images2015.cnblogs.com/blog/614524/201703/614524-20170325165051049-557097806.png" alt="" width="757" height="537" /></p>
+<p style="line-height: 1.75em; text-indent: 2em;">
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">&nbsp;然后在项目中添加一个自定义命令MyCommand：</span>
+</p>
+<p style="line-height: 1.75em; text-indent: 2em;"><img src="https://images2015.cnblogs.com/blog/614524/201703/614524-20170325165107752-194266130.png" alt="" width="759" height="488" /></p>
+<p style="line-height: 1.75em; text-indent: 2em;">
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">可以看到项目中出现了很多以&ldquo;MyCommand&rdquo;开头的文件，不用猜也知道都是和这个命令有关的一些文件。其中&ldquo;<span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px; text-indent: 32px;">MyCommand.cs</span>&rdquo;需要特别关注，因为你的命令创建、回调事件都是在这个类中定义的，这里面必须要了解的就是MenuItemCallback方法，看名称大致可以猜到它是你命令执行的回调函数。说白了，你的命令想干些什么事就是在这个方法里面code出来的，看一下自动生成的代码：</span></p>
+<div class="cnblogs_code">
+<pre>        <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+        <span style="color: #808080;">///</span><span style="color: #008000;"> This function is the callback used to execute the command when the menu item is clicked.
+        </span><span style="color: #808080;">///</span><span style="color: #008000;"> See the constructor to see how the menu item is associated with this function using
+        </span><span style="color: #808080;">///</span><span style="color: #008000;"> OleMenuCommandService service and MenuCommand class.
+        </span><span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+        <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="sender"&gt;</span><span style="color: #008000;">Event sender.</span><span style="color: #808080;">&lt;/param&gt;</span>
+        <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="e"&gt;</span><span style="color: #008000;">Event args.</span><span style="color: #808080;">&lt;/param&gt;</span>
+        <span style="color: #0000ff;">private</span> <span style="color: #0000ff;">void</span> MenuItemCallback(<span style="color: #0000ff;">object</span><span style="color: #000000;"> sender, EventArgs e)
+        {
+            </span><span style="color: #0000ff;">string</span> message = <span style="color: #0000ff;">string</span>.Format(CultureInfo.CurrentCulture, <span style="color: #800000;">"</span><span style="color: #800000;">Inside {0}.MenuItemCallback()</span><span style="color: #800000;">"</span>, <span style="color: #0000ff;">this</span><span style="color: #000000;">.GetType().FullName);
+            </span><span style="color: #0000ff;">string</span> title = <span style="color: #800000;">"</span><span style="color: #800000;">MyCommand</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+
+            </span><span style="color: #008000;">//</span><span style="color: #008000;"> Show a message box to prove we were here</span>
+<span style="color: #000000;">            VsShellUtilities.ShowMessageBox(
+                </span><span style="color: #0000ff;">this</span><span style="color: #000000;">.ServiceProvider,
+                message,
+                title,
+                OLEMSGICON.OLEMSGICON_INFO,
+                OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+        }</span></pre>
+</div>
+<p style="line-height: 1.75em; text-indent: 2em;"> <span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">通过VS的方法提示和代码注释可以看到方法体内主要做了一个弹框操作，类似Winform的MessageBox.Show()的玩意儿，那我们就在这里根据实际需求来写代码。<br /></span>
+</p>
+<p style="line-height: 1.75em; text-indent: 2em;">
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">我的需求是：通过执行这个命令把当前编辑的文件保存到本地指定的一个目录中，如果有同名文件则直接替换。非常简单的需求，那就开始像平常开发那样啪啪啪地coding了。中间只有一个需要注意的点，就是要根据当前文件所在的组件名称去拼接目标目录，好在我的项目命名都是有规律的，所以也就比较轻松了。主要代码为：</span></p>
+<div class="cnblogs_code">
+<pre>        <span style="color: #0000ff;">private</span> <span style="color: #0000ff;">void</span> MenuItemCallback(<span style="color: #0000ff;">object</span><span style="color: #000000;"> sender, EventArgs e)
+        {
+　　　　　　　</span><span style="color: #0000ff;">var</span> dte = <span style="color: #0000ff;">this</span>.ServiceProvider.GetService(<span style="color: #0000ff;">typeof</span>(DTE)) <span style="color: #0000ff;">as</span><span style="color: #000000;"> DTE;
+            </span><span style="color: #0000ff;">var</span> doc = dte?.ActiveDocument;<span style="color: #008000;">//</span><span style="color: #008000;">当前文档</span>
+            <span style="color: #0000ff;">if</span> (doc == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+            {
+                ShowErrorMessage();
+                </span><span style="color: #0000ff;">return</span><span style="color: #000000;">;
+            }
+            </span><span style="color: #0000ff;">if</span> (!doc.Name.EndsWith(<span style="color: #800000;">"</span><span style="color: #800000;">.cshtml</span><span style="color: #800000;">"</span>)&amp;&amp;!doc.Name.EndsWith(<span style="color: #800000;">"</span><span style="color: #800000;">.js</span><span style="color: #800000;">"</span>)&amp;&amp;!doc.Name.EndsWith(<span style="color: #800000;">"</span><span style="color: #800000;">.css</span><span style="color: #800000;">"</span><span style="color: #000000;">))
+            {
+                ShowErrorMessage();
+                </span><span style="color: #0000ff;">return</span><span style="color: #000000;">;
+            }
+            doc.Save();
+            dte.StatusBar.Text </span>= <span style="color: #800000;">"</span><span style="color: #800000;">suibao：当前修改已保存</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+            DirectoryInfo directory </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> DirectoryInfo(doc.Path);
+            </span><span style="color: #0000ff;">var</span> projectPath =<span style="color: #000000;"> directory.Parent.Parent;
+            </span><span style="color: #0000ff;">var</span> moduleName = projectPath.Name.Split(<span style="color: #800000;">'</span><span style="color: #800000;">.</span><span style="color: #800000;">'</span><span style="color: #000000;">);
+            </span><span style="color: #0000ff;">if</span> (moduleName.Length &gt; <span style="color: #800080;">2</span><span style="color: #000000;">)
+            {
+                </span><span style="color: #0000ff;">string</span> path = doc.Path.Replace(projectPath.Name, <span style="color: #800000;">"</span><span style="color: #800000;">SuiBao.WebAdmin\\Plugins\\</span><span style="color: #800000;">"</span> + moduleName[<span style="color: #800080;">2</span><span style="color: #000000;">]);
+                </span><span style="color: #008000;">//</span><span style="color: #008000;">doc.Save(path);</span>
+                <span style="color: #0000ff;">if</span> (!<span style="color: #000000;">Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                File.Copy(doc.FullName, path </span>+ doc.Name, <span style="color: #0000ff;">true</span>);<span style="color: #008000;">//</span><span style="color: #008000;">复制且替换</span>
+                dte.StatusBar.Text = <span style="color: #800000;">"</span><span style="color: #800000;">suibao：保存到组件目录完成</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+            }
+            </span><span style="color: #0000ff;">else</span><span style="color: #000000;">
+            {
+                ShowErrorMessage();
+            }
+        }
+
+        </span><span style="color: #0000ff;">private</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> ShowErrorMessage()
+        {
+            VsShellUtilities.ShowMessageBox(ServiceProvider, </span><span style="color: #800000;">"</span><span style="color: #800000;">无效操作！</span><span style="color: #800000;">"</span>, <span style="color: #800000;">"</span><span style="color: #800000;">系统提示</span><span style="color: #800000;">"</span><span style="color: #000000;">, OLEMSGICON.OLEMSGICON_WARNING, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+        }</span></pre>
+</div>
+<p style="line-height: 1.75em; text-indent: 2em;"> <span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">目前只做了Razor视图、js、css的处理，同时也做了异常操作处理，并且在VS状态栏中给出操作结果提示。然后编译、运行，这时会在VS的主菜单&ldquo;工具&rdquo;下面第一行多了自定义的命令：<br /></span>
+</p>
+<p style="line-height: 1.75em; text-indent: 2em;"><img src="https://images2015.cnblogs.com/blog/614524/201703/614524-20170325202450830-1137953452.png" alt="" width="322" height="352" /></p>
+<p style="line-height: 1.75em; text-indent: 2em;">
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">觉得&ldquo;Invoke MyCommand&rdquo;这个名字不喜欢想自己定义？没问题~打开项目中的&ldquo;MyCommandPackage.vsct&rdquo;文件，找到Buttons这个节点，里面定义了我们命令的各种属性，改名称改图标自己看着办：</span></p>
+<div class="cnblogs_Highlighter">
+<pre class="brush:csharp;gutter:true;">      &lt;Button guid="guidMyCommandPackageCmdSet" id="MyCommandId" priority="0x0100" type="Button"&gt;
+        &lt;Parent guid="guidMyCommandPackageCmdSet" id="MyMenuGroup" /&gt;
+        &lt;Icon guid="guidImages" id="bmpPic1" /&gt;
+        &lt;Strings&gt;
+          &lt;ButtonText&gt;MyCommandDemo&lt;/ButtonText&gt;
+        &lt;/Strings&gt;
+      &lt;/Button&gt;</pre>
+</div>
+<p style="line-height: 1.75em; text-indent: 2em;"> <span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">什么？觉得每次都要点2次菜单太麻烦想搞个快捷键？小意思~有两种方式，如下。<br /></span>
+</p>
+<p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">方式一，在配置文件中设置快捷键，参考<a href="https://msdn.microsoft.com/zh-cn/library/cc138531.aspx" target="_blank">这里</a>：</span></p>
+<div class="cnblogs_Highlighter">
+<pre class="brush:csharp;gutter:true;">&lt;KeyBindings&gt;  
+    &lt;KeyBinding guid="guidMyCommandPackageCmdSet" id="MyCommandId"  
+        editor="guidVSStd97" key1="Q" mod1="CONTROL"/&gt;<br />&lt;/KeyBindings&gt;</pre>
+</div>
+<p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">方式二，在VS中给命令设置快捷键：</span></p>
+<p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 微软雅黑, Microsoft YaHei;"><span style="font-size: 14px;">依次打开菜单&ldquo;工具&rdquo;-&ldquo;选项&rdquo;-&ldquo;环境&rdquo;-&ldquo;键盘&rdquo;，按名称搜索到命令，然后输入快捷键，点击&ldquo;分配&rdquo;，再保存一下，搞定。</span></span></p>
+<p style="line-height: 1.75em; text-indent: 2em;"> <img src="https://images2015.cnblogs.com/blog/614524/201703/614524-20170325165453018-2015470500.png" alt="" width="553" height="360" /><br />
+</p>
+<p style="line-height: 1.75em; text-indent: 2em;">&nbsp;</p>
+<h3 style="white-space: normal; line-height: 1.75em; text-indent: 2em;">
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 18px;">持续地探索</span>
+</h3>
+<p style="white-space: normal; line-height: 1.75em; text-indent: 2em;">
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei';"><span style="font-size: 14px;">折腾到现在总算是解决了其中一个问题，内心多少有点小兴奋。回到项目中，依然有个痛点亟需解决，那就是关于编译的问题。稍微分析一下不难发现，这个问题的核心其实就是DLL文件生成与存放路径。于是就打算继续按上面的套路，在本项目生成程序集然后copy到web项目中，然后就开干了。在写代码过程中，发现EnvDTE.DTE这个接口提供了很多操作VS资源的方法，然后顺着一路找下来看到了SolutionBuild这个接口对解决方案有各种Build相关的方法(参考<a href="https://msdn.microsoft.com/en-us/library/envdte.solution.aspx" target="_blank">这里</a>和<a href="https://msdn.microsoft.com/en-us/library/envdte.solutionbuild.aspx" target="_blank">这里</a>)，于是果然放弃之前的套路，打算把&ldquo;清理&rdquo;和&ldquo;重新编译&rdquo;两个命令结合到一起。因为按原来的思路，也是要先编译完才能复制DLL，中间还要解决DLL被进程占用的问题，还不如直接Clean+Build一条龙来的快。代码非常简单：</span></span></p>
+<div class="cnblogs_code">
+<pre>        <span style="color: #0000ff;">private</span> <span style="color: #0000ff;">void</span> MenuItemCallback(<span style="color: #0000ff;">object</span><span style="color: #000000;"> sender, EventArgs e)
+        {
+            </span><span style="color: #0000ff;">var</span> dte = <span style="color: #0000ff;">this</span>.ServiceProvider.GetService(<span style="color: #0000ff;">typeof</span>(DTE)) <span style="color: #0000ff;">as</span><span style="color: #000000;"> DTE;
+            dte.Solution.SolutionBuild.Clean(</span><span style="color: #0000ff;">true</span><span style="color: #000000;">);
+            dte.Solution.SolutionBuild.Build();
+        }</span></pre>
+</div>
+<p style="white-space: normal; line-height: 1.75em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><span style="font-size: 14px;">有了上面提到的那些接口，发现能够干的事太多了，几乎可以随心所欲来扩展自己想要的功能。</span></span></p>
+<p style="white-space: normal; line-height: 1.75em; text-indent: 2em;"> <span style="font-family: 微软雅黑, 'Microsoft YaHei';"><span style="font-size: 14px;"><br /></span></span>
+</p>
+<h3 style="white-space: normal; line-height: 1.75em; text-indent: 2em;">
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 18px;">总结</span>
+</h3>
+<p style="white-space: normal; line-height: 1.75em; text-indent: 2em;">
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei';"><span style="font-size: 14px;">本文的目的并不是展示Visual Studio插件开发的流程，只是借这个例子来阐述遇到问题时要积极寻找合适的工具或方法去解决问题，对于过程中碰到未知领域，要乐于探索，对于工作中那种重复性特别高的事，尽可能想办法来提高效率。我是第一次接触VS插件开发，本文的例子也是最最基础的尝试。网上有很多强大和酷炫的插件开发示例，VS的插件库也有很多实用的扩展包可以下载使用。总之，能解决你实际问题的任何过程和产出都是有价值、有意义的~</span></span>
+</p>
+<p style="text-indent: 2em;">
+    <br />
+</p>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2017-03-25 20:52</span>&nbsp;
+<a href="https://www.cnblogs.com/hohoa/">balahoho</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=6617619" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(6617619);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 294354, cb_blogApp = 'hohoa', cb_blogUserGuid = '86b892cb-79ae-e311-8d02-90b11c0b17d6';
+    var cb_entryId = 6617619, cb_entryCreatedDate = '2017-03-25 20:52', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 balahoho
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <!-- 右侧图标返回顶部 -->
+<span id="gotop1"><img src="https://files.cnblogs.com/files/hohoa/huojian.ico" alt="返回顶部"></span>
+<script src="https://cdn.bootcss.com/bootstrap/3.2.0/js/transition.js"></script>
+<script src="https://blog-static.cnblogs.com/files/hohoa/zoom.js"></script>
+ <!--鼠标特效-->
+ <script src="https://blog-static.cnblogs.com/files/zouwangblog/mouse-click.js"></script>
+ <canvas width="1777" height="841" style="position: fixed; left: 0px; top: 0px; z-index: 2147483647; pointer-events: none;"></canvas>
+ <!--鼠标特效 end-->
+<script>
+   $('#cnblogs_post_body img').attr('data-action', 'zoom');
+    // scroll body to 0px on click
+    $('#gotop1').click(function() {
+       TweenMax.to(window, 1.5, {scrollTo:0, ease: Expo.easeInOut});
+      var huojian = new TimelineLite();
+      huojian.to("#gotop1", 1, {rotationY:720, scale:0.6, y:"+=40", ease:  Power4.easeOut})
+	.to("#gotop1", 1, {y:-1000, opacity:0, ease:  Power4.easeOut}, 0.6)
+	.to("#gotop1", 1, {y:0, rotationY:0, opacity:1, scale:1, ease: Expo.easeOut, clearProps: "all"}, "1.4");
+        $('body,html').animate({
+            scrollTop: 0
+        }, 1500);
+        return false;
+    });
+    window.onload = function () {
+        if ($("#div_digg") != null) {
+            //添加快速评论按钮
+            $("#div_digg").append("<a href='#tbCommentAuthor' id='quickReply'>快速评论</a>");
+            //快速评论动画
+            $('#quickReply').click(function () {
+                $('html, body').animate({
+                    scrollTop: $($.attr(this, 'href')).offset().top
+                }, 500);
+                return false;
+            });
+        }
+    }
+</script>
+    </div>
+</body>
+</html>

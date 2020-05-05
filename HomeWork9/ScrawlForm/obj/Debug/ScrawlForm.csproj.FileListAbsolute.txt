@@ -1,0 +1,10 @@
+E:\VS DATA\HomeWork\HomeWork9\ScrawlForm\bin\Debug\ScrawlForm.exe.config
+E:\VS DATA\HomeWork\HomeWork9\ScrawlForm\bin\Debug\ScrawlForm.exe
+E:\VS DATA\HomeWork\HomeWork9\ScrawlForm\bin\Debug\ScrawlForm.pdb
+E:\VS DATA\HomeWork\HomeWork9\ScrawlForm\obj\Debug\ScrawlForm.csprojAssemblyReference.cache
+E:\VS DATA\HomeWork\HomeWork9\ScrawlForm\obj\Debug\ScrawlForm.Form1.resources
+E:\VS DATA\HomeWork\HomeWork9\ScrawlForm\obj\Debug\ScrawlForm.Properties.Resources.resources
+E:\VS DATA\HomeWork\HomeWork9\ScrawlForm\obj\Debug\ScrawlForm.csproj.GenerateResource.cache
+E:\VS DATA\HomeWork\HomeWork9\ScrawlForm\obj\Debug\ScrawlForm.csproj.CoreCompileInputs.cache
+E:\VS DATA\HomeWork\HomeWork9\ScrawlForm\obj\Debug\ScrawlForm.exe
+E:\VS DATA\HomeWork\HomeWork9\ScrawlForm\obj\Debug\ScrawlForm.pdb

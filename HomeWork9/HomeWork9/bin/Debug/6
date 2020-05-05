@@ -1,0 +1,449 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="业务背景 在稍微复杂点业务系统中，不可避免会碰到做定时任务的需求，比如淘宝的交易超时自动关闭订单、超时自动确认收货等等。对于一些定时作业比较多的系统，通常都会搭建专门的调度平台来管理，通过创建定时器来" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>采用简易的环形延时队列处理秒级定时任务的解决方案 - balahoho - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=BKtyzabbeYJEVOaELkxmRjHbp7LT-v37GzrU5S24bJk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/simplememory/bundle-simplememory.min.css?v=OL4qeo1LNGlN1rKIhv5UctANvt0M6Nx6kLzr_ffx3Xk" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/hohoa/custom.css?v=bvCfrzb5j5f5sKZquyvoKkCcF8w=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/hohoa/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/hohoa/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/hohoa/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=VSP5rTXbJNpNidklGdgoLgwCGyUPITrcsmlgoaMKz3w"></script>
+    <script>
+        var currentBlogId = 294354;
+        var currentBlogApp = 'hohoa';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'SimpleMemory';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    <div id="page_begin_html">
+        <script src="https://files.cnblogs.com/files/hohoa/TweenMax.min.js" defer></script>
+<a href="https://github.com/hey-hoho" target="_blank"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://files.cnblogs.com/files/hohoa/github.ico" alt="Fork me on GitHub" data-evernote-hover-show="true"></a>
+    </div>
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/hohoa/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/hohoa/">HOHO</a>
+</h1>
+<h2>
+你简单，世界就是童话；心复杂，世界就是迷宫。
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/hohoa/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/balahoho">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/hohoa/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+19&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+220</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/hohoa/p/7739271.html">采用简易的环形延时队列处理秒级定时任务的解决方案</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body ">
+    <h3><span style="font-family: 微软雅黑, 'Microsoft YaHei';">&nbsp;业务背景</span></h3>
+<p style="text-indent: 2em; line-height: 1.75em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">在稍微复杂点业务系统中，不可避免会碰到做定时任务的需求，比如淘宝的交易超时自动关闭订单、超时自动确认收货等等。对于一些定时作业比较多的系统，通常都会搭建专门的调度平台来管理，通过创建定时器来周期性执行任务。如刚才所说的场景，我们可以给订单创建一个专门的任务来处理交易状态，每秒轮询一次订单表，找出那些符合超时条件的订单然后标记状态。这是最简单粗暴的做法，但明显也很low，自己都下不去手写这样的代码，所有必须要找个更好的方案。</span></p>
+<p style="text-indent: 2em; line-height: 1.75em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">回到真实项目中的场景，系统中某个活动上线后要给目标用户发送短信通知，这些通知需要按时间点批量发送。虽然已经基于quartz.net给系统搭建了任务调度平台，但着实不想用上述方案来实现。在网上各种搜索和思考，找到一篇</span><a style="text-decoration: underline; font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;" href="https://mp.weixin.qq.com/s/eDMV25YqCPYjxQG-dvqSqQ" target="_blank"><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">文章</span></a><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">让我眼前一亮，稍加分析发现里面的思路完全符合现在的场景，于是决定在自己项目中实现出来。</span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">&nbsp;</span></p>
+<h3><span style="font-family: 微软雅黑, 'Microsoft YaHei';">原理分析</span></h3>
+<p style="text-indent: 2em; line-height: 1.75em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">&nbsp;这种方案的核心就是构造一种数据结构，称之为环形队列，但实际上还是一个数组，加上对它的循环遍历，达到一种环状的假象。然后再配合定时器，就可以实现按需延时的效果。上面提到的文章中也介绍了实现思路，这里我采用我的理解再更加详细的解释一下。</span></p>
+<p style="text-indent: 2em; line-height: 1.75em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">我们先为这个数组分配一个固定大小的空间，比如60，每个数组的元素用来存放任务的集合。然后开启一个定时器每隔一秒来扫描这个数组，扫完一圈刚好是一分钟。如果提前设置好任务被扫描的圈数（CycleNum）和在数组中的位置（Slot），在刚好扫到数组的Slot位置时，集合里那些CycleNum为0的任务就是达到触发条件的任务，拉出来做业务操作然后移除掉，其他的把圈数减掉一次，然后留到下次继续扫描，这样就实现了延时的效果。原理如下图所示：</span></p>
+<p style="text-align: center;"><img src="https://images2017.cnblogs.com/blog/614524/201710/614524-20171026215304539-166865974.png" alt="" width="650" height="344" /></p>
+<p style="text-indent: 2em; line-height: 1.75em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">可以看出中间的重点是计算出每个任务所在的位置以及需要循环的圈数。假设当前时间为15:20:08，当前扫描位置是2，我的任务要在15:22:35这个时刻触发，也就是147秒后。那么我需要循环的圈数就是147/60=2圈，需要被扫描的位置就是(147+2)%60=29的地方。计算好任务的坐标后塞到数组中属于它的位置，然后静静等待被消费就好啦。</span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">&nbsp;</span></p>
+<h3><span style="font-family: 微软雅黑, 'Microsoft YaHei';">撸码实现</span></h3>
+<p style="text-indent: 2em; line-height: 1.75em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">光讲原理不上代码怎么能行呢，根据上面的思路，下面一步步在.net平台下实现出来。</span></p>
+<p style="text-indent: 2em; line-height: 1.75em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">先做一些基础封装。</span></p>
+<p style="text-indent: 2em; line-height: 1.75em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">首先构造任务参数的基类，用来记录任务的位置信息和定义业务回调方法：</span></p>
+<div class="cnblogs_code">
+<pre>    <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> DelayQueueParam
+    {
+        </span><span style="color: #0000ff;">internal</span> <span style="color: #0000ff;">int</span> Slot { <span style="color: #0000ff;">get</span>; <span style="color: #0000ff;">set</span><span style="color: #000000;">; }
+
+        </span><span style="color: #0000ff;">internal</span> <span style="color: #0000ff;">int</span> CycleNum { <span style="color: #0000ff;">get</span>; <span style="color: #0000ff;">set</span><span style="color: #000000;">; }
+
+        </span><span style="color: #0000ff;">public</span> Action&lt;<span style="color: #0000ff;">object</span>&gt; Callback { <span style="color: #0000ff;">get</span>; <span style="color: #0000ff;">set</span><span style="color: #000000;">; }
+    }</span></pre>
+</div>
+<p style="text-indent: 2em; line-height: 1.75em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">接下来是核心地方。再构造队列的泛型类，真实类型必须派生自上面的基类，用来扩展一些业务字段方便消费时使用。队列的主要属性有当前位置指针以及数组容器，主要的操作有插入、移除和消费。插入任务时需要传入执行时间，用来计算这个任务的坐标。</span></p>
+<div class="cnblogs_code">
+<pre>    <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span> DelayQueue&lt;T&gt; <span style="color: #0000ff;">where</span><span style="color: #000000;"> T : DelayQueueParam
+    {
+        </span><span style="color: #0000ff;">private</span> List&lt;T&gt;<span style="color: #000000;">[] queue;
+
+        </span><span style="color: #0000ff;">private</span> <span style="color: #0000ff;">int</span> currentIndex = <span style="color: #800080;">1</span><span style="color: #000000;">;
+
+        </span><span style="color: #0000ff;">public</span> DelayQueue(<span style="color: #0000ff;">int</span><span style="color: #000000;"> length)
+        {
+            queue </span>= <span style="color: #0000ff;">new</span> List&lt;T&gt;<span style="color: #000000;">[length];
+        }
+
+        </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> Insert(T item, DateTime time)
+        {
+            </span><span style="color: #008000;">//</span><span style="color: #008000;">根据消费时间计算消息应该放入的位置</span>
+            <span style="color: #0000ff;">var</span> second = (<span style="color: #0000ff;">int</span>)(time - DateTime.Now).TotalSeconds<span style="color: #000000;">;
+            item.CycleNum </span>= second /<span style="color: #000000;"> queue.Length;
+            item.Slot </span>= (second + currentIndex) %<span style="color: #000000;"> queue.Length;
+            </span><span style="color: #008000;">//</span><span style="color: #008000;">加入到延时队列中</span>
+            <span style="color: #0000ff;">if</span> (queue[item.Slot] == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+            {
+                queue[item.Slot] </span>= <span style="color: #0000ff;">new</span> List&lt;T&gt;<span style="color: #000000;">();
+            }
+            queue[item.Slot].Add(item);
+        }
+
+        </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> Remove(T item)
+        {
+            </span><span style="color: #0000ff;">if</span> (queue[item.Slot] != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+            {
+                queue[item.Slot].Remove(item);
+            }
+        }
+
+        </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> Read()
+        {
+            </span><span style="color: #0000ff;">if</span> (queue.Length &gt;=<span style="color: #000000;"> currentIndex)
+            {
+                </span><span style="color: #0000ff;">var</span> list = queue[currentIndex - <span style="color: #800080;">1</span><span style="color: #000000;">];
+                </span><span style="color: #0000ff;">if</span> (list != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+                {
+                    List</span>&lt;T&gt; target = <span style="color: #0000ff;">new</span> List&lt;T&gt;<span style="color: #000000;">();
+                    </span><span style="color: #0000ff;">foreach</span> (<span style="color: #0000ff;">var</span> item <span style="color: #0000ff;">in</span><span style="color: #000000;"> list)
+                    {
+                        </span><span style="color: #0000ff;">if</span> (item.CycleNum == <span style="color: #800080;">0</span><span style="color: #000000;">)
+                        {
+                            </span><span style="color: #008000;">//</span><span style="color: #008000;">在本轮命中，用单独线程去执行业务操作</span>
+                            Task.Run(()=&gt;<span style="color: #000000;"> { item.Callback(item); });
+                            target.Add(item);
+                        }
+                        </span><span style="color: #0000ff;">else</span><span style="color: #000000;">
+                        {
+                            </span><span style="color: #008000;">//</span><span style="color: #008000;">等下一轮</span>
+                            item.CycleNum--<span style="color: #000000;">;
+                            System.Diagnostics.Debug.WriteLine($</span><span style="color: #800000;">"</span><span style="color: #800000;">@@@@@索引：{item.Slot}，剩余：{item.CycleNum}</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+                        }
+                    }
+                    </span><span style="color: #008000;">//</span><span style="color: #008000;">把已过期的移除掉</span>
+                    <span style="color: #0000ff;">foreach</span> (<span style="color: #0000ff;">var</span> item <span style="color: #0000ff;">in</span><span style="color: #000000;"> target)
+                    {
+                        list.Remove(item);
+                    }
+                }
+                currentIndex</span>++<span style="color: #000000;">;
+                </span><span style="color: #008000;">//</span><span style="color: #008000;">下一遍从头开始</span>
+                <span style="color: #0000ff;">if</span> (currentIndex &gt;<span style="color: #000000;"> queue.Length)
+                {
+                    currentIndex </span>= <span style="color: #800080;">1</span><span style="color: #000000;">;
+                }
+            }
+        }
+    }</span></pre>
+</div>
+<p style="text-indent: 2em; line-height: 1.75em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">接下来是使用方法。</span></p>
+<p style="text-indent: 2em; line-height: 1.75em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">创建一个管理队列实例的静态类，里面封装对队列的操作：</span></p>
+<div class="cnblogs_code">
+<pre>    <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">static</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> NotifyPlanManager
+    {
+        </span><span style="color: #0000ff;">private</span> <span style="color: #0000ff;">static</span> DelayQueue&lt;NotifyPlan&gt; _queue = <span style="color: #0000ff;">new</span> DelayQueue&lt;NotifyPlan&gt;(<span style="color: #800080;">60</span><span style="color: #000000;">);
+
+        </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">static</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> Insert(NotifyPlan plan, DateTime time)
+        {
+            _queue.Insert(plan, time);
+        }
+
+        </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">static</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> Read()
+        {
+            _queue.Read();
+        }
+    }</span></pre>
+</div>
+<p style="text-indent: 2em; line-height: 1.75em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">构建我们的实际业务参数类，派生自DelayQueueParam：</span></p>
+<div class="cnblogs_code">
+<pre>    <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> NotifyPlan : DelayQueueParam
+    {
+        </span><span style="color: #0000ff;">public</span> Guid CamId { <span style="color: #0000ff;">get</span>; <span style="color: #0000ff;">set</span><span style="color: #000000;">; }
+
+        </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">int</span> PreviousTotal { <span style="color: #0000ff;">get</span>; <span style="color: #0000ff;">set</span><span style="color: #000000;">; }
+
+        </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">int</span> Amount { <span style="color: #0000ff;">get</span>; <span style="color: #0000ff;">set</span><span style="color: #000000;">; }
+    }</span></pre>
+</div>
+<p style="text-indent: 2em; line-height: 1.75em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">生产端往队列中插入数据：</span></p>
+<div class="cnblogs_code">
+<pre>    Action&lt;<span style="color: #0000ff;">object</span>&gt; callback = (result) =&gt;<span style="color: #000000;">
+    {
+        </span><span style="color: #0000ff;">var</span> np = result <span style="color: #0000ff;">as</span><span style="color: #000000;"> NotifyPlan;
+        </span><span style="color: #008000;">//</span><span style="color: #008000;">这里做自己的业务操作
+        </span><span style="color: #008000;">//</span><span style="color: #008000;">举个例子：</span>
+        Debug.WriteLine($<span style="color: #800000;">"</span><span style="color: #800000;">活动ID：{np.CamId}，已发送数量：{np.PreviousTotal}，本次发送数量：{np.Amount}</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+    };
+    NotifyPlanManager.Insert(</span><span style="color: #0000ff;">new</span><span style="color: #000000;"> NotifyPlan
+    {
+        Amount </span>= <span style="color: #0000ff;">set</span><span style="color: #000000;">.MainAmount,
+        CamId </span>=<span style="color: #000000;"> camId,
+        PreviousTotal </span>= <span style="color: #800080;">0</span><span style="color: #000000;">,
+        Callback </span>=<span style="color: #000000;"> callback
+    }, smsTemplate.SendDate);</span></pre>
+</div>
+<p style="text-indent: 2em; line-height: 1.75em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">再创建一个每秒执行一次的定时器用做消费端，我这里使用的是FluentScheduler，核心代码：</span></p>
+<div class="cnblogs_code">
+<pre>    <span style="color: #0000ff;">internal</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> NotifyPlanJob : IJob
+    {
+        </span><span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+        <span style="color: #808080;">///</span><span style="color: #008000;"> 执行计划
+        </span><span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+        <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> Execute()
+        {
+            NotifyPlanManager.Read();
+        }
+    }
+
+    </span><span style="color: #0000ff;">internal</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> JobFactory : Registry
+    {
+        </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> JobFactory()
+        {
+            </span><span style="color: #008000;">//</span><span style="color: #008000;">每秒运行一次</span>
+            Schedule&lt;NotifyPlanJob &gt;().ToRunEvery(<span style="color: #800080;">1</span><span style="color: #000000;">).Seconds();
+        }
+    }
+
+　　JobManager.Initialize(</span><span style="color: #0000ff;">new</span> JobFactory());</pre>
+</div>
+<p style="text-indent: 2em; line-height: 1.75em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">然后开启调试运行，打开本机的系统时间面板，对着时间看输出结果。亲测有效。</span></p>
+<p><span style="font-family: 微软雅黑, 'Microsoft YaHei';">&nbsp;</span></p>
+<h3><span style="font-family: 微软雅黑, 'Microsoft YaHei';">总结</span></h3>
+<p style="text-indent: 2em; line-height: 1.75em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">&nbsp;这种方案的好处是避免了频繁地扫描数据库和不必要的业务操作，另外也很方便控制时间精度。带来的问题是如果web服务异常或重启可能会发生任务丢失的情况，我目前的处理方法是在数据库中标记任务状态，服务启动时把状态为&ldquo;排队中&rdquo;的任务重新加载到队列中等待消费。</span></p>
+<p style="text-indent: 2em; line-height: 1.75em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 14px;">以上方案在单机环境测试没问题，多节点情况下暂时没有深究。若有设计实现上的缺陷，欢迎讨论与指正，要是有更好的方案，那就当抛砖引玉，再好不过了~</span></p>
+<p style="text-indent: 2em; line-height: 1.75em;">&nbsp;</p>
+<p style="text-indent: 2em; line-height: 1.75em;">&nbsp;</p>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2017-10-29 16:00</span>&nbsp;
+<a href="https://www.cnblogs.com/hohoa/">balahoho</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=7739271" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(7739271);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 294354, cb_blogApp = 'hohoa', cb_blogUserGuid = '86b892cb-79ae-e311-8d02-90b11c0b17d6';
+    var cb_entryId = 7739271, cb_entryCreatedDate = '2017-10-29 16:00', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 balahoho
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <!-- 右侧图标返回顶部 -->
+<span id="gotop1"><img src="https://files.cnblogs.com/files/hohoa/huojian.ico" alt="返回顶部"></span>
+<script src="https://cdn.bootcss.com/bootstrap/3.2.0/js/transition.js"></script>
+<script src="https://blog-static.cnblogs.com/files/hohoa/zoom.js"></script>
+ <!--鼠标特效-->
+ <script src="https://blog-static.cnblogs.com/files/zouwangblog/mouse-click.js"></script>
+ <canvas width="1777" height="841" style="position: fixed; left: 0px; top: 0px; z-index: 2147483647; pointer-events: none;"></canvas>
+ <!--鼠标特效 end-->
+<script>
+   $('#cnblogs_post_body img').attr('data-action', 'zoom');
+    // scroll body to 0px on click
+    $('#gotop1').click(function() {
+       TweenMax.to(window, 1.5, {scrollTo:0, ease: Expo.easeInOut});
+      var huojian = new TimelineLite();
+      huojian.to("#gotop1", 1, {rotationY:720, scale:0.6, y:"+=40", ease:  Power4.easeOut})
+	.to("#gotop1", 1, {y:-1000, opacity:0, ease:  Power4.easeOut}, 0.6)
+	.to("#gotop1", 1, {y:0, rotationY:0, opacity:1, scale:1, ease: Expo.easeOut, clearProps: "all"}, "1.4");
+        $('body,html').animate({
+            scrollTop: 0
+        }, 1500);
+        return false;
+    });
+    window.onload = function () {
+        if ($("#div_digg") != null) {
+            //添加快速评论按钮
+            $("#div_digg").append("<a href='#tbCommentAuthor' id='quickReply'>快速评论</a>");
+            //快速评论动画
+            $('#quickReply').click(function () {
+                $('html, body').animate({
+                    scrollTop: $($.attr(this, 'href')).offset().top
+                }, 500);
+                return false;
+            });
+        }
+    }
+</script>
+    </div>
+</body>
+</html>

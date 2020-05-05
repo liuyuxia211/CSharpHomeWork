@@ -1,0 +1,416 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="从何说起 这来自于我把项目迁移到Asp.Net Core的过程中碰到一个问题。在一个web程序中同时包含了MVC和WebAPI，现在需要给WebAPI部分单独添加一个接口验证过滤器 ，常规做法一般是写" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>在Asp.Net Core中使用ModelConvention实现全局过滤器隔离 - balahoho - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=BKtyzabbeYJEVOaELkxmRjHbp7LT-v37GzrU5S24bJk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/simplememory/bundle-simplememory.min.css?v=OL4qeo1LNGlN1rKIhv5UctANvt0M6Nx6kLzr_ffx3Xk" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/hohoa/custom.css?v=bvCfrzb5j5f5sKZquyvoKkCcF8w=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/hohoa/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/hohoa/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/hohoa/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=VSP5rTXbJNpNidklGdgoLgwCGyUPITrcsmlgoaMKz3w"></script>
+    <script>
+        var currentBlogId = 294354;
+        var currentBlogApp = 'hohoa';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'SimpleMemory';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    <div id="page_begin_html">
+        <script src="https://files.cnblogs.com/files/hohoa/TweenMax.min.js" defer></script>
+<a href="https://github.com/hey-hoho" target="_blank"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://files.cnblogs.com/files/hohoa/github.ico" alt="Fork me on GitHub" data-evernote-hover-show="true"></a>
+    </div>
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/hohoa/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/hohoa/">HOHO</a>
+</h1>
+<h2>
+你简单，世界就是童话；心复杂，世界就是迷宫。
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/hohoa/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/balahoho">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/hohoa/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+19&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+220</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/hohoa/p/12134019.html">在Asp.Net Core中使用ModelConvention实现全局过滤器隔离</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+    <h3 id="从何说起">从何说起</h3>
+<p>这来自于我把项目迁移到Asp.Net Core的过程中碰到一个问题。在一个web程序中同时包含了MVC和WebAPI，现在需要给WebAPI部分单独添加一个接口验证过滤器<code>IActionFilter</code>，常规做法一般是写好过滤器后给需要的控制器挂上这个标签，高级点的做法是注册一个全局过滤器，这样可以避免每次手动添加同时代码也更好管理。注册全局过滤器的方式为：</p>
+<pre><code class="language-c#"> services.AddMvc(options =&gt;
+    {
+        options.Filters.Add(typeof(AccessControlFilter));
+    });
+</code></pre>
+<p>但这样做会带来一个问题，那就是MVC部分控制器也会受影响，虽然可以在过滤器中进行一些判断来区分哪些是MVC Controller哪些是API Controller，但是平白无故给MVC增加这么一个没用的Filter，反正我是不能忍，所以寻找有没有更好的办法来实现这个功能。<br>
+于是ModelConvention（可以翻译为模型约定）闪亮登场。</p>
+ <br/>
+<h3 id="先认识下applicationmodel">先认识下ApplicationModel</h3>
+<p>看一下官方文档是怎么描述应用程序模型（ApplicationModel）的：</p>
+<blockquote>
+<p>ASP.NET Core MVC defines an application model representing the components of an MVC app. You can read and manipulate this model to modify how MVC elements behave. By default, MVC follows certain conventions to determine which classes are considered to be controllers, which methods on those classes are actions, and how parameters and routing behave. You can customize this behavior to suit your app's needs by creating your own conventions and applying them globally or as attributes.</p>
+</blockquote>
+<p>简单一点说，ApplicationModel描述了MVC应用中的各种对象和行为，这些内容包含Application、Controller、Action、Parameter、Router、Page、Property、Filter等等，而Asp.Net Core框架本身内置一套规则（Convention）用来处理这些模型，同时也提供了接口给我们自定义约定来扩展模型以实现更符合需要的应用。</p>
+<p>和应用程序模型有关的类都定义在命名空间<code>Microsoft.AspNetCore.Mvc.ApplicationModels</code>中，这些模型通过<code>IApplicationModelProvider</code> 构建出来，Asp.Net Core框架提供的默认Provider是<code>DefaultApplicationModelProvider</code>。我们可以编辑这些模型，从而更改它的表现行为，这就要借助它的ModelConvention来实现。</p>
+ <br/>
+<h3 id="modelconvention">ModelConvention</h3>
+<p>ModelConvention定义了操作模型的入口，又或者说是一种契约，通过它我们可以对模型进行修改，常用的Convention包括：</p>
+<ul>
+<li>IApplicationModelConvention</li>
+<li>IControllerModelConvention</li>
+<li>IActionModelConvention</li>
+<li>IParameterModelConvention</li>
+<li>IPageRouteModelConvention</li>
+</ul>
+<p>这些接口提供了一个共同的方法<code>Apply</code>，方法参数是各自的应用程序模型，以<code>IControllerModelConvention</code>为例看一下它的定义：</p>
+<pre><code class="language-c#">namespace Microsoft.AspNetCore.Mvc.ApplicationModels
+{
+    //
+    // 摘要:
+    //     Allows customization of the Microsoft.AspNetCore.Mvc.ApplicationModels.ControllerModel.
+    //
+    // 言论：
+    //     To use this interface, create an System.Attribute class which implements the
+    //     interface and place it on a controller class. Microsoft.AspNetCore.Mvc.ApplicationModels.IControllerModelConvention
+    //     customizations run after Microsoft.AspNetCore.Mvc.ApplicationModels.IApplicationModelConvention
+    //     customizations and before Microsoft.AspNetCore.Mvc.ApplicationModels.IActionModelConvention
+    //     customizations.
+    public interface IControllerModelConvention
+    {
+        //
+        // 摘要:
+        //     Called to apply the convention to the Microsoft.AspNetCore.Mvc.ApplicationModels.ControllerModel.
+        //
+        // 参数:
+        //   controller:
+        //     The Microsoft.AspNetCore.Mvc.ApplicationModels.ControllerModel.
+        void Apply(ControllerModel controller);
+    }
+}
+</code></pre>
+<p>从接口摘要可以看到，这个接口允许自定义<code>ControllerModel</code>对象，而如何自定义内容正是通过<code>Apply</code>方法来实现，这个方法提供了当前<code>ControllerModel</code>对象的实例，我们可以在它身上获取到的东西实在太多了，看看它包含些什么：<br>
+<img src="https://img2018.cnblogs.com/blog/614524/202001/614524-20200102195206219-1857024703.png" alt=""></p>
+<p>有了这些，我们可以做很多很灵活的操作，例如通过设置<code>ControllerName</code>字段强制更改控制器的名称让程序中写死的控制器名失效，也可以通过<code>Filters</code>字段动态更新它的过滤器集合，通过<code>RouteValues</code>来更改路由规则等等。</p>
+<p>说到这里，很多人会觉得这玩意儿和自定义过滤器看起来差不多，最开始我也这么认为，但经过实际代码调试我发现它的生命周期要比过滤器早的多，或者说根本无法比较，<strong>这个家伙只需要在应用启动时执行一次并不用随着每次请求而执行</strong>。也就是说，它的执行时间比激活控制器还要早，那时候根本没有过滤器什么事儿，它的调用是发生在<code>app.UseEndpoints()</code>。</p>
+<p>回到最开始的需求。基于上面的介绍，我们可以自定义如下的约定：</p>
+<pre><code class="language-c#">    public class ApiControllerAuthorizeConvention : IControllerModelConvention
+    {
+        public void Apply(ControllerModel controller)
+        {
+            if (controller.Filters.Any(x =&gt; x is ApiControllerAttribute) &amp;&amp; !controller.Filters.Any(x =&gt; x is AccessControlFilter))
+            {
+                controller.Filters.Add(new AccessControlAttribute());
+            }
+        }
+    }
+</code></pre>
+<p>上面的主要思路就是通过判断控制器本身的过滤器集合是否包含<code>ApiControllerAttribute</code>来识别是否API Controller，如果是API Controller并且没有标记过<code>AccessControlAttribute</code>的话就新建一个实例加入进去。</p>
+<p>那么如何把这个约定注册到应用中呢？在Microsoft.AspNetCore.Mvc.MvcOptions中提供了<code>Conventions</code>属性：</p>
+<pre><code class="language-c#">        //
+        // 摘要:
+        //     Gets a list of Microsoft.AspNetCore.Mvc.ApplicationModels.IApplicationModelConvention
+        //     instances that will be applied to the Microsoft.AspNetCore.Mvc.ApplicationModels.ApplicationModel
+        //     when discovering actions.
+        public IList&lt;IApplicationModelConvention&gt; Conventions { get; }
+</code></pre>
+<p>通过操作它就能把自定义约定注入进去：</p>
+<pre><code class="language-c#">         services.AddMvc(options =&gt;
+         {
+             options.Conventions.Add(new ApiControllerAuthorizeConvention());
+         })
+</code></pre>
+<p>细心的人会发现，Conventions是一个<code>IApplicationModelConvention</code>类型的集合，而我们自定义的Convention是一个<code>IControllerModelConvention</code>，正常来说应该会报错才对？原因是Asp.Net Core的DI框架帮我们提供了一系列扩展方法来简化Convention的添加不用自己再去转换：<br>
+<img src="https://img2018.cnblogs.com/blog/614524/202001/614524-20200102195238249-352642888.png" alt=""></p>
+<p>通过代码调试发现，应用启动时遍历了系统中的所有控制器去执行Apply操作，那么通过<code>IApplicationModelConvention</code>一样也能实现这个功能，因为它里面包含了控制器集合：</p>
+<pre><code class="language-c#">    public class ApiControllerAuthorizeConvention : IApplicationModelConvention
+    {
+        public void Apply(ApplicationModel application)
+        {
+            foreach (var controller in application.Controllers)
+            {
+                if (controller.Filters.Any(x =&gt; x is ApiControllerAttribute) &amp;&amp; !controller.Filters.Any(x =&gt; x is AccessControlFilter))
+                {
+                    controller.Filters.Add(new AccessControlFilter());
+                }
+            }
+        }
+    }
+</code></pre>
+ <br/>
+<h3 id="再改进一下">再改进一下</h3>
+<p>实际开发中我的AccessControlFilter需要通过构造函数注入业务接口，类似于这样：</p>
+<pre><code class="language-c#">    public class AccessControlFilter : IActionFilter
+    {
+        private IUserService _userService;
+
+        public AccessControlFilter(IUserService service)
+        {
+            _userService = service;
+        }
+
+        public void OnActionExecuting(ActionExecutingContext context)
+        {
+                //模拟一下业务操作
+	            //var user=_userService.GetById(996);
+		        //.......
+        }
+
+        public void OnActionExecuted(ActionExecutedContext context)
+        {
+        }
+    }
+</code></pre>
+<p>如何优雅的在Convention中使用DI自动注入呢？Asp.Net Core MVC框架提供的<code>ServiceFilter</code>可以解决这个问题，<code>ServiceFilter</code>本身是一个过滤器，它的不同之处在于能够通过构造函数接收一个Type类型的参数，我们可以在这里把真正要用的过滤器传进去，于是上面的过滤器注册过程演变为：</p>
+<pre><code class="language-c#">	controller.Filters.Add(new ServiceFilterAttribute(typeof(AccessControlFilter)));
+</code></pre>
+<p>当然了，要从DI中获取这个filter实例，必须要把它注入到DI容器中：</p>
+<pre><code class="language-c#">	services.AddScoped&lt;AccessControlFilter&gt;();
+</code></pre>
+<p>至此，大功告成，继续愉快的CRUD。</p>
+<blockquote>
+<p>突然想起来我<a href="https://www.cnblogs.com/hohoa/p/11884719.html">上篇文章</a>提到的扩展DI属性注入功能估计也能通过这个玩意实现，eeeeeee...有空了试一下。</p>
+</blockquote>
+ <br/>
+<h3 id="总结">总结</h3>
+<p>总体来说，我通过曲线救国的方式实现了全局过滤器隔离，虽然去遍历目标控制器再手动添加Filter的方式没有那种一行代码就能实现的方式优雅，但我大体来说还算满意，是目前能想到的最好办法。我估摸着，<code>options.Filters.Add(xxx)</code>也是在框架某个时候一个个把xxx丢给各自主人的，瞎猜的，说错不负责~hhhh🙈🙈🙈</p>
+<blockquote>
+<p>第一次用markdown写博客真香</p>
+</blockquote>
+ <br/>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2020-01-02 20:00</span>&nbsp;
+<a href="https://www.cnblogs.com/hohoa/">balahoho</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12134019" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(12134019);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 294354, cb_blogApp = 'hohoa', cb_blogUserGuid = '86b892cb-79ae-e311-8d02-90b11c0b17d6';
+    var cb_entryId = 12134019, cb_entryCreatedDate = '2020-01-02 20:00', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 balahoho
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <!-- 右侧图标返回顶部 -->
+<span id="gotop1"><img src="https://files.cnblogs.com/files/hohoa/huojian.ico" alt="返回顶部"></span>
+<script src="https://cdn.bootcss.com/bootstrap/3.2.0/js/transition.js"></script>
+<script src="https://blog-static.cnblogs.com/files/hohoa/zoom.js"></script>
+ <!--鼠标特效-->
+ <script src="https://blog-static.cnblogs.com/files/zouwangblog/mouse-click.js"></script>
+ <canvas width="1777" height="841" style="position: fixed; left: 0px; top: 0px; z-index: 2147483647; pointer-events: none;"></canvas>
+ <!--鼠标特效 end-->
+<script>
+   $('#cnblogs_post_body img').attr('data-action', 'zoom');
+    // scroll body to 0px on click
+    $('#gotop1').click(function() {
+       TweenMax.to(window, 1.5, {scrollTo:0, ease: Expo.easeInOut});
+      var huojian = new TimelineLite();
+      huojian.to("#gotop1", 1, {rotationY:720, scale:0.6, y:"+=40", ease:  Power4.easeOut})
+	.to("#gotop1", 1, {y:-1000, opacity:0, ease:  Power4.easeOut}, 0.6)
+	.to("#gotop1", 1, {y:0, rotationY:0, opacity:1, scale:1, ease: Expo.easeOut, clearProps: "all"}, "1.4");
+        $('body,html').animate({
+            scrollTop: 0
+        }, 1500);
+        return false;
+    });
+    window.onload = function () {
+        if ($("#div_digg") != null) {
+            //添加快速评论按钮
+            $("#div_digg").append("<a href='#tbCommentAuthor' id='quickReply'>快速评论</a>");
+            //快速评论动画
+            $('#quickReply').click(function () {
+                $('html, body').animate({
+                    scrollTop: $($.attr(this, 'href')).offset().top
+                }, 500);
+                return false;
+            });
+        }
+    }
+</script>
+    </div>
+</body>
+</html>

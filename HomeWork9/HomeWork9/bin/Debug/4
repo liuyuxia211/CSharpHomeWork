@@ -1,0 +1,616 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="故事背景 最近在把自己的一个老项目从Framework迁移到.Net Core 3.0，数据访问这块选择的是EFCore&#x2B;Mysql。使用EF的话不可避免要和DbContext打交道，在Core中的常" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>从EFCore上下文的使用到深入剖析DI的生命周期最后实现自动属性注入 - balahoho - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=BKtyzabbeYJEVOaELkxmRjHbp7LT-v37GzrU5S24bJk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/simplememory/bundle-simplememory.min.css?v=OL4qeo1LNGlN1rKIhv5UctANvt0M6Nx6kLzr_ffx3Xk" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/hohoa/custom.css?v=bvCfrzb5j5f5sKZquyvoKkCcF8w=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/hohoa/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/hohoa/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/hohoa/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=VSP5rTXbJNpNidklGdgoLgwCGyUPITrcsmlgoaMKz3w"></script>
+    <script>
+        var currentBlogId = 294354;
+        var currentBlogApp = 'hohoa';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'SimpleMemory';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    <div id="page_begin_html">
+        <script src="https://files.cnblogs.com/files/hohoa/TweenMax.min.js" defer></script>
+<a href="https://github.com/hey-hoho" target="_blank"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://files.cnblogs.com/files/hohoa/github.ico" alt="Fork me on GitHub" data-evernote-hover-show="true"></a>
+    </div>
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/hohoa/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/hohoa/">HOHO</a>
+</h1>
+<h2>
+你简单，世界就是童话；心复杂，世界就是迷宫。
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/hohoa/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/balahoho">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/hohoa/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+19&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+220</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/hohoa/p/11884719.html">从EFCore上下文的使用到深入剖析DI的生命周期最后实现自动属性注入</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body ">
+    <h3 style="line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">故事背景</span></h3>
+<p style="line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">最近在把自己的一个老项目从Framework迁移到.Net Core 3.0，数据访问这块选择的是EFCore+Mysql。使用EF的话不可避免要和</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">DbContext</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">打交道，在Core中的常规用法一般是：创建一个</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">XXXContext</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">类继承自</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">DbContext</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">，实现一个拥有</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">DbContextOptions</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">参数的构造器，在启动类</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">StartUp</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">中的</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">ConfigureServices</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">方法里调用</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">IServiceCollection</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">的扩展方法</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">AddDbContext</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">，把上下文注入到DI容器中，然后在使用的地方通过构造函数的参数获取实例。OK，没任何毛病，官方示例也都是这么来用的。但是，通过构造函数这种方式来获取上下文实例其实很不方便，比如在Attribute或者静态类中，又或者是系统启动时初始化一些数据，更多的是如下一种场景：</span></p>
+<div class="cnblogs_code">
+<pre>    <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> BaseController : Controller
+    {
+        </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> BloggingContext _dbContext;
+        </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> BaseController(BloggingContext dbContext)
+        {
+            _dbContext </span>=<span style="color: #000000;"> dbContext;
+        }
+
+        </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">bool</span> BlogExist(<span style="color: #0000ff;">int</span><span style="color: #000000;"> id)
+        {
+            </span><span style="color: #0000ff;">return</span> _dbContext.Blogs.Any(x =&gt; x.BlogId ==<span style="color: #000000;"> id);
+        }
+    }
+
+    </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> BlogsController : BaseController
+    {
+        </span><span style="color: #0000ff;">public</span> BlogsController(BloggingContext dbContext) : <span style="color: #0000ff;">base</span><span style="color: #000000;">(dbContext) { }
+    }</span></pre>
+</div>
+<p style="line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">从上面的代码可以看到，任何要继承</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">BaseController</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">的类都要写一个&ldquo;多余&rdquo;的构造函数，如果参数再多几个，这将是无法忍受的（就算只有一个参数我也忍受不了）。那么怎样才能更优雅的获取数据库上下文实例呢，我想到以下几种办法。</span></p>
+<p style="line-height: 2em; text-indent: 2em;"> <span style="font-family: 微软雅黑, 'Microsoft YaHei';"><br /></span>
+</p>
+<h3 style="line-height: 2em; text-indent: 2em;">
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei';">DbContext<span style="font-family: 宋体;">从哪来</span></span>
+</h3>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;">
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei';">1、<span style="font-style: normal; font-variant: normal; font-weight: normal; font-stretch: normal; font-size: 9px; line-height: normal;">&nbsp; </span>直接开<span style="text-decoration: line-through;">溜</span>new</span>
+</p>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"> <span style="font-family: 微软雅黑, 'Microsoft YaHei';">回归原始，既然要创建实例，没有比直接new一个更好的办法了，在Framework中没有DI的时候也差不多都这么干。但在EFCore中不同的是，</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">DbContext</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">不再提供无参构造函数，取而代之的是必须传入一个</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">DbContextOptions</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">类型的参数，这个参数通常是做一些上下文选项配置例如使用什么类型数据库连接字符串是多少。</span></p>
+<div class="cnblogs_code">
+<pre>        <span style="color: #0000ff;">public</span> BloggingContext(DbContextOptions&lt;BloggingContext&gt; options) : <span style="color: #0000ff;">base</span><span style="color: #000000;">(options)
+        {
+        }</span></pre>
+</div>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">默认情况下，我们已经在</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">StartUp</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">中注册上下文的时候做了配置，DI容器会自动帮我们把options传进来。如果要手动new一个上下文，那岂不是每次都要自己传？不行，这太痛苦了。那有没有办法不传这个参数？肯定也是有的。我们可以去掉有参构造函数，然后重写</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">DbContext</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">中的</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">OnConfiguring</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">方法，在这个方法中做数据库配置：</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">&nbsp;</span></p>
+<div class="cnblogs_code">
+<pre>        <span style="color: #0000ff;">protected</span> <span style="color: #0000ff;">override</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlite(</span><span style="color: #800000;">"</span><span style="color: #800000;">Filename=./efcoredemo.db</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+        }</span></pre>
+</div>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">即使是这样，依然有不够优雅的地方，那就是连接字符串被硬编码在代码中，不能做到从配置文件读取。反正我忍受不了，只能再寻找其他方案。</span></p>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">2、<span style="font-style: normal; font-variant: normal; font-stretch: normal; font-size: 9px; line-height: normal; font-family: 'Times New Roman';">&nbsp; </span>从DI容器手动获取</span></p>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">既然前面已经在启动类中注册了上下文，那么从DI容器中获取实例肯定是没问题的。于是我写了这样一句测试代码用来验证猜想：</span></p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">　　　　var</span> context = app.ApplicationServices.GetService&lt;BloggingContext&gt;();</pre>
+</div>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">不过很遗憾抛出了异常：</span></p>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><img src="https://img2018.cnblogs.com/blog/614524/201911/614524-20191118194340460-1121285707.png" alt="" /></span></p>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">报错信息说的很明确，不能从root provider中获取这个服务。我从G站下载了DI框架的源码（地址是<a href="https://github.com/aspnet/Extensions/tree/master/src/DependencyInjection" target="_blank"><span style="font-size: 13px; color: green;">https://github.com/aspnet/Extensions/tree/master/src/DependencyInjection</span></a>），拿报错信息进行反向追溯，发现异常来自于</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">CallSiteValidator</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">类的</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">ValidateResolution</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">方法：</span></p>
+<div class="cnblogs_code" onclick="cnblogs_code_show('9241809b-3df7-4fbb-b304-693b064be123')"><img id="code_img_closed_9241809b-3df7-4fbb-b304-693b064be123" class="code_img_closed" src="https://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt="" /><img id="code_img_opened_9241809b-3df7-4fbb-b304-693b064be123" class="code_img_opened" style="display: none;" onclick="cnblogs_code_hide('9241809b-3df7-4fbb-b304-693b064be123',event)" src="https://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt="" />
+<div id="cnblogs_code_open_9241809b-3df7-4fbb-b304-693b064be123" class="cnblogs_code_hide">
+<pre>        <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> ValidateResolution(Type serviceType, IServiceScope scope, IServiceScope rootScope)
+        {
+            </span><span style="color: #0000ff;">if</span><span style="color: #000000;"> (ReferenceEquals(scope, rootScope)
+                </span>&amp;&amp; _scopedServices.TryGetValue(serviceType, <span style="color: #0000ff;">out</span> <span style="color: #0000ff;">var</span><span style="color: #000000;"> scopedService))
+            {
+                </span><span style="color: #0000ff;">if</span> (serviceType ==<span style="color: #000000;"> scopedService)
+                {
+                    </span><span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> InvalidOperationException(
+                        Resources.FormatDirectScopedResolvedFromRootException(serviceType,
+                            nameof(ServiceLifetime.Scoped).ToLowerInvariant()));
+                }
+
+                </span><span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> InvalidOperationException(
+                    Resources.FormatScopedResolvedFromRootException(
+                        serviceType,
+                        scopedService,
+                        nameof(ServiceLifetime.Scoped).ToLowerInvariant()));
+            }
+        }</span></pre>
+</div>
+<span class="cnblogs_code_collapse">View Code</span></div>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">继续往上，看到了</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">GetService</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">方法的实现：</span></p>
+<div class="cnblogs_code" onclick="cnblogs_code_show('d6e2c13e-de99-4a9c-86d2-e951b81e38ee')"><img id="code_img_closed_d6e2c13e-de99-4a9c-86d2-e951b81e38ee" class="code_img_closed" src="https://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt="" /><img id="code_img_opened_d6e2c13e-de99-4a9c-86d2-e951b81e38ee" class="code_img_opened" style="display: none;" onclick="cnblogs_code_hide('d6e2c13e-de99-4a9c-86d2-e951b81e38ee',event)" src="https://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt="" />
+<div id="cnblogs_code_open_d6e2c13e-de99-4a9c-86d2-e951b81e38ee" class="cnblogs_code_hide">
+<pre>        <span style="color: #0000ff;">internal</span> <span style="color: #0000ff;">object</span><span style="color: #000000;"> GetService(Type serviceType, ServiceProviderEngineScope serviceProviderEngineScope)
+        {
+            </span><span style="color: #0000ff;">if</span><span style="color: #000000;"> (_disposed)
+            {
+                ThrowHelper.ThrowObjectDisposedException();
+            }
+
+            </span><span style="color: #0000ff;">var</span> realizedService =<span style="color: #000000;"> RealizedServices.GetOrAdd(serviceType, _createServiceAccessor);
+            _callback</span>?<span style="color: #000000;">.OnResolve(serviceType, serviceProviderEngineScope);
+            DependencyInjectionEventSource.Log.ServiceResolved(serviceType);
+            </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> realizedService.Invoke(serviceProviderEngineScope);
+        }</span></pre>
+</div>
+<span class="cnblogs_code_collapse">View Code</span></div>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">可以看到，</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">_callback</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">在为空的情况下是不会做验证的，于是猜想有参数能对它进行配置。把追溯对象换成</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">_callback</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">继续往上翻，在DI框架的核心类</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">ServiceProvider</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">中找到如下方法：</span></p>
+<div class="cnblogs_code">
+<pre>        <span style="color: #0000ff;">internal</span> ServiceProvider(IEnumerable&lt;ServiceDescriptor&gt;<span style="color: #000000;"> serviceDescriptors, ServiceProviderOptions options)
+        {
+            IServiceProviderEngineCallback callback </span>= <span style="color: #0000ff;">null</span><span style="color: #000000;">;
+            </span><span style="color: #0000ff;">if</span><span style="color: #000000;"> (options.ValidateScopes)
+            {
+                callback </span>= <span style="color: #0000ff;">this</span><span style="color: #000000;">;
+                _callSiteValidator </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> CallSiteValidator();
+            }
+            </span><span style="color: #008000;">//</span><span style="color: #008000;">省略....</span>
+        }    </pre>
+</div>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">说明我的猜想没错，验证是受</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">ValidateScopes</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">控制的。这样来看，把</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">ValidateScopes</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">设置成</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">False</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">就可以解决了，这也是网上普遍的解决方案：</span></p>
+<div class="cnblogs_code">
+<pre>      .UseDefaultServiceProvider(options =&gt;<span style="color: #000000;">
+       {
+              options.ValidateScopes </span>= <span style="color: #0000ff;">false</span><span style="color: #000000;">;
+       })</span></pre>
+</div>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><strong> <span style="font-family: 微软雅黑, 'Microsoft YaHei';">但这样做是极其危险的。</span> </strong></p>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">为什么危险？到底什么是root provider？那就要从原生DI的生命周期说起。我们知道，DI容器被封装成一个</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">IServicePro</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">vider</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">对象，服务都是从这里来获取。不过这并不是一个单一对象，它是具有层级结构的，最顶层的即前面提到的root provider，可以理解为仅属于系统层面的DI控制中心。在Asp.Net Core中，内置的DI有3种服务模式，分别是</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">Singleton</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">、</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">Transient</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">、</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">Scoped</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">，Singleton服务实例是保存在root provider中的，所以它才能做到全局单例。相对应的Scoped，是保存在某一个provider中的，它能保证在这个provider中是单例的，而Transient服务则是随时需要随时创建，用完就丢弃。由此可知，除非是在root provider中获取一个单例服务，否则必须要指定一个服务范围（Scope），这个验证是通过</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">ServiceProviderOptions</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">的</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">ValidateScopes</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">来控制的。默认情况下，Asp.Net Core框架在创建</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">HostBuilder</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">的时候会判定当前是否开发环境，在开发环境下会开启这个验证：</span></p>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><img src="https://img2018.cnblogs.com/blog/614524/201911/614524-20191118194805866-640894251.png" alt="" /></span></p>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">所以前面那种关闭验证的方式是错误的。这是因为，root provider只有一个，如果恰好有某个singleton服务引用了一个scope服务，这会导致这个scope服务也变成singleton，仔细看一下注册</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">DbContext</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">的扩展方法，它实际上提供的是scope服务：</span></span></span></p>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><img src="https://img2018.cnblogs.com/blog/614524/201911/614524-20191118194855911-1218258878.png" alt="" /></span></span></span></p>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">如果发生这种情况，数据库连接会一直得不到释放，至于有什么后果大家应该都明白。</span></p>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">所以前面的测试代码应该这样写：</span></p>
+<div class="cnblogs_code">
+<pre>     <span style="color: #0000ff;">using</span> (<span style="color: #0000ff;">var</span> serviceScope =<span style="color: #000000;"> app.ApplicationServices.CreateScope())
+     {
+         </span><span style="color: #0000ff;">var</span> context = serviceScope.ServiceProvider.GetService&lt;BloggingContext&gt;<span style="color: #000000;">();
+     }</span></pre>
+</div>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">与之相关的还有一个</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">ValidateOnBuild</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">属性，也就是说在构建</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">IServiceProvider</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">的时候就会做验证，从源码中也能体现出来：</span></p>
+<div class="cnblogs_code" onclick="cnblogs_code_show('3eebdffa-4886-47a1-8a1e-d49bb7f0884a')"><img id="code_img_closed_3eebdffa-4886-47a1-8a1e-d49bb7f0884a" class="code_img_closed" src="https://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt="" /><img id="code_img_opened_3eebdffa-4886-47a1-8a1e-d49bb7f0884a" class="code_img_opened" style="display: none;" onclick="cnblogs_code_hide('3eebdffa-4886-47a1-8a1e-d49bb7f0884a',event)" src="https://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt="" />
+<div id="cnblogs_code_open_3eebdffa-4886-47a1-8a1e-d49bb7f0884a" class="cnblogs_code_hide">
+<pre>            <span style="color: #0000ff;">if</span><span style="color: #000000;"> (options.ValidateOnBuild)
+            {
+                List</span>&lt;Exception&gt; exceptions = <span style="color: #0000ff;">null</span><span style="color: #000000;">;
+                </span><span style="color: #0000ff;">foreach</span> (<span style="color: #0000ff;">var</span> serviceDescriptor <span style="color: #0000ff;">in</span><span style="color: #000000;"> serviceDescriptors)
+                {
+                    </span><span style="color: #0000ff;">try</span><span style="color: #000000;">
+                    {
+                        _engine.ValidateService(serviceDescriptor);
+                    }
+                    </span><span style="color: #0000ff;">catch</span><span style="color: #000000;"> (Exception e)
+                    {
+                        exceptions </span>= exceptions ?? <span style="color: #0000ff;">new</span> List&lt;Exception&gt;<span style="color: #000000;">();
+                        exceptions.Add(e);
+                    }
+                }
+
+                </span><span style="color: #0000ff;">if</span> (exceptions != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+                {
+                    </span><span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span> AggregateException(<span style="color: #800000;">"</span><span style="color: #800000;">Some services are not able to be constructed</span><span style="color: #800000;">"</span><span style="color: #000000;">, exceptions.ToArray());
+                }
+            }</span></pre>
+</div>
+<span class="cnblogs_code_collapse">View Code</span></div>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">正因为如此，Asp.Net Core在设计的时候为每个请求创建独立的Scope，这个Scope的provider被封装在</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">HttpContext.RequestServices</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">中。</span></p>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><em> <span style="font-family: 微软雅黑, 'Microsoft YaHei';">&nbsp;[小插曲]</span></em></p>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">通过代码提示可以看到，</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">IServiceProvider</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">提供了2种获取service的方式：</span></p>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><img src="https://img2018.cnblogs.com/blog/614524/201911/614524-20191118195124374-1587482656.png" alt="" /></span></p>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">这2个有什么区别呢？分别查看各自的方法摘要可以看到，通过</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">GetService</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">获取一个没有注册的服务时会返回</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">null</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">，而</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">GetRequiredService</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">会抛出一个</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">InvalidOperationException</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">，仅此而已。</span></p>
+<div class="cnblogs_code">
+<pre>        <span style="color: #008000;">//</span><span style="color: #008000;"> 返回结果:
+        </span><span style="color: #008000;">//</span><span style="color: #008000;">     A service object of type T or null if there is no such service.</span>
+        <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">static</span> T GetService&lt;T&gt;(<span style="color: #0000ff;">this</span><span style="color: #000000;"> IServiceProvider provider);
+
+        </span><span style="color: #008000;">//</span><span style="color: #008000;"> 返回结果:
+        </span><span style="color: #008000;">//</span><span style="color: #008000;">     A service object of type T.
+        </span><span style="color: #008000;">//</span>
+        <span style="color: #008000;">//</span><span style="color: #008000;"> 异常:
+        </span><span style="color: #008000;">//</span><span style="color: #008000;">   T:System.InvalidOperationException:
+        </span><span style="color: #008000;">//</span><span style="color: #008000;">     There is no service of type T.</span>
+        <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">static</span> T GetRequiredService&lt;T&gt;(<span style="color: #0000ff;">this</span> IServiceProvider provider);</pre>
+</div>
+<p style="margin-left: 24px; line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">&nbsp;</span></p>
+<h3 style="line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">终极大招</span></h3>
+<p style="line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">到现在为止，尽管找到了一种看起来合理的方案，但还是不够优雅，使用过其他第三方DI框架的朋友应该知道，属性注入的快感无可比拟。那原生DI有没有实现这个功能呢，我满心欢喜上G站搜Issue，看到这样一个回复（</span><a style="text-decoration: underline; font-family: 微软雅黑, 'Microsoft YaHei';" href="https://github.com/aspnet/Extensions/issues/2406"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">https://github.com/aspnet/Extensions/issues/2406</span></a><span style="font-family: 微软雅黑, 'Microsoft YaHei';">）：</span></p>
+<p style="line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><img src="https://img2018.cnblogs.com/blog/614524/201911/614524-20191118195242538-1867266868.png" alt="" /></span></p>
+<p style="line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">官方明确表示没有开发属性注入的计划，没办法，只能靠自己了。</span></p>
+<p style="line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">我的思路大概是：创建一个自定义标签（</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">Attribute</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">），用来给需要注入的属性打标签，然后写一个服务激活类，用来解析给定实例需要注入的属性并赋值，在某个类型被创建实例的时候也就是构造函数中调用这个激活方法实现属性注入。<strong>这里有个核心点要注意的是，从DI容器获取实例的时候一定要保证是和当前请求是同一个</strong></span><strong><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">Scope</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">，也就是说，必须要从当前的</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">HttpContext</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">中拿到这个</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">IServiceProvider</span></strong><span style="font-family: 微软雅黑, 'Microsoft YaHei';">。</span></p>
+<p style="line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">先创建一个自定义标签：</span></p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">    [AttributeUsage(AttributeTargets.Property)]
+    </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> AutowiredAttribute : Attribute
+    {
+
+    }</span></pre>
+</div>
+<p style="line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">解析属性的方法：</span></p>
+<div class="cnblogs_code">
+<pre>        <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span> PropertyActivate(<span style="color: #0000ff;">object</span><span style="color: #000000;"> service, IServiceProvider provider)
+        {
+            </span><span style="color: #0000ff;">var</span> serviceType =<span style="color: #000000;"> service.GetType();
+            </span><span style="color: #0000ff;">var</span> properties = serviceType.GetProperties().AsEnumerable().Where(x =&gt; x.Name.StartsWith(<span style="color: #800000;">"</span><span style="color: #800000;">_</span><span style="color: #800000;">"</span><span style="color: #000000;">));
+            </span><span style="color: #0000ff;">foreach</span> (PropertyInfo property <span style="color: #0000ff;">in</span><span style="color: #000000;"> properties)
+            {
+                </span><span style="color: #0000ff;">var</span> autowiredAttr = property.GetCustomAttribute&lt;AutowiredAttribute&gt;<span style="color: #000000;">();
+                </span><span style="color: #0000ff;">if</span> (autowiredAttr != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+                {
+                    </span><span style="color: #008000;">//</span><span style="color: #008000;">从DI容器获取实例</span>
+                    <span style="color: #0000ff;">var</span> innerService =<span style="color: #000000;"> provider.GetService(property.PropertyType);
+                    </span><span style="color: #0000ff;">if</span> (innerService != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+                    {
+                        </span><span style="color: #008000;">//</span><span style="color: #008000;">递归解决服务嵌套问题</span>
+<span style="color: #000000;">                        PropertyActivate(innerService, provider);
+                        </span><span style="color: #008000;">//</span><span style="color: #008000;">属性赋值</span>
+<span style="color: #000000;">                        property.SetValue(service, innerService);
+                    }
+                }
+            }
+        }</span></pre>
+</div>
+<p style="line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">然后在控制器中激活属性：</span></p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">        [Autowired]
+        </span><span style="color: #0000ff;">public</span> IAccountService _accountService { <span style="color: #0000ff;">get</span>; <span style="color: #0000ff;">set</span><span style="color: #000000;">; }
+
+        </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> LoginController(IHttpContextAccessor httpContextAccessor)
+        {
+            </span><span style="color: #0000ff;">var</span> pro = <span style="color: #0000ff;">new</span><span style="color: #000000;"> AutowiredServiceProvider();
+            pro.PropertyActivate(</span><span style="color: #0000ff;">this</span><span style="color: #000000;">, httpContextAccessor.HttpContext.RequestServices);
+        }</span></pre>
+</div>
+<p style="line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">这样子下来，虽然功能实现了，但是里面存着几个问题。第一个是由于控制器的构造函数中不能直接使用</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">ControllerBase</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">的</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">HttpContext</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">属性，所以必须要通过注入</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">IHttpContextAccessor</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">对象来获取，貌似问题又回到原点。第二个是每个构造函数中都要写这么一堆代码，不能忍。于是想有没有办法在控制器被激活的时候做一些操作？没考虑引入AOP框架，感觉为了这一个功能引入AOP有点重。经过网上搜索，发现Asp.Net Core框架激活控制器是通过</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">IControllerActivator</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">接口实现的，它的默认实现是</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">DefaultControllerActivator</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">（</span><a style="text-decoration: underline; font-family: 微软雅黑, 'Microsoft YaHei';" href="https://github.com/aspnet/AspNetCore/blob/master/src/Mvc/Mvc.Core/src/Controllers/DefaultControllerActivator.cs"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">https://github.com/aspnet/AspNetCore/blob/master/src/Mvc/Mvc.Core/src/Controllers/DefaultControllerActivator.cs</span></a><span style="font-family: 微软雅黑, 'Microsoft YaHei';">）：</span></p>
+<div class="cnblogs_code" onclick="cnblogs_code_show('86ca258f-94af-446e-8fdd-096d4da3bcf0')"><img id="code_img_closed_86ca258f-94af-446e-8fdd-096d4da3bcf0" class="code_img_closed" src="https://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt="" /><img id="code_img_opened_86ca258f-94af-446e-8fdd-096d4da3bcf0" class="code_img_opened" style="display: none;" onclick="cnblogs_code_hide('86ca258f-94af-446e-8fdd-096d4da3bcf0',event)" src="https://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt="" />
+<div id="cnblogs_code_open_86ca258f-94af-446e-8fdd-096d4da3bcf0" class="cnblogs_code_hide">
+<pre>       <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;inheritdoc /&gt;</span>
+        <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">object</span><span style="color: #000000;"> Create(ControllerContext controllerContext)
+        {
+            </span><span style="color: #0000ff;">if</span> (controllerContext == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+            {
+                </span><span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(controllerContext));
+            }
+
+            </span><span style="color: #0000ff;">if</span> (controllerContext.ActionDescriptor == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+            {
+                </span><span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentException(Resources.FormatPropertyOfTypeCannotBeNull(
+                    nameof(ControllerContext.ActionDescriptor),
+                    nameof(ControllerContext)));
+            }
+
+            </span><span style="color: #0000ff;">var</span> controllerTypeInfo =<span style="color: #000000;"> controllerContext.ActionDescriptor.ControllerTypeInfo;
+
+            </span><span style="color: #0000ff;">if</span> (controllerTypeInfo == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+            {
+                </span><span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentException(Resources.FormatPropertyOfTypeCannotBeNull(
+                    nameof(controllerContext.ActionDescriptor.ControllerTypeInfo),
+                    nameof(ControllerContext.ActionDescriptor)));
+            }
+
+            </span><span style="color: #0000ff;">var</span> serviceProvider =<span style="color: #000000;"> controllerContext.HttpContext.RequestServices;
+            </span><span style="color: #0000ff;">return</span> _typeActivatorCache.CreateInstance&lt;<span style="color: #0000ff;">object</span>&gt;<span style="color: #000000;">(serviceProvider, controllerTypeInfo.AsType());
+        }</span></pre>
+</div>
+<span class="cnblogs_code_collapse">View Code</span></div>
+<p style="line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">这样一来，我自己实现一个Controller激活器不就可以接管控制器激活了，于是有如下这个类：</span></p>
+<div class="cnblogs_code" onclick="cnblogs_code_show('be512715-ef89-4aaa-80d7-2be52a4fa9d8')"><img id="code_img_closed_be512715-ef89-4aaa-80d7-2be52a4fa9d8" class="code_img_closed" src="https://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt="" /><img id="code_img_opened_be512715-ef89-4aaa-80d7-2be52a4fa9d8" class="code_img_opened" style="display: none;" onclick="cnblogs_code_hide('be512715-ef89-4aaa-80d7-2be52a4fa9d8',event)" src="https://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt="" />
+<div id="cnblogs_code_open_be512715-ef89-4aaa-80d7-2be52a4fa9d8" class="cnblogs_code_hide">
+<pre>    <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> HosControllerActivator : IControllerActivator
+    {
+        </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">object</span><span style="color: #000000;"> Create(ControllerContext actionContext)
+        {
+            </span><span style="color: #0000ff;">var</span> controllerType =<span style="color: #000000;"> actionContext.ActionDescriptor.ControllerTypeInfo.AsType();
+            </span><span style="color: #0000ff;">var</span> instance =<span style="color: #000000;"> actionContext.HttpContext.RequestServices.GetRequiredService(controllerType);
+            PropertyActivate(instance, actionContext.HttpContext.RequestServices);
+            </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> instance;
+        }
+
+        </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">virtual</span> <span style="color: #0000ff;">void</span> Release(ControllerContext context, <span style="color: #0000ff;">object</span><span style="color: #000000;"> controller)
+        {
+            </span><span style="color: #0000ff;">if</span> (context == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+            {
+                </span><span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(context));
+            }
+            </span><span style="color: #0000ff;">if</span> (controller == <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+            {
+                </span><span style="color: #0000ff;">throw</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> ArgumentNullException(nameof(controller));
+            }
+            </span><span style="color: #0000ff;">if</span> (controller <span style="color: #0000ff;">is</span><span style="color: #000000;"> IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
+        }
+
+        </span><span style="color: #0000ff;">private</span> <span style="color: #0000ff;">void</span> PropertyActivate(<span style="color: #0000ff;">object</span><span style="color: #000000;"> service, IServiceProvider provider)
+        {
+            </span><span style="color: #0000ff;">var</span> serviceType =<span style="color: #000000;"> service.GetType();
+            </span><span style="color: #0000ff;">var</span> properties = serviceType.GetProperties().AsEnumerable().Where(x =&gt; x.Name.StartsWith(<span style="color: #800000;">"</span><span style="color: #800000;">_</span><span style="color: #800000;">"</span><span style="color: #000000;">));
+            </span><span style="color: #0000ff;">foreach</span> (PropertyInfo property <span style="color: #0000ff;">in</span><span style="color: #000000;"> properties)
+            {
+                </span><span style="color: #0000ff;">var</span> autowiredAttr = property.GetCustomAttribute&lt;AutowiredAttribute&gt;<span style="color: #000000;">();
+                </span><span style="color: #0000ff;">if</span> (autowiredAttr != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+                {
+                    </span><span style="color: #008000;">//</span><span style="color: #008000;">从DI容器获取实例</span>
+                    <span style="color: #0000ff;">var</span> innerService =<span style="color: #000000;"> provider.GetService(property.PropertyType);
+                    </span><span style="color: #0000ff;">if</span> (innerService != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+                    {
+                        </span><span style="color: #008000;">//</span><span style="color: #008000;">递归解决服务嵌套问题</span>
+<span style="color: #000000;">                        PropertyActivate(innerService, provider);
+                        </span><span style="color: #008000;">//</span><span style="color: #008000;">属性赋值</span>
+<span style="color: #000000;">                        property.SetValue(service, innerService);
+                    }
+                }
+            }
+        }
+    }</span></pre>
+</div>
+<span class="cnblogs_code_collapse">View Code</span></div>
+<p style="line-height: 2em; text-indent: 2em;"><strong> <span style="font-family: 微软雅黑, 'Microsoft YaHei';">需要注意的是，</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">DefaultControllerActivator</span><span style="font-family: 微软雅黑, 'Microsoft YaHei';">中的控制器实例是从</span><span style="color: #c7254e; font-family: 'Microsoft YaHei'; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">TypeActivatorCache</span></strong><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><strong>获取的，而自己的激活器是从DI获取的，所以必须额外把系统所有控制器注册到DI中</strong>，封装成如下的扩展方法：</span></p>
+<div class="cnblogs_code" onclick="cnblogs_code_show('f7815133-70cf-4757-ab69-49240fb94de8')"><img id="code_img_closed_f7815133-70cf-4757-ab69-49240fb94de8" class="code_img_closed" src="https://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt="" /><img id="code_img_opened_f7815133-70cf-4757-ab69-49240fb94de8" class="code_img_opened" style="display: none;" onclick="cnblogs_code_hide('f7815133-70cf-4757-ab69-49240fb94de8',event)" src="https://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt="" />
+<div id="cnblogs_code_open_f7815133-70cf-4757-ab69-49240fb94de8" class="cnblogs_code_hide">
+<pre>        <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;summary&gt;</span>
+        <span style="color: #808080;">///</span><span style="color: #008000;"> 自定义控制器激活，并手动注册所有控制器
+        </span><span style="color: #808080;">///</span> <span style="color: #808080;">&lt;/summary&gt;</span>
+        <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="services"&gt;&lt;/param&gt;</span>
+        <span style="color: #808080;">///</span> <span style="color: #808080;">&lt;param name="obj"&gt;&lt;/param&gt;</span>
+        <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">static</span> <span style="color: #0000ff;">void</span> AddHosControllers(<span style="color: #0000ff;">this</span> IServiceCollection services, <span style="color: #0000ff;">object</span><span style="color: #000000;"> obj)
+        {
+            services.Replace(ServiceDescriptor.Transient</span>&lt;IControllerActivator, HosControllerActivator&gt;<span style="color: #000000;">());
+            </span><span style="color: #0000ff;">var</span> assembly =<span style="color: #000000;"> obj.GetType().GetTypeInfo().Assembly;
+            </span><span style="color: #0000ff;">var</span> manager = <span style="color: #0000ff;">new</span><span style="color: #000000;"> ApplicationPartManager();
+            manager.ApplicationParts.Add(</span><span style="color: #0000ff;">new</span><span style="color: #000000;"> AssemblyPart(assembly));
+            manager.FeatureProviders.Add(</span><span style="color: #0000ff;">new</span><span style="color: #000000;"> ControllerFeatureProvider());
+            </span><span style="color: #0000ff;">var</span> feature = <span style="color: #0000ff;">new</span><span style="color: #000000;"> ControllerFeature();
+            manager.PopulateFeature(feature);
+            feature.Controllers.Select(ti </span>=&gt; ti.AsType()).ToList().ForEach(t =&gt;<span style="color: #000000;">
+            {
+                services.AddTransient(t);
+            });
+        }</span></pre>
+</div>
+<span class="cnblogs_code_collapse">View Code</span></div>
+<p style="line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">在<span style="color: #c7254e; font-variant-ligatures: common-ligatures; text-indent: 28px; background-color: #f9f2f4;">ConfigureServices</span>中调用：</span></p>
+<div class="cnblogs_code">
+<pre>services.AddHosControllers(<span style="color: #0000ff;">this</span>);</pre>
+</div>
+<p style="line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">到此，大功告成！可以愉快的继续CRUD了。</span></p>
+<p style="line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">&nbsp;</span></p>
+<h3 style="line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">结尾</span></h3>
+<p style="line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">市面上好用的DI框架一堆一堆的，集成到Core里面也很简单，为啥还要这么折腾？没办法，这不就是造轮子的乐趣嘛。上面这些东西从头到尾也折腾了不少时间，属性注入那里也还有优化的空间，欢迎探讨。</span></p>
+<p style="line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">推荐阅读：</span></p>
+<p style="line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">&nbsp;<a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-05.html">https://www.cnblogs.com/artech/p/inside-asp-net-core-03-05.html</a></span></p>
+<p style="line-height: 2em; text-indent: 2em;"><span style="font-family: 微软雅黑, 'Microsoft YaHei';">&nbsp;<a href="https://www.cnblogs.com/tdfblog/p/controller-activation-and-dependency-injection-in-asp-net-core-mvc.html">https://www.cnblogs.com/tdfblog/p/controller-activation-and-dependency-injection-in-asp-net-core-mvc.html</a></span></p>
+<p> <br />
+</p>
+<p>&nbsp;</p>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2019-11-18 20:24</span>&nbsp;
+<a href="https://www.cnblogs.com/hohoa/">balahoho</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=11884719" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(11884719);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 294354, cb_blogApp = 'hohoa', cb_blogUserGuid = '86b892cb-79ae-e311-8d02-90b11c0b17d6';
+    var cb_entryId = 11884719, cb_entryCreatedDate = '2019-11-18 20:24', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 balahoho
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <!-- 右侧图标返回顶部 -->
+<span id="gotop1"><img src="https://files.cnblogs.com/files/hohoa/huojian.ico" alt="返回顶部"></span>
+<script src="https://cdn.bootcss.com/bootstrap/3.2.0/js/transition.js"></script>
+<script src="https://blog-static.cnblogs.com/files/hohoa/zoom.js"></script>
+ <!--鼠标特效-->
+ <script src="https://blog-static.cnblogs.com/files/zouwangblog/mouse-click.js"></script>
+ <canvas width="1777" height="841" style="position: fixed; left: 0px; top: 0px; z-index: 2147483647; pointer-events: none;"></canvas>
+ <!--鼠标特效 end-->
+<script>
+   $('#cnblogs_post_body img').attr('data-action', 'zoom');
+    // scroll body to 0px on click
+    $('#gotop1').click(function() {
+       TweenMax.to(window, 1.5, {scrollTo:0, ease: Expo.easeInOut});
+      var huojian = new TimelineLite();
+      huojian.to("#gotop1", 1, {rotationY:720, scale:0.6, y:"+=40", ease:  Power4.easeOut})
+	.to("#gotop1", 1, {y:-1000, opacity:0, ease:  Power4.easeOut}, 0.6)
+	.to("#gotop1", 1, {y:0, rotationY:0, opacity:1, scale:1, ease: Expo.easeOut, clearProps: "all"}, "1.4");
+        $('body,html').animate({
+            scrollTop: 0
+        }, 1500);
+        return false;
+    });
+    window.onload = function () {
+        if ($("#div_digg") != null) {
+            //添加快速评论按钮
+            $("#div_digg").append("<a href='#tbCommentAuthor' id='quickReply'>快速评论</a>");
+            //快速评论动画
+            $('#quickReply').click(function () {
+                $('html, body').animate({
+                    scrollTop: $($.attr(this, 'href')).offset().top
+                }, 500);
+                return false;
+            });
+        }
+    }
+</script>
+    </div>
+</body>
+</html>

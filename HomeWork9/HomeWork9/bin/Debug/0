@@ -1,0 +1,498 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="Origin" />
+    
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>我的随笔 - balahoho - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=BKtyzabbeYJEVOaELkxmRjHbp7LT-v37GzrU5S24bJk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/simplememory/bundle-simplememory.min.css?v=OL4qeo1LNGlN1rKIhv5UctANvt0M6Nx6kLzr_ffx3Xk" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/hohoa/custom.css?v=bvCfrzb5j5f5sKZquyvoKkCcF8w=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/hohoa/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/hohoa/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/hohoa/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=VSP5rTXbJNpNidklGdgoLgwCGyUPITrcsmlgoaMKz3w"></script>
+    <script>
+        var currentBlogId = 294354;
+        var currentBlogApp = 'hohoa';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'SimpleMemory';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    <div id="page_begin_html">
+        <script src="https://files.cnblogs.com/files/hohoa/TweenMax.min.js" defer></script>
+<a href="https://github.com/hey-hoho" target="_blank"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://files.cnblogs.com/files/hohoa/github.ico" alt="Fork me on GitHub" data-evernote-hover-show="true"></a>
+    </div>
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/hohoa/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/hohoa/">HOHO</a>
+</h1>
+<h2>
+你简单，世界就是童话；心复杂，世界就是迷宫。
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/hohoa/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/balahoho">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/hohoa/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+19&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+220</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+
+    <h1 class="PostListTitle">
+    我的随笔
+</h1>
+<div class="pager">
+    
+
+</div>
+<div id="myposts">
+            <div class="PostList">
+                <div class="postTitl2">
+                    
+
+<a id="PostsList1_rpPosts_TitleUrl_0" href="https://www.cnblogs.com/hohoa/p/12685237.html">[一起读源码]走进C#并发队列ConcurrentQueue的内部世界 — .NET Core篇</a> 
+                </div>
+                <div class="postDesc2">
+                    
+balahoho 2020-04-19 20:27
+阅读:15 评论:0
+                </div>
+                <div class="postText2">
+                    
+
+                </div>
+            </div>
+            <div class="PostList">
+                <div class="postTitl2">
+                    
+
+<a id="PostsList1_rpPosts_TitleUrl_1" href="https://www.cnblogs.com/hohoa/p/12622459.html">[一起读源码]走进C#并发队列ConcurrentQueue的内部世界</a> 
+                </div>
+                <div class="postDesc2">
+                    
+balahoho 2020-04-07 09:02
+阅读:3163 评论:12
+                </div>
+                <div class="postText2">
+                    
+
+                </div>
+            </div>
+            <div class="PostList">
+                <div class="postTitl2">
+                    
+
+<a id="PostsList1_rpPosts_TitleUrl_2" href="https://www.cnblogs.com/hohoa/p/12197518.html">Asp.Net Core下的开源任务调度平台ScheduleMaster—快速上手</a> 
+                </div>
+                <div class="postDesc2">
+                    
+balahoho 2020-01-15 17:06
+阅读:1697 评论:4
+                </div>
+                <div class="postText2">
+                    
+
+                </div>
+            </div>
+            <div class="PostList">
+                <div class="postTitl2">
+                    
+
+<a id="PostsList1_rpPosts_TitleUrl_3" href="https://www.cnblogs.com/hohoa/p/12162581.html">Asp.Net Core下的开源任务调度平台ScheduleMaster-我的首个开源项目</a> 
+                </div>
+                <div class="postDesc2">
+                    
+balahoho 2020-01-09 16:30
+阅读:3183 评论:41
+                </div>
+                <div class="postText2">
+                    
+
+                </div>
+            </div>
+            <div class="PostList">
+                <div class="postTitl2">
+                    
+
+<a id="PostsList1_rpPosts_TitleUrl_4" href="https://www.cnblogs.com/hohoa/p/12145689.html">在C#中使用二叉树实时计算海量用户积分排名的实现</a> 
+                </div>
+                <div class="postDesc2">
+                    
+balahoho 2020-01-06 08:50
+阅读:1096 评论:9
+                </div>
+                <div class="postText2">
+                    
+
+                </div>
+            </div>
+            <div class="PostList">
+                <div class="postTitl2">
+                    
+
+<a id="PostsList1_rpPosts_TitleUrl_5" href="https://www.cnblogs.com/hohoa/p/12134019.html">在Asp.Net Core中使用ModelConvention实现全局过滤器隔离</a> 
+                </div>
+                <div class="postDesc2">
+                    
+balahoho 2020-01-02 20:00
+阅读:769 评论:3
+                </div>
+                <div class="postText2">
+                    
+
+                </div>
+            </div>
+            <div class="PostList">
+                <div class="postTitl2">
+                    
+
+<a id="PostsList1_rpPosts_TitleUrl_6" href="https://www.cnblogs.com/hohoa/p/11884719.html">从EFCore上下文的使用到深入剖析DI的生命周期最后实现自动属性注入</a> 
+                </div>
+                <div class="postDesc2">
+                    
+balahoho 2019-11-18 20:24
+阅读:882 评论:8
+                </div>
+                <div class="postText2">
+                    
+
+                </div>
+            </div>
+            <div class="PostList">
+                <div class="postTitl2">
+                    
+
+<a id="PostsList1_rpPosts_TitleUrl_7" href="https://www.cnblogs.com/hohoa/p/11409806.html">【实践总结】给Centos和Ubuntu设置静态网络IP以及配置ssh功能</a> 
+                </div>
+                <div class="postDesc2">
+                    
+balahoho 2019-08-25 22:56
+阅读:299 评论:0
+                </div>
+                <div class="postText2">
+                    
+
+                </div>
+            </div>
+            <div class="PostList">
+                <div class="postTitl2">
+                    
+
+<a id="PostsList1_rpPosts_TitleUrl_8" href="https://www.cnblogs.com/hohoa/p/11087198.html">【工具篇】在.Net中实现HTML生成图片或PDF的几种方式</a> 
+                </div>
+                <div class="postDesc2">
+                    
+balahoho 2019-06-25 23:11
+阅读:1492 评论:10
+                </div>
+                <div class="postText2">
+                    
+
+                </div>
+            </div>
+            <div class="PostList">
+                <div class="postTitl2">
+                    
+
+<a id="PostsList1_rpPosts_TitleUrl_9" href="https://www.cnblogs.com/hohoa/p/10743552.html">.NetCore&amp;Linux&amp;Docker&amp;Portainer踩坑历险记</a> 
+                </div>
+                <div class="postDesc2">
+                    
+balahoho 2019-04-21 23:38
+阅读:710 评论:6
+                </div>
+                <div class="postText2">
+                    
+
+                </div>
+            </div>
+            <div class="PostList">
+                <div class="postTitl2">
+                    
+
+<a id="PostsList1_rpPosts_TitleUrl_10" href="https://www.cnblogs.com/hohoa/p/7739271.html">采用简易的环形延时队列处理秒级定时任务的解决方案</a> 
+                </div>
+                <div class="postDesc2">
+                    
+balahoho 2017-10-29 16:00
+阅读:7111 评论:26
+                </div>
+                <div class="postText2">
+                    
+
+                </div>
+            </div>
+            <div class="PostList">
+                <div class="postTitl2">
+                    
+
+<a id="PostsList1_rpPosts_TitleUrl_11" href="https://www.cnblogs.com/hohoa/p/7256758.html">分布式web架构中对session同步的常用处理方法以及优缺点</a> 
+                </div>
+                <div class="postDesc2">
+                    
+balahoho 2017-08-06 10:10
+阅读:1041 评论:2
+                </div>
+                <div class="postText2">
+                    
+
+                </div>
+            </div>
+            <div class="PostList">
+                <div class="postTitl2">
+                    
+
+<a id="PostsList1_rpPosts_TitleUrl_12" href="https://www.cnblogs.com/hohoa/p/6617619.html">【小试插件开发】给Visual Studio装上自己定制的功能来提高代码调试效率</a> 
+                </div>
+                <div class="postDesc2">
+                    
+balahoho 2017-03-25 20:52
+阅读:3485 评论:4
+                </div>
+                <div class="postText2">
+                    
+
+                </div>
+            </div>
+            <div class="PostList">
+                <div class="postTitl2">
+                    
+
+<a id="PostsList1_rpPosts_TitleUrl_13" href="https://www.cnblogs.com/hohoa/p/6060228.html">在Parallel中使用DbSet.Add()发现的一系列多线程问题和解决过程</a> 
+                </div>
+                <div class="postDesc2">
+                    
+balahoho 2016-11-13 23:36
+阅读:2591 评论:35
+                </div>
+                <div class="postText2">
+                    
+
+                </div>
+            </div>
+            <div class="PostList">
+                <div class="postTitl2">
+                    
+
+<a id="PostsList1_rpPosts_TitleUrl_14" href="https://www.cnblogs.com/hohoa/p/5860896.html">在Centos中部署redis运行状态图形化监控工具 — RedisLive</a> 
+                </div>
+                <div class="postDesc2">
+                    
+balahoho 2016-09-12 11:31
+阅读:3356 评论:2
+                </div>
+                <div class="postText2">
+                    
+
+                </div>
+            </div>
+            <div class="PostList">
+                <div class="postTitl2">
+                    
+
+<a id="PostsList1_rpPosts_TitleUrl_15" href="https://www.cnblogs.com/hohoa/p/5839993.html">再说表单验证，在Web Api中使用ModelState进行接口参数验证</a> 
+                </div>
+                <div class="postDesc2">
+                    
+balahoho 2016-09-04 23:59
+阅读:5664 评论:6
+                </div>
+                <div class="postText2">
+                    
+
+                </div>
+            </div>
+            <div class="PostList">
+                <div class="postTitl2">
+                    
+
+<a id="PostsList1_rpPosts_TitleUrl_16" href="https://www.cnblogs.com/hohoa/p/5808216.html">由表单验证说起，关于在C#中尝试链式编程的实践</a> 
+                </div>
+                <div class="postDesc2">
+                    
+balahoho 2016-08-26 09:10
+阅读:2867 评论:16
+                </div>
+                <div class="postText2">
+                    
+
+                </div>
+            </div>
+            <div class="PostList">
+                <div class="postTitl2">
+                    
+
+<a id="PostsList1_rpPosts_TitleUrl_17" href="https://www.cnblogs.com/hohoa/p/5771255.html">【新手总结】在.Net项目中使用Redis作为缓存服务</a> 
+                </div>
+                <div class="postDesc2">
+                    
+balahoho 2016-08-14 23:19
+阅读:11250 评论:29
+                </div>
+                <div class="postText2">
+                    
+
+                </div>
+            </div>
+            <div class="PostList">
+                <div class="postTitl2">
+                    
+
+<a id="PostsList1_rpPosts_TitleUrl_18" href="https://www.cnblogs.com/hohoa/p/5691071.html">【新手出发】从搭虚拟机开始，一步一步在CentOS上跑起来.Net Core程序</a> 
+                </div>
+                <div class="postDesc2">
+                    
+balahoho 2016-07-21 11:36
+阅读:6419 评论:7
+                </div>
+                <div class="postText2">
+                    
+
+                </div>
+            </div>
+
+    <div class="pager">
+        
+
+    </div>
+</div>
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 balahoho
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <!-- 右侧图标返回顶部 -->
+<span id="gotop1"><img src="https://files.cnblogs.com/files/hohoa/huojian.ico" alt="返回顶部"></span>
+<script src="https://cdn.bootcss.com/bootstrap/3.2.0/js/transition.js"></script>
+<script src="https://blog-static.cnblogs.com/files/hohoa/zoom.js"></script>
+ <!--鼠标特效-->
+ <script src="https://blog-static.cnblogs.com/files/zouwangblog/mouse-click.js"></script>
+ <canvas width="1777" height="841" style="position: fixed; left: 0px; top: 0px; z-index: 2147483647; pointer-events: none;"></canvas>
+ <!--鼠标特效 end-->
+<script>
+   $('#cnblogs_post_body img').attr('data-action', 'zoom');
+    // scroll body to 0px on click
+    $('#gotop1').click(function() {
+       TweenMax.to(window, 1.5, {scrollTo:0, ease: Expo.easeInOut});
+      var huojian = new TimelineLite();
+      huojian.to("#gotop1", 1, {rotationY:720, scale:0.6, y:"+=40", ease:  Power4.easeOut})
+	.to("#gotop1", 1, {y:-1000, opacity:0, ease:  Power4.easeOut}, 0.6)
+	.to("#gotop1", 1, {y:0, rotationY:0, opacity:1, scale:1, ease: Expo.easeOut, clearProps: "all"}, "1.4");
+        $('body,html').animate({
+            scrollTop: 0
+        }, 1500);
+        return false;
+    });
+    window.onload = function () {
+        if ($("#div_digg") != null) {
+            //添加快速评论按钮
+            $("#div_digg").append("<a href='#tbCommentAuthor' id='quickReply'>快速评论</a>");
+            //快速评论动画
+            $('#quickReply').click(function () {
+                $('html, body').animate({
+                    scrollTop: $($.attr(this, 'href')).offset().top
+                }, 500);
+                return false;
+            });
+        }
+    }
+</script>
+    </div>
+</body>
+</html>

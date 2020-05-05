@@ -1,0 +1,456 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="毫不夸张地说，整个ASP.NET Core框架是建立在依赖注入框架之上的。ASP.NET Core应用在启动时构建管道以及利用该管道处理每个请求过程中使用到的服务对象均来源于依赖注入容器。该依赖注入容" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>[ASP.NET Core 3框架揭秘] 依赖注入[5]: 利用容器提供服务 - Artech - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=BKtyzabbeYJEVOaELkxmRjHbp7LT-v37GzrU5S24bJk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/custom/bundle-custom.min.css?v=1ssrnY3Il79Ok472qeVrpxlSprSXcHhYPgZC5S3wtVM" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/artech/custom.css?v=leU/goGCZP8MalVXSCwwWQ/6Ask=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/custom/bundle-custom-mobile.min.css?v=-Yh290MhQyDeXLmvKTSses9H6-49lqbpXFh55zvS0w8" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/artech/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/artech/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/artech/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=VSP5rTXbJNpNidklGdgoLgwCGyUPITrcsmlgoaMKz3w"></script>
+    <script>
+        var currentBlogId = 22886;
+        var currentBlogApp = 'artech';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'Custom';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    <div id="page_begin_html">
+        <script>loadPageBeginHtml();</script>
+    </div>
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/artech/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/artech/"><img style="margin:0px auto 10px auto" style="width:94px; height:42px" src="http://images.cnblogs.com/cnblogs_com/artech/158198/o_ArtechLogo.png" alt="Artech" /></a>
+</h1>
+<h2>
+
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/artech/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/Artech">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/artech/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+750&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+25627</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-05.html">[ASP.NET Core 3框架揭秘] 依赖注入[5]: 利用容器提供服务</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+    <div id="cnblogs_post_description" style="display: none">
+        <img src="http://images.cnblogs.com/cnblogs_com/artech/158198/o_.netcore.png" class="desc_img">毫不夸张地说，整个ASP.NET Core框架是建立在依赖注入框架之上的。ASP.NET Core应用在启动时构建管道以及利用该管道处理每个请求过程中使用到的服务对象均来源于依赖注入容器。该依赖注入容器不仅为ASP.NET Core框架自身提供必要的服务，同时也是应用程序的服务提供者，依赖注入已经成为了ASP.NET Core应用的基本编程模式。
+    </div>
+<div id="cnblogs_post_body" class="blogpost-body ">
+    <p>毫不夸张地说，整个ASP.NET Core框架是建立在依赖注入框架之上的。ASP.NET Core应用在启动时构建管道以及利用该管道处理每个请求过程中使用到的服务对象均来源于依赖注入容器。该依赖注入容器不仅为ASP.NET Core框架自身提供必要的服务，同时也是应用程序的服务提供者，依赖注入已经成为了ASP.NET Core应用的基本编程模式。</p><h1><font size="4">一、服务的注册与消费</font></h1><p>为了让读者朋友们能够更加容易地认识.NET Core提供的依赖注入框架，我在“《<a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-04.html">一个迷你版DI框架</a>》”中特意创建了一个名为Cat的迷你版依赖注入框架。不论是编程模式还是实现原理，Cat与我们即将介绍的依赖注入框架都非常相似。这个依赖注入框架主要涉及两个NuGet包，我们在编程过程中频繁使用的一些接口和基础数据类型都定义在NuGet包“Microsoft.Extensions.DependencyInjection.Abstractions”中，而依赖注入的具体实现则由“Microsoft.Extensions.DependencyInjection”这个NuGet包来承载。</p><p>我在设计Cat的时候，既将它作为提供服务实例的依赖注入容器，也将它作为存放服务注册的集合，但是.NET Core依赖注入框架则将这两者分离开来。我们添加的服务注册被保存到通过IServiceCollection接口表示的集合之中，由这个集合创建的依赖注入容器体现为一个IServiceProvider对象。</p><p>作为依赖注入容器的IServiceProvider对象不仅具有类似于Cat的层次结构，两者对提供的服务实例也采用一致的生命周期管理方式。依赖注入框架利用如下这个枚举ServiceLifetime来表示Singleton、Scoped和Transient三种生命周期模式，我在Cat中则将其命名为Root、Self和Transient，前者命名关注于现象，后者则关注于内部实现。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid rgb(204, 204, 204); border-image: none; background-color: rgb(245, 245, 245);"><pre><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">enum</span><span style="color: rgb(0, 0, 0);"> ServiceLifetime
+{
+    Singleton,
+    Scoped,
+    Transient
+}</span></pre></div><p>应用程序初始化过程中添加的服务注册是依赖注入容器用来提供所需服务实例的依据。由于IServiceProvider对象总是利用指定的服务类型来提供对应服务实例，所以服务总是基于类型进行注册。我们倾向于利用接口来对服务进行抽象，所以这里的服务类型一般为接口，但是依赖注入框架对服务注册的类型并没有任何限制。具体的服务注册主要体现为如下三种形式，除了直接提供一个服务实例的注册形式之外（这种形式默认采用Singleton模式），我们在注册服务的时候必须指定一个具体的生命周期模式。</p><ul><li>指定具体的服务实现类型。</li><li>提供一个现成的服务实例。</li><li>指定一个创建服务实例的工厂。</li></ul><p>我们的演示实例时一个普通的控制台应用。由于“Microsoft.Extensions.DependencyInjection”这个NuGet包承载了整个依赖注入框架的实现，所以我们应该添加该NuGet包的依赖。由于是ASP.NET Core框架的基础NuGet包之一，所以我们可以通过修改项目文件并按照如下的方式添加针对“Microsoft.AspNetCore.App”的框架引用（FrameworkReference）来引入该NuGet包。对于后续部分中采用 “Microsoft.NET.Sdk”作为SDK的演示实例，如果未作说明，在默认采用这种方式添加所需NuGet包的依赖。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid rgb(204, 204, 204); border-image: none; background-color: rgb(245, 245, 245);"><pre><span style="color: rgb(0, 0, 255);">&lt;</span><span style="color: rgb(128, 0, 0);">Project </span><span style="color: rgb(255, 0, 0);">Sdk</span><span style="color: rgb(0, 0, 255);">="Microsoft.NET.Sdk"</span><span style="color: rgb(0, 0, 255);">&gt;</span>
+  <span style="color: rgb(0, 0, 255);">&lt;</span><span style="color: rgb(128, 0, 0);">PropertyGroup</span><span style="color: rgb(0, 0, 255);">&gt;</span>
+    <span style="color: rgb(0, 0, 255);">&lt;</span><span style="color: rgb(128, 0, 0);">OutputType</span><span style="color: rgb(0, 0, 255);">&gt;</span>Exe<span style="color: rgb(0, 0, 255);">&lt;/</span><span style="color: rgb(128, 0, 0);">OutputType</span><span style="color: rgb(0, 0, 255);">&gt;</span>
+    <span style="color: rgb(0, 0, 255);">&lt;</span><span style="color: rgb(128, 0, 0);">TargetFramework</span><span style="color: rgb(0, 0, 255);">&gt;</span>netcoreapp3.0<span style="color: rgb(0, 0, 255);">&lt;/</span><span style="color: rgb(128, 0, 0);">TargetFramework</span><span style="color: rgb(0, 0, 255);">&gt;</span>
+  <span style="color: rgb(0, 0, 255);">&lt;/</span><span style="color: rgb(128, 0, 0);">PropertyGroup</span><span style="color: rgb(0, 0, 255);">&gt;</span>
+  <span style="color: rgb(0, 0, 255);">&lt;</span><span style="color: rgb(128, 0, 0);">ItemGroup</span><span style="color: rgb(0, 0, 255);">&gt;</span>
+    <strong><font size="2"><font size="4"><span style="color: rgb(0, 0, 255);">&lt;</span><span style="color: rgb(128, 0, 0);">FrameworkReference </span><span style="color: rgb(255, 0, 0);">Include</span><span style="color: rgb(0, 0, 255);">="Microsoft.AspNetCore.App"</span> <span style="color: rgb(0, 0, 255);">/&gt;</span></font></font></strong>
+  <span style="color: rgb(0, 0, 255);">&lt;/</span><span style="color: rgb(128, 0, 0);">ItemGroup</span><span style="color: rgb(0, 0, 255);">&gt;</span>
+<span style="color: rgb(0, 0, 255);">&lt;/</span><span style="color: rgb(128, 0, 0);">Project</span><span style="color: rgb(0, 0, 255);">&gt;</span></pre></div><p>在添加了针对“Microsoft.Extensions.DependencyInjection”这个NuGet包的依赖之后，我们定义了如下这些接口和实现类型来表示相应的服务。如下面的代码片段所示，Foo、Bar和Baz分别实现了对应的接口IFoo、IBar和IBaz。为了反映DI框架对服务实例生命周期的控制，我们让它们派生于同一个基类Base。Base实现了IDisposable接口，我们在其构造函数和实现的Dispose方法中打印出相应的文字以确定对应的实例何时被创建和释放。我们还定义了一个泛型的接口IFoobar&lt;T1, T2&gt;和对应的实现类Foobar&lt;T1, T2&gt;来演示针对泛型服务实例的提供。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid rgb(204, 204, 204); border-image: none; background-color: rgb(245, 245, 245);"><pre><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">interface</span><span style="color: rgb(0, 0, 0);"> IFoo {}
+</span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">interface</span><span style="color: rgb(0, 0, 0);"> IBar {}
+</span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">interface</span><span style="color: rgb(0, 0, 0);"> IBaz {}
+</span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">interface</span> IFoobar&lt;T1, T2&gt;<span style="color: rgb(0, 0, 0);"> {}
+</span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> Base : IDisposable
+{
+    </span><span style="color: rgb(0, 0, 255);">public</span> Base()  =&gt; Console.WriteLine($<span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(128, 0, 0);">An instance of {GetType().Name} is created.</span><span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(0, 0, 0);">);
+    </span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">void</span> Dispose() =&gt; Console.WriteLine($<span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(128, 0, 0);">The instance of {GetType().Name} is disposed.</span><span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(0, 0, 0);">);
+}
+
+</span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> Foo : Base, IFoo, IDisposable { }
+</span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> Bar : Base, IBar, IDisposable { }
+</span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> Baz : Base, IBaz, IDisposable { }
+</span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">class</span> Foobar&lt;T1, T2&gt;: IFoobar&lt;T1,T2&gt;<span style="color: rgb(0, 0, 0);">
+{
+    </span><span style="color: rgb(0, 0, 255);">public</span> IFoo Foo { <span style="color: rgb(0, 0, 255);">get</span><span style="color: rgb(0, 0, 0);">; }
+    </span><span style="color: rgb(0, 0, 255);">public</span> IBar Bar { <span style="color: rgb(0, 0, 255);">get</span><span style="color: rgb(0, 0, 0);">; }
+    </span><span style="color: rgb(0, 0, 255);">public</span><span style="color: rgb(0, 0, 0);"> Foobar(IFoo foo, IBar bar)
+    {
+        Foo </span>=<span style="color: rgb(0, 0, 0);"> foo;
+        Bar </span>=<span style="color: rgb(0, 0, 0);"> bar;
+    }
+}</span></pre></div>在如下所示的代码片段中，我们创建了一个ServiceCollection（它是对IServiceCollection接口的默认实现）对象并调用相应的方法（AddTransient、AddScoped和AddSingleton）针对接口IFoo、IBar和IBaz注册了对应的服务，从方法命名可以看出注册的服务采用的生命周期模式分别为Transient、Scoped和Singleton。在完成服务注册之后，我们调用IServiceCollection接口的扩展方法BuildServiceProvider创建出代表依赖注入容器的IServiceProvider对象，并调用该对象的GetService&lt;T&gt;方法来提供相应的服务实例。调试断言表明IServiceProvider对象提供的服务实例与预先添加的服务注册是一致的。<div class="cnblogs_code" style="padding: 5px; border: 1px solid rgb(204, 204, 204); border-image: none; background-color: rgb(245, 245, 245);"><pre><span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> Program
+{
+    </span><span style="color: rgb(0, 0, 255);">static</span> <span style="color: rgb(0, 0, 255);">void</span><span style="color: rgb(0, 0, 0);"> Main()
+    {
+        </span><span style="color: rgb(0, 0, 255);">var</span> provider = <span style="color: rgb(0, 0, 255);">new</span><span style="color: rgb(0, 0, 0);"> ServiceCollection()
+            .AddTransient</span>&lt;IFoo, Foo&gt;<span style="color: rgb(0, 0, 0);">()
+            .AddScoped</span>&lt;IBar&gt;(_ =&gt; <span style="color: rgb(0, 0, 255);">new</span><span style="color: rgb(0, 0, 0);"> Bar())
+            .AddSingleton</span>&lt;IBaz, Baz&gt;<span style="color: rgb(0, 0, 0);">()
+            .BuildServiceProvider();
+        Debug.Assert(provider.GetService</span>&lt;IFoo&gt;() <span style="color: rgb(0, 0, 255);">is</span><span style="color: rgb(0, 0, 0);"> Foo);
+        Debug.Assert(provider.GetService</span>&lt;IBar&gt;() <span style="color: rgb(0, 0, 255);">is</span><span style="color: rgb(0, 0, 0);"> Bar);
+        Debug.Assert(provider.GetService</span>&lt;IBaz&gt;() <span style="color: rgb(0, 0, 255);">is</span><span style="color: rgb(0, 0, 0);"> Baz); 
+    }
+}</span></pre></div><p>除了提供类似于IFoo、IBar和IBaz这样普通的服务实例之外，IServiceProvider对象同样也能提供<font color="#ff0000">泛型</font>服务实例。如下面的代码片段所示，在为创建的ServiceCollection对象添加了针对IFoo和IBar接口的服务注册之后，我们调用AddTransient方法注册了针对泛型定义IFoobar&lt;,&gt;的服务注册（实现的类型为Foobar&lt;,&gt;）。当我们利用ServiceCollection创建出代表依赖注入容器的IServiceProvider对象并由它提供一个类型为IFoobar&lt;IFoo, IBar&gt;的服务实例的时候，它会创建并返回一个Foobar&lt;Foo, Bar&gt;对象。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid rgb(204, 204, 204); border-image: none; background-color: rgb(245, 245, 245);"><pre><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> Program
+{
+    </span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">static</span> <span style="color: rgb(0, 0, 255);">void</span><span style="color: rgb(0, 0, 0);"> Main()
+    {
+        </span><span style="color: rgb(0, 0, 255);">var</span> provider = <span style="color: rgb(0, 0, 255);">new</span><span style="color: rgb(0, 0, 0);"> ServiceCollection()
+            .AddTransient</span>&lt;IFoo, Foo&gt;<span style="color: rgb(0, 0, 0);">()
+            .AddTransient</span>&lt;IBar, Bar&gt;<span style="color: rgb(0, 0, 0);">()
+            .AddTransient(</span><span style="color: rgb(0, 0, 255);">typeof</span>(IFoobar&lt;,&gt;), <span style="color: rgb(0, 0, 255);">typeof</span>(Foobar&lt;,&gt;<span style="color: rgb(0, 0, 0);">))
+            .BuildServiceProvider();
+
+        </span><span style="color: rgb(0, 0, 255);">var</span> foobar = (Foobar&lt;IFoo, IBar&gt;)provider.GetService&lt;IFoobar&lt;IFoo, IBar&gt;&gt;<span style="color: rgb(0, 0, 0);">();
+        Debug.Assert(foobar.Foo </span><span style="color: rgb(0, 0, 255);">is</span><span style="color: rgb(0, 0, 0);"> Foo);
+        Debug.Assert(foobar.Bar </span><span style="color: rgb(0, 0, 255);">is</span><span style="color: rgb(0, 0, 0);"> Bar);       
+    }
+}</span></pre></div><p>当我们在进行服务注册的时候，可以为同一个类型添加多个服务注册。虽然添加的所有服务注册均是有效的，但是由于扩展方法GetService&lt;T&gt;总是返回一个服务实例。依赖注入框架对该方法采用了“后来居上”的策略，也就是说它总是采用最近添加的服务注册来创建服务实例。如果我们调用另一个扩展方法GetServices&lt;TService&gt;，它将利用返回根据所有服务注册提供的服务实例。如下面的代码片段所示，我们为创建的ServiceCollection对象添加了三个针对Base类型的服务注册，对应的实现类型分别为Foo、Bar和Baz。我们最后将Base作为泛型参数调用了<font color="#ff0000">GetServices&lt;Base&gt;</font>方法，该方法会返回包含三个Base对象的集合，集合元素的类型分别为Foo、Bar和Baz。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid rgb(204, 204, 204); border-image: none; background-color: rgb(245, 245, 245);"><pre><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> Program
+{
+    </span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">static</span> <span style="color: rgb(0, 0, 255);">void</span><span style="color: rgb(0, 0, 0);"> Main()
+    {
+        </span><span style="color: rgb(0, 0, 255);">var</span> services = <span style="color: rgb(0, 0, 255);">new</span><span style="color: rgb(0, 0, 0);"> ServiceCollection()
+            .AddTransient</span>&lt;Base, Foo&gt;<span style="color: rgb(0, 0, 0);">()
+            .AddTransient</span>&lt;Base, Bar&gt;<span style="color: rgb(0, 0, 0);">()
+            .AddTransient</span>&lt;Base, Baz&gt;<span style="color: rgb(0, 0, 0);">()
+            .BuildServiceProvider()
+            .GetServices</span>&lt;Base&gt;<span style="color: rgb(0, 0, 0);">();
+        Debug.Assert(services.OfType</span>&lt;Foo&gt;<span style="color: rgb(0, 0, 0);">().Any());
+        Debug.Assert(services.OfType</span>&lt;Bar&gt;<span style="color: rgb(0, 0, 0);">().Any());
+        Debug.Assert(services.OfType</span>&lt;Baz&gt;<span style="color: rgb(0, 0, 0);">().Any());      
+    }
+}</span></pre></div><p>对于IServiceProvider针对服务实例的提供还有这么一个细节：如果我们在调用GetService或者GetService&lt;T&gt;方法时服务类型设置为IServiceProvider接口，提供的服务实例实际上就是当前的IServiceProvider对象。这一特性意味着我们可以将代表依赖注入容器的IServiceProvider作为服务进行注入，这一特性体现在如下所示的调试断言中。但是在上一章已经提到过，一旦我们在应用中利用注入的IServiceProvider来获取其他依赖的服务实例，意味着我们在使用“Service Locator”模式。这是一种“反模式（Anti-Pattern）”，当我们的应用程序出现了这样的代码时，最好多想想是否真的需要这么做。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid rgb(204, 204, 204); border-image: none; background-color: rgb(245, 245, 245);"><pre><span style="color: rgb(0, 0, 255);">var</span> provider = <span style="color: rgb(0, 0, 255);">new</span><span style="color: rgb(0, 0, 0);"> ServiceCollection().BuildServiceProvider();
+Debug.Assert(provider.GetService</span>&lt;IServiceProvider&gt;() == provider);</pre></div><h1><font size="4">二、生命周期</font></h1><p>代表依赖注入容器的IServiceProvider对象之间的层次结构造就了三种不同的生命周期模式。由于Singleton服务实例保存在作为根容器的IServiceProvider对象上，所以它能够在多个同根IServiceProvider对象之间提供真正的单例保证。Scoped服务实例被保存在当前IServiceProvider对象上，所以它只能在当前范围内保证提供的实例是单例的。没有实现IDisposable接口的Transient服务则采用“<font color="#ff0000">即用即建，用后即弃</font>”的策略。</p><p>接下来我们通过对前面演示的实例略作修改来演示三种不同生命周期模式的差异。在如下所示的代码片段中我们创建了一个ServiceCollection对象并针对接口IFoo、IBar和IBaz注册了对应的服务，它们采用的生命周期模式分别为Transient、Scoped和Singleton。在利用ServiceCollection创建出代表依赖注入容器的IServiceProvider对象之后，我们调用其CreateScope方法创建了两个代表“服务范围”的IServiceScope对象，该对象的ServiceProvider属性返回一个新的IServiceProvider对象，它实际上是当前IServiceProvider对象的子容器。我们最后利用作为子容器的IServiceProvider对象来提供相应的服务实例。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid rgb(204, 204, 204); border-image: none; background-color: rgb(245, 245, 245);"><pre><span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> Program
+{
+    </span><span style="color: rgb(0, 0, 255);">static</span> <span style="color: rgb(0, 0, 255);">void</span><span style="color: rgb(0, 0, 0);"> Main()
+    {
+        </span><span style="color: rgb(0, 0, 255);">var</span> root = <span style="color: rgb(0, 0, 255);">new</span><span style="color: rgb(0, 0, 0);"> ServiceCollection()
+            .AddTransient</span>&lt;IFoo, Foo&gt;<span style="color: rgb(0, 0, 0);">()
+            .AddScoped</span>&lt;IBar&gt;(_ =&gt; <span style="color: rgb(0, 0, 255);">new</span><span style="color: rgb(0, 0, 0);"> Bar())
+            .AddSingleton</span>&lt;IBaz, Baz&gt;<span style="color: rgb(0, 0, 0);">()
+            .BuildServiceProvider();
+        </span><span style="color: rgb(0, 0, 255);">var</span> provider1 =<span style="color: rgb(0, 0, 0);"> root.CreateScope().ServiceProvider;
+        </span><span style="color: rgb(0, 0, 255);">var</span> provider2 =<span style="color: rgb(0, 0, 0);"> root.CreateScope().ServiceProvider;
+
+        GetServices</span>&lt;IFoo&gt;<span style="color: rgb(0, 0, 0);">(provider1);
+        GetServices</span>&lt;IBar&gt;<span style="color: rgb(0, 0, 0);">(provider1);
+        GetServices</span>&lt;IBaz&gt;<span style="color: rgb(0, 0, 0);">(provider1);
+        Console.WriteLine();
+        GetServices</span>&lt;IFoo&gt;<span style="color: rgb(0, 0, 0);">(provider2);
+        GetServices</span>&lt;IBar&gt;<span style="color: rgb(0, 0, 0);">(provider2);
+        GetServices</span>&lt;IBaz&gt;<span style="color: rgb(0, 0, 0);">(provider2);
+
+        </span><span style="color: rgb(0, 0, 255);">static</span> <span style="color: rgb(0, 0, 255);">void</span> GetServices&lt;T&gt;<span style="color: rgb(0, 0, 0);">(IServiceProvider provider)
+        {
+            provider.GetService</span>&lt;T&gt;<span style="color: rgb(0, 0, 0);">();
+            provider.GetService</span>&lt;T&gt;<span style="color: rgb(0, 0, 0);">();
+        }
+    }
+}</span></pre></div><p>上面的程序运行之后会在控制台上输出如下图所示的结果。由于服务IFoo被注册为Transient服务，所以IServiceProvider针对该接口类型的四次调用都会创建一个全新的Foo对象。IBar服务的生命周期模式为Scoped，如果我们利用同一个IServiceProvider对象来提供对应的服务实例，它只会创建一个Bar对象，所以整个程序执行过程中会创建两个Bar对象。IBaz服务采用Singleton生命周期，所以具有同根的两个IServiceProvider对象提供的总是同一个Baz对象，后者只会被创建一次。</p><p><a href="https://img2018.cnblogs.com/blog/19327/201911/19327-20191111082033138-480669082.png"><img width="325" height="234" title="4-1" style="border: 0px currentcolor; border-image: none; display: inline; background-image: none;" alt="4-1" src="https://img2018.cnblogs.com/blog/19327/201911/19327-20191111082033438-2134653211.png" border="0"></a></p><p>作为依赖注入容器的IServiceProvider对象不仅为我们提供所需的服务实例，它还帮我们管理这些服务实例的生命周期。如果某个服务类型实现了IDisposable接口，意味着当生命周期完结的时候需要通过调用Dispose方法执行一些资源释放操作，这些操作同样由提供该服务实例的IServiceProvider对象来驱动执行。依赖注入框架针对提供服务实例的释放策略取决于对应的服务注册采用的生命周期模式，具体的策略如下：</p><ul><li>Transient和Scoped：所有实现了IDisposable接口的服务实例会被当前IServiceProvider对象保存起来，当IServiceProvider对象的Dispose方法被调用的时候，这些服务实例的Dispose方法会随之被调用。</li><li>Singleton：由于服务实例保存在作为根容器的IServiceProvider对象上，只有当后者的Dispose方法被调用的时候，这些服务实例的Dispose方法才会随之被调用。</li></ul><p>对于一个ASP.NET Core应用来说，它具有一个与当前应用绑定代表全局根容器的IServiceProvider对象。对于处理的每一次请求，ASP.NET Core框架都会利用这个根容器来创建基于当前请求的服务范围，并利用后者提供的IServiceProvider对象来提供请求处理所需的服务实例。请求处理完成之后，创建的服务范围被终结，对应的IServiceProvider对象也随之被释放，此时由它提供的Scoped服务实例以及实现了IDisposable接口的Transient服务实例得以及时释放。</p><p>上述的释放策略可以通过如下的演示实例来印证。我们在如下的代码片段中创建了一个ServiceCollection对象，并针对不同的生命周期模式添加了针对IFoo、IBar和IBaz的服务注册。在利用ServiceCollection创建出作为根容器的IServiceProvider之后，我们调用它的CreateScope方法创建出对应的服务范围。接下来我们利用创建的服务范围得到代表子容器的IServiceProvider对象，并用它提供了三个注册服务对应的实例。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid rgb(204, 204, 204); border-image: none; background-color: rgb(245, 245, 245);"><pre><span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> Program
+{
+    </span><span style="color: rgb(0, 0, 255);">static</span> <span style="color: rgb(0, 0, 255);">void</span><span style="color: rgb(0, 0, 0);"> Main()
+    {
+        </span><span style="color: rgb(0, 0, 255);">using</span> (<span style="color: rgb(0, 0, 255);">var</span> root = <span style="color: rgb(0, 0, 255);">new</span><span style="color: rgb(0, 0, 0);"> ServiceCollection()
+            .AddTransient</span>&lt;IFoo, Foo&gt;<span style="color: rgb(0, 0, 0);">()
+            .AddScoped</span>&lt;IBar, Bar&gt;<span style="color: rgb(0, 0, 0);">()
+            .AddSingleton</span>&lt;IBaz, Baz&gt;<span style="color: rgb(0, 0, 0);">()
+            .BuildServiceProvider())
+        {
+            </span><span style="color: rgb(0, 0, 255);">using</span> (<span style="color: rgb(0, 0, 255);">var</span> scope =<span style="color: rgb(0, 0, 0);"> root.CreateScope())
+            {
+                </span><span style="color: rgb(0, 0, 255);">var</span> provider =<span style="color: rgb(0, 0, 0);"> scope.ServiceProvider;
+                provider.GetService</span>&lt;IFoo&gt;<span style="color: rgb(0, 0, 0);">();
+                provider.GetService</span>&lt;IBar&gt;<span style="color: rgb(0, 0, 0);">();
+                provider.GetService</span>&lt;IBaz&gt;<span style="color: rgb(0, 0, 0);">();
+                Console.WriteLine(</span><span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(128, 0, 0);">Child container is disposed.</span><span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(0, 0, 0);">);
+            }
+            Console.WriteLine(</span><span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(128, 0, 0);">Root container is disposed.</span><span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(0, 0, 0);">);
+        }
+    }
+}</span></pre></div><p>由于代表根容器的IServiceProvider对象和服务范围的创建都是在using块中进行的，所有针对它们的Dispose方法都会在using块结束的地方被调用。为了确定方法被调用的时机，我们特意在控制台上打印了相应的文字。该程序运行之后会在控制台上输出如下图所示的结果，我们可以看到当作为子容器的IServiceProvider对象被释放的时候，由它提供的两个生命周期模式分别为Transient和Scoped的两个服务实例（Foo和Bar）被正常释放了。至于生命周期模式为Singleton的服务实例Baz，它的Dispose方法会延迟到作为根容器的IServiceProvider对象被释放的时候。</p><p><a href="https://img2018.cnblogs.com/blog/19327/201911/19327-20191111082033599-970971357.png"><img width="356" height="220" title="4-2" style="border: 0px currentcolor; border-image: none; display: inline; background-image: none;" alt="4-2" src="https://img2018.cnblogs.com/blog/19327/201911/19327-20191111082033828-1286821543.png" border="0"></a></p><h1><font size="4">三、针对服务注册的验证</font></h1><p>Singleton和Scoped这两种不同的生命周期是通过将提供的服务实例分别存放到作为根容器的IServiceProvider对象和当前IServiceProvider对象来实现的，这意味着<font color="#ff0000">作为根容器的IServiceProvider对象提供的Scoped服务实例也是单例的</font>。<font color="#ff0000">如果某个Singleton服务依赖另一个Scoped服务，那么Scoped服务实例将被一个Singleton服务实例所引用，意味着Scoped服务实例也成了一个Singleton服务实例</font>。</p><p>在ASP.NET Core应用中，我们将某个服务注册的生命周期设置为Scoped的真正意图是希望依赖注入容器根据每个接收的请求来创建和释放服务实例，但是一旦出现上述这种情况，意味着Scoped服务实例将变成一个Singleton服务实例，这样的Scoped服务实例会直到应用关闭的那一刻才会被释放，这无疑不是我们希望得到的结果。如果某个Scoped服务实例引用的资源（比如数据库连接）需要被及时释放，这可能会对应用造成灭顶之灾。为了避免这种情况的出现，我们在利用IServiceProvider提供服务过程中可以开启针对服务范围的验证。</p><p>如果希望IServiceProvider在提供服务的过程中对服务范围作有效性检验，我们只需要在调用IServiceCollection的BuildServiceProvider扩展方法的时候将一个布尔类型的True值作为参数即可。在如下所示的演示程序中，我们定义了两个服务接口（IFoo和IBar）和对应的实现类型（Foo和Bar），其中Foo依赖IBar。我们将IFoo和IBar分别注册为Singleton和Scoped服务，当调用BuildServiceProvider方法创建代表依赖注入容器的IServiceProvider对象的时候，我们将参数设置为True以开启针对服务范围的检验。我们最后分别利用代表根容器和子容器的IServiceProvider来提供这两种类型的服务实例。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid rgb(204, 204, 204); border-image: none; background-color: rgb(245, 245, 245);"><pre><span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> Program
+{
+    </span><span style="color: rgb(0, 0, 255);">static</span> <span style="color: rgb(0, 0, 255);">void</span><span style="color: rgb(0, 0, 0);"> Main()
+    {
+        </span><span style="color: rgb(0, 0, 255);">var</span> root = <span style="color: rgb(0, 0, 255);">new</span><span style="color: rgb(0, 0, 0);"> ServiceCollection()
+            .AddSingleton</span>&lt;IFoo, Foo&gt;<span style="color: rgb(0, 0, 0);">()
+            .AddScoped</span>&lt;IBar, Bar&gt;<span style="color: rgb(0, 0, 0);">()
+            .BuildServiceProvider(</span><span style="color: rgb(0, 0, 255);">true</span><span style="color: rgb(0, 0, 0);">);    
+        </span><span style="color: rgb(0, 0, 255);">var</span> child =<span style="color: rgb(0, 0, 0);"> root.CreateScope().ServiceProvider;
+
+        </span><span style="color: rgb(0, 0, 255);">void</span> ResolveService&lt;T&gt;<span style="color: rgb(0, 0, 0);">(IServiceProvider provider)
+        {
+            </span><span style="color: rgb(0, 0, 255);">var</span> isRootContainer = root == provider ? <span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(128, 0, 0);">Yes</span><span style="color: rgb(128, 0, 0);">"</span> : <span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(128, 0, 0);">No</span><span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(0, 0, 0);">;
+            </span><span style="color: rgb(0, 0, 255);">try</span><span style="color: rgb(0, 0, 0);">
+            {
+                provider.GetService</span>&lt;T&gt;<span style="color: rgb(0, 0, 0);">();
+                Console.WriteLine( $</span><span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(128, 0, 0);">Status: Success; </span>
+                    Service Type: {<span style="color: rgb(0, 0, 255);">typeof</span>(T).Name}; Root: {isRootContainer}<span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(128, 0, 0);">);</span>
+<span style="color: rgb(0, 0, 0);">            }
+            </span><span style="color: rgb(0, 0, 255);">catch</span><span style="color: rgb(0, 0, 0);"> (Exception ex)
+            {
+                Console.WriteLine($</span><span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(128, 0, 0);">Status: Fail; </span>
+                    Service Type: {<span style="color: rgb(0, 0, 255);">typeof</span>(T).Name}; Root: {isRootContainer}<span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(128, 0, 0);">);</span>
+                Console.WriteLine($<span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(128, 0, 0);">Error: {ex.Message}</span><span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(0, 0, 0);">);
+            }
+        }
+
+        ResolveService</span>&lt;IFoo&gt;<span style="color: rgb(0, 0, 0);">(root);
+        ResolveService</span>&lt;IBar&gt;<span style="color: rgb(0, 0, 0);">(root);
+        ResolveService</span>&lt;IFoo&gt;<span style="color: rgb(0, 0, 0);">(child);
+        ResolveService</span>&lt;IBar&gt;<span style="color: rgb(0, 0, 0);">(child);
+    }
+}
+
+</span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">interface</span><span style="color: rgb(0, 0, 0);"> IFoo {}
+</span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">interface</span><span style="color: rgb(0, 0, 0);"> IBar {}
+</span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> Foo : IFoo
+{
+    </span><span style="color: rgb(0, 0, 255);">public</span> IBar Bar { <span style="color: rgb(0, 0, 255);">get</span><span style="color: rgb(0, 0, 0);">; }
+    </span><span style="color: rgb(0, 0, 255);">public</span> Foo(IBar bar) =&gt; Bar =<span style="color: rgb(0, 0, 0);"> bar;
+}
+</span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">class</span> Bar : IBar {}</pre></div><p>上面这个演示实例启动之后将在控制台上输出如下图所示的结果。从输出结果可以看出针对四个服务解析，只有一次（使用代表子容器的IServiceProvider提供IBar服务实例）是成功的。这个实例充分说明了一旦开启了针对服务范围的验证，IServiceProvider对象不可能提供以单例形式存在的Scoped服务。</p><p><a href="https://img2018.cnblogs.com/blog/19327/201911/19327-20191111082034051-1395900354.png"><img width="710" height="228" title="4-3" style="border: 0px currentcolor; border-image: none; display: inline; background-image: none;" alt="4-3" src="https://img2018.cnblogs.com/blog/19327/201911/19327-20191111082034286-228205451.png" border="0"></a></p><p>针对服务范围的检验体现在配置选项类型ServiceProviderOptions的ValidateScopes属性上。如下面的代码片段所示，ServiceProviderOptions还具有另一个名为ValidateOnBuild的属性，如果该属性设置为True，意味着IServiceProvider对象被构建的时候会检验提供的每个ServiceDescriptor的有效性，即确保它们最终都具有提供对应服务实例的能力。默认情况下ValidateOnBuild的属性值为False，意味着只有利用IServiceProvider对象来提供我们所需的服务实例的时候，相应的异常采用才会抛出来。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid rgb(204, 204, 204); border-image: none; background-color: rgb(245, 245, 245);"><pre><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> ServiceProviderOptions
+{
+    </span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">bool</span> ValidateScopes { <span style="color: rgb(0, 0, 255);">get</span>; <span style="color: rgb(0, 0, 255);">set</span><span style="color: rgb(0, 0, 0);">; }
+    </span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">bool</span> ValidateOnBuild { <span style="color: rgb(0, 0, 255);">get</span>; <span style="color: rgb(0, 0, 255);">set</span><span style="color: rgb(0, 0, 0);">; }
+}</span></pre></div><p>我们照例来作一个在构建IServiceProvider对象时检验服务注册有效性的实例。我们定义了如下一个接口IFoobar和对应的实现类型Foobar，由于我们希望采用单例的形式来使用Foobar对象，所以我们为它定义了唯一的私有构造函数。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid rgb(204, 204, 204); border-image: none; background-color: rgb(245, 245, 245);"><pre><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">interface</span><span style="color: rgb(0, 0, 0);"> IFoobar {}
+</span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> Foobar : IFoobar
+{
+    </span><span style="color: rgb(0, 0, 255);">private</span><span style="color: rgb(0, 0, 0);"> Foobar() {}
+    </span><span style="color: rgb(0, 0, 255);">public</span> <span style="color: rgb(0, 0, 255);">static</span> <span style="color: rgb(0, 0, 255);">readonly</span> Foobar Instance = <span style="color: rgb(0, 0, 255);">new</span><span style="color: rgb(0, 0, 0);"> Foobar();
+}</span></pre></div><p>在如下的演示实例中，我们定义了一个内嵌的BuildServiceProvider方法来完成针对IFoobar/Foobar的服务注册和最终对IServiceProvider对象的创建。当我们在调用扩展方法BuildServiceProvider创建对应IServiceProvider对象时指定了一个ServiceProviderOptions对象，而它的ValidateOnBuild属性来源于内嵌方法的同名参数。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid rgb(204, 204, 204); border-image: none; background-color: rgb(245, 245, 245);"><pre><span style="color: rgb(0, 0, 255);">class</span><span style="color: rgb(0, 0, 0);"> Program
+{
+    </span><span style="color: rgb(0, 0, 255);">static</span> <span style="color: rgb(0, 0, 255);">void</span><span style="color: rgb(0, 0, 0);"> Main()
+    {        
+       BuildServiceProvider(</span><span style="color: rgb(0, 0, 255);">false</span><span style="color: rgb(0, 0, 0);">);
+        BuildServiceProvider(</span><span style="color: rgb(0, 0, 255);">true</span><span style="color: rgb(0, 0, 0);">);
+
+        </span><span style="color: rgb(0, 0, 255);">static</span> <span style="color: rgb(0, 0, 255);">void</span> BuildServiceProvider(<span style="color: rgb(0, 0, 255);">bool</span><span style="color: rgb(0, 0, 0);"> validateOnBuild)
+        {
+            </span><span style="color: rgb(0, 0, 255);">try</span><span style="color: rgb(0, 0, 0);">
+            {
+                </span><span style="color: rgb(0, 0, 255);">var</span> options = <span style="color: rgb(0, 0, 255);">new</span><span style="color: rgb(0, 0, 0);"> ServiceProviderOptions
+                {
+                    ValidateOnBuild </span>=<span style="color: rgb(0, 0, 0);"> validateOnBuild
+                };
+                </span><span style="color: rgb(0, 0, 255);">new</span><span style="color: rgb(0, 0, 0);"> ServiceCollection()
+                    .AddSingleton</span>&lt;IFoobar, Foobar&gt;<span style="color: rgb(0, 0, 0);">()
+                    .BuildServiceProvider(options);
+                Console.WriteLine(
+                    $</span><span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(128, 0, 0);">Status: Success; ValidateOnBuild: {validateOnBuild}</span><span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(0, 0, 0);">);
+            }
+            </span><span style="color: rgb(0, 0, 255);">catch</span><span style="color: rgb(0, 0, 0);"> (Exception ex)
+            {
+                Console.WriteLine( $</span><span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(128, 0, 0);">Status: Fail; ValidateOnBuild: {validateOnBuild}</span><span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(0, 0, 0);">);
+                Console.WriteLine($</span><span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(128, 0, 0);">Error: {ex.Message}</span><span style="color: rgb(128, 0, 0);">"</span><span style="color: rgb(0, 0, 0);">);
+            }
+        }
+    }
+}</span></pre></div><p>由于Foobar只具有一个唯一的私有构造函数，所以内嵌方法BuildServiceProvider提供的服务注册并不能提供我们所需的服务实例，所以这个服务注册是无效的。由于默认情况下构建IServiceProvider对象的时候并不会对服务注册作有效性检验，所以此时无效的服务注册并不会及时被探测到。一旦我们将ValidateOnBuild选项设置为True，IServiceProvider对象在被构建的时候就会抛出异常，如下图所示的输出结果体现了这一点。</p><p><a href="https://img2018.cnblogs.com/blog/19327/201911/19327-20191111082034545-563096366.png"><img width="729" height="204" title="4-4" style="border: 0px currentcolor; border-image: none; display: inline; background-image: none;" alt="4-4" src="https://img2018.cnblogs.com/blog/19327/201911/19327-20191111082034798-1592081888.png" border="0"></a></p><p><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-01.html">[ASP.NET Core 3框架揭秘] 依赖注入[1]：控制反转</a><br><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-02.html">[ASP.NET Core 3框架揭秘] 依赖注入[2]：IoC模式</a><br><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-03.html">[ASP.NET Core 3框架揭秘] 依赖注入[3]：依赖注入模式</a><br><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-04.html">[ASP.NET Core 3框架揭秘] 依赖注入[4]：一个迷你版DI框架</a><br><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-05.html">[ASP.NET Core 3框架揭秘] 依赖注入[5]：利用容器提供服务</a><br><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-06.html">[ASP.NET Core 3框架揭秘] 依赖注入[6]：服务注册</a><br><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-07.html">[ASP.NET Core 3框架揭秘] 依赖注入[7]：服务消费</a><br><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-08.html">[ASP.NET Core 3框架揭秘] 依赖注入[8]：服务实例的生命周期</a><br><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-09.html">[ASP.NET Core 3框架揭秘] 依赖注入[9]：实现概述</a><br><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-10.html">[ASP.NET Core 3框架揭秘] 依赖注入[10]：与第三方依赖注入框架的适配</a></p>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2019-11-11 08:15</span>&nbsp;
+<a href="https://www.cnblogs.com/artech/">Artech</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=11832731" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(11832731);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 22886, cb_blogApp = 'artech', cb_blogUserGuid = '9f65360b-63cf-dd11-9e4d-001cf0cd104b';
+    var cb_entryId = 11832731, cb_entryCreatedDate = '2019-11-11 08:15', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 Artech
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <script type="text/javascript">
+    $(document).ready(function () {
+        var html = '作者：蒋金楠 <br />微信公众账号：大内老A<br/>微博：<a href="http://www.weibo.com/artech">www.weibo.com/artech</a><br/>如果你想及时得到个人撰写文章以及著作的消息推送，或者想看看个人推荐的技术资料，可以扫描左边二维码（或者长按识别二维码）关注个人公众号）。<br/>本文版权归作者和博客园共有，欢迎转载，但未经作者同意必须保留此段声明，且在文章页面明显位置给出原文连接，否则保留追究法律责任的权利。<div style="clear:both"/>';
+        $("body").prepend($("#div_digg").css({ "position": "fixed", "right": "0px", "bottom": "0px", "z-index": "10", "background-color": "white", "margin": "10px", "padding": "10px", "border": "1px solid #cccccc" }));
+        if ($("#cnblogs_post_body").next().attr("id") == "MySignature") {
+            $("#cnblogs_post_body #MySignature").hide();
+            $("#cnblogs_post_body").next().show().html(html);
+        }
+        else {
+            $("#cnblogs_post_body #MySignature").show().html(html);
+        }
+    });
+</script>
+    </div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+C:\Users\jiaxy\source\repos\SimpleCrawler\CrawlerForm\bin\Debug\CrawlerForm.exe.config
+C:\Users\jiaxy\source\repos\SimpleCrawler\CrawlerForm\bin\Debug\CrawlerForm.exe
+C:\Users\jiaxy\source\repos\SimpleCrawler\CrawlerForm\bin\Debug\CrawlerForm.pdb
+C:\Users\jiaxy\source\repos\SimpleCrawler\CrawlerForm\obj\Debug\CrawlerForm.csprojAssemblyReference.cache
+C:\Users\jiaxy\source\repos\SimpleCrawler\CrawlerForm\obj\Debug\CrawlerForm.Form1.resources
+C:\Users\jiaxy\source\repos\SimpleCrawler\CrawlerForm\obj\Debug\CrawlerForm.Properties.Resources.resources
+C:\Users\jiaxy\source\repos\SimpleCrawler\CrawlerForm\obj\Debug\CrawlerForm.csproj.GenerateResource.cache
+C:\Users\jiaxy\source\repos\SimpleCrawler\CrawlerForm\obj\Debug\CrawlerForm.csproj.CoreCompileInputs.cache
+C:\Users\jiaxy\source\repos\SimpleCrawler\CrawlerForm\obj\Debug\CrawlerForm.exe
+C:\Users\jiaxy\source\repos\SimpleCrawler\CrawlerForm\obj\Debug\CrawlerForm.pdb
+E:\网课\软件工程导论\Crawler\CrawlerForm\bin\Debug\CrawlerForm.exe.config
+E:\网课\软件工程导论\Crawler\CrawlerForm\bin\Debug\CrawlerForm.exe
+E:\网课\软件工程导论\Crawler\CrawlerForm\bin\Debug\CrawlerForm.pdb
+E:\网课\软件工程导论\Crawler\CrawlerForm\obj\Debug\CrawlerForm.Form1.resources
+E:\网课\软件工程导论\Crawler\CrawlerForm\obj\Debug\CrawlerForm.Properties.Resources.resources
+E:\网课\软件工程导论\Crawler\CrawlerForm\obj\Debug\CrawlerForm.csproj.GenerateResource.cache
+E:\网课\软件工程导论\Crawler\CrawlerForm\obj\Debug\CrawlerForm.csproj.CoreCompileInputs.cache
+E:\网课\软件工程导论\Crawler\CrawlerForm\obj\Debug\CrawlerForm.exe
+E:\网课\软件工程导论\Crawler\CrawlerForm\obj\Debug\CrawlerForm.pdb
+E:\网课\软件工程导论\Crawler\CrawlerForm\bin\Debug\CrawlerForm.exe.CodeAnalysisLog.xml
+E:\网课\软件工程导论\Crawler\CrawlerForm\bin\Debug\CrawlerForm.exe.lastcodeanalysissucceeded
+E:\VS DATA\HomeWork\HomeWork10\Crawler\CrawlerForm\bin\Debug\CrawlerForm.exe.config
+E:\VS DATA\HomeWork\HomeWork10\Crawler\CrawlerForm\bin\Debug\CrawlerForm.exe
+E:\VS DATA\HomeWork\HomeWork10\Crawler\CrawlerForm\bin\Debug\CrawlerForm.pdb
+E:\VS DATA\HomeWork\HomeWork10\Crawler\CrawlerForm\obj\Debug\CrawlerForm.csprojAssemblyReference.cache
+E:\VS DATA\HomeWork\HomeWork10\Crawler\CrawlerForm\obj\Debug\CrawlerForm.Form1.resources
+E:\VS DATA\HomeWork\HomeWork10\Crawler\CrawlerForm\obj\Debug\CrawlerForm.Properties.Resources.resources
+E:\VS DATA\HomeWork\HomeWork10\Crawler\CrawlerForm\obj\Debug\CrawlerForm.csproj.GenerateResource.cache
+E:\VS DATA\HomeWork\HomeWork10\Crawler\CrawlerForm\obj\Debug\CrawlerForm.csproj.CoreCompileInputs.cache
+E:\VS DATA\HomeWork\HomeWork10\Crawler\CrawlerForm\obj\Debug\CrawlerForm.exe
+E:\VS DATA\HomeWork\HomeWork10\Crawler\CrawlerForm\obj\Debug\CrawlerForm.pdb

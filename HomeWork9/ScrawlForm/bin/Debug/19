@@ -1,0 +1,394 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content=".NET Core具有一个承载（Hosting）系统，承载需要在后台长时间运行的服务，一个ASP.NET Core应用仅仅是该系统承载的一种服务而已。承载系统总是采用依赖注入的方式来消费它在服务承载过" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>[ASP.NET Core 3框架揭秘] 依赖注入[10]：与第三方依赖注入框架的适配 - Artech - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=BKtyzabbeYJEVOaELkxmRjHbp7LT-v37GzrU5S24bJk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/custom/bundle-custom.min.css?v=1ssrnY3Il79Ok472qeVrpxlSprSXcHhYPgZC5S3wtVM" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/artech/custom.css?v=leU/goGCZP8MalVXSCwwWQ/6Ask=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/custom/bundle-custom-mobile.min.css?v=-Yh290MhQyDeXLmvKTSses9H6-49lqbpXFh55zvS0w8" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/artech/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/artech/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/artech/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=VSP5rTXbJNpNidklGdgoLgwCGyUPITrcsmlgoaMKz3w"></script>
+    <script>
+        var currentBlogId = 22886;
+        var currentBlogApp = 'artech';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'Custom';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    <div id="page_begin_html">
+        <script>loadPageBeginHtml();</script>
+    </div>
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/artech/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/artech/"><img style="margin:0px auto 10px auto" style="width:94px; height:42px" src="http://images.cnblogs.com/cnblogs_com/artech/158198/o_ArtechLogo.png" alt="Artech" /></a>
+</h1>
+<h2>
+
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/artech/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/Artech">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/artech/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+750&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+25627</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-10.html">[ASP.NET Core 3框架揭秘] 依赖注入[10]：与第三方依赖注入框架的适配</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+    <div id="cnblogs_post_description" style="display: none">
+        <img src="http://images.cnblogs.com/cnblogs_com/artech/158198/o_.netcore.png" class="desc_img">.NET Core具有一个承载（Hosting）系统，承载需要在后台长时间运行的服务，一个ASP.NET Core应用仅仅是该系统承载的一种服务而已。承载系统总是采用依赖注入的方式来消费它在服务承载过程所需的服务。对于承载系统来说，原始的服务注册总是体现为一个IServiceCollection集合，最终的依赖注入容器则体现为一个IServiceProvider对象，如果要将第三方依赖注入框架整合进来，就需要利用它们解决从IServiceCollection集合到IServiceProvider对象之间的适配问题。
+    </div>
+<div id="cnblogs_post_body" class="blogpost-body ">
+    <p>.NET Core具有一个承载（Hosting）系统，承载需要在后台长时间运行的服务，一个ASP.NET Core应用仅仅是该系统承载的一种服务而已。承载系统总是采用依赖注入的方式来消费它在服务承载过程所需的服务。对于承载系统来说，原始的服务注册总是体现为一个<font color="#ff0000">IServiceCollection</font>集合，最终的依赖注入容器则体现为一个<font color="#ff0000">IServiceProvider</font>对象，如果要将第三方依赖注入框架整合进来，就需要利用它们解决从IServiceCollection集合到IServiceProvider对象之间的适配问题。</p><h1><font size="4"><font color="#000000">一、IServiceCollection =&gt;ContainerBuilder=&gt;IServiceProvider</font><font color="#ff0000"><font color="#ff0000"><font color="#ff0000"></font></font></font><font color="#ff0000"><font color="#ff0000"></font></font><font color="#ff0000"></font></font></h1><p>具体来说，我们可以在IServiceCollection集合和IServiceProvider对象之间设置一个针对某个第三方依赖注入框架的<font color="#ff0000">ContainerBuilder</font>对象。我们先利用包含原始服务注册的IServiceCollection集合来创建一个ContainerBuilder对象，再利用该对象来构建作为依赖注入容器的IServiceProvider对象。</p><p><a href="https://img2018.cnblogs.com/blog/19327/201911/19327-20191118081618396-1093565825.png"><img width="371" height="189" title="4-15" style="border: 0px currentcolor; border-image: none; display: inline; background-image: none;" alt="4-15" src="https://img2018.cnblogs.com/blog/19327/201911/19327-20191118081618748-622583109.png" border="0" /></a></p><h1><font size="4">二、 IServiceProviderFactory&lt;TContainerBuilder&gt;</font></h1><p>如上图所示的两种转换是利用一个<font color="#ff0000">IServiceProviderFactory&lt;TContainerBuilder&gt;</font>对象完成的。如下面的代码片段所示，IServiceProviderFactory&lt;TContainerBuilder&gt;接口定义了两个方法，其中<font color="#ff0000">CreateBuilder</font>方法利用指定的IServiceCollection集合创建出对应的ContainerBuilder对象，而<font color="#ff0000">CreateServiceProvider</font>方法则进一步利用这个ContainerBuilder对象创建出作为依赖注入容器的IServiceProvider对象。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid #cccccc; border-image: none; background-color: #f5f5f5;"><pre><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">interface</span> IServiceProviderFactory&lt;TContainerBuilder&gt;<span style="color: #000000;">
+{
+    TContainerBuilder CreateBuilder(IServiceCollection services);
+    IServiceProvider CreateServiceProvider(TContainerBuilder containerBuilder);
+}</span></pre></div><p>.NET Core的承载系统总是利用注册的IServiceProviderFactory&lt;TContainerBuilder&gt;服务来创建最终作为依赖注入容器的IServiceProvider对象。承载系统默认注册的是如下这个<font color="#ff0000">DefaultServiceProviderFactory</font>类型。如下面的代码片段所示，DefaultServiceProviderFactory对象会直接调用指定IServiceCollection集合的BuildServiceProvider方法创建出对应的IServiceProvider对象。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid #cccccc; border-image: none; background-color: #f5f5f5;"><pre><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span> DefaultServiceProviderFactory :  IServiceProviderFactory&lt;IServiceCollection&gt;<span style="color: #000000;">
+{   
+    </span><span style="color: #0000ff;">public</span> DefaultServiceProviderFactory()  : <span style="color: #0000ff;">this</span><span style="color: #000000;">(ServiceProviderOptions.Default){}
+    </span><span style="color: #0000ff;">public</span> DefaultServiceProviderFactory(ServiceProviderOptions options) =&gt;_options =<span style="color: #000000;"> options;
+
+    </span><span style="color: #0000ff;">public</span> IServiceCollection CreateBuilder(IServiceCollection services)  =&gt;<span style="color: #000000;"> services;
+
+    </span><span style="color: #0000ff;">public</span> IServiceProvider CreateServiceProvider( IServiceCollection containerBuilder) =&gt;<span style="color: #000000;">  containerBuilder.BuildServiceProvider(_options);
+}</span></pre></div><h1><font size="4">三、整合第三方依赖注入框架</font></h1><p>为了让读者朋友对利用注册的IServiceProviderFactory&lt;TContainerBuilder&gt;服务整合第三方依赖注入框架具有更加深刻的理解，我们来演示一个具体的实例。我们在《<a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-04.html">一个Mini版的依赖注入框架</a>》创建了一个名为Cat的&#8220;迷你版&#8221;依赖注入框架，接下来我们将提供一个具体IServiceProviderFactory&lt;TContainerBuilder&gt;实现类型完成对它的整合。</p><p>我们首先创建一个名为<font color="#ff0000">CatBuilder</font>的类型作为对应的ContainerBuilder。由于需要涉及针对服务范围的创建，我们在CatBuilder类中定了如下两个内嵌的私有类型，其中表示服务范围的ServiceScope对象实际上就是对一个IServiceProvider对象的封装，另一个ServiceScopeFactory类型表示创建该对象的工厂，它是对一个Cat对象的封装。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid #cccccc; border-image: none; background-color: #f5f5f5;"><pre><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> CatBuilder
+{    
+    </span><span style="color: #0000ff;">private</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> ServiceScope : IServiceScope
+    {
+        </span><span style="color: #0000ff;">public</span> ServiceScope(IServiceProvider serviceProvider) =&gt; ServiceProvider =<span style="color: #000000;"> serviceProvider;
+        </span><span style="color: #0000ff;">public</span> IServiceProvider ServiceProvider { <span style="color: #0000ff;">get</span><span style="color: #000000;">; }
+        </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span> Dispose()=&gt; (ServiceProvider <span style="color: #0000ff;">as</span> IDisposable)?<span style="color: #000000;">.Dispose();
+}
+
+    </span><span style="color: #0000ff;">private</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> ServiceScopeFactory : IServiceScopeFactory
+    {
+        </span><span style="color: #0000ff;">private</span> <span style="color: #0000ff;">readonly</span><span style="color: #000000;"> Cat _cat;
+        </span><span style="color: #0000ff;">public</span> ServiceScopeFactory(Cat cat) =&gt; _cat =<span style="color: #000000;"> cat;
+        </span><span style="color: #0000ff;">public</span> IServiceScope CreateScope() =&gt; <span style="color: #0000ff;">new</span><span style="color: #000000;"> ServiceScope(_cat);
+    }
+}</span></pre></div><p>一个CatBuilder对象是对一个Cat对象的封装，它的BuildServiceProvider方法会直接返回这个Cat对象，并作为最终提供的依赖注入容器。CatBuilder在初始化过程中添加了针对IServiceScopeFactory接口的服务注册，具体注册的是根据作为当前子容器的Cat对象创建的ServiceScopeFactory对象。为了实现程序集范围内的批量服务注册，我们为CatBuilder定义了一个Register方法。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid #cccccc; border-image: none; background-color: #f5f5f5;"><pre><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> CatBuilder
+{
+    </span><span style="color: #0000ff;">private</span> <span style="color: #0000ff;">readonly</span><span style="color: #000000;"> Cat _cat;
+    </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> CatBuilder(Cat cat)
+    {
+        _cat </span>=<span style="color: #000000;"> cat;
+        _cat.Register</span>&lt;IServiceScopeFactory&gt;( c =&gt; <span style="color: #0000ff;">new</span><span style="color: #000000;"> ServiceScopeFactory(c.CreateChild()), Lifetime.Transient);
+    }
+    </span><span style="color: #0000ff;">public</span> IServiceProvider BuildServiceProvider() =&gt;<span style="color: #000000;"> _cat;
+    </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> CatBuilder Register(Assembly assembly)
+    {
+        _cat.Register(assembly);
+        </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">this</span><span style="color: #000000;">;
+    }
+    ...
+}</span></pre></div><p>如下所示的CatServiceProviderFactory类型实现了IServiceProviderFactory&lt;CatBuilder&gt;接口。在实现的CreateBuilder方法中，我们创建了一个Cat对象，并将指定IServiceCollection集合包含中的服务注册（ServiceDescriptor对象）转换成兼容Cat的服务注册（ServiceRegistry对象）并应用到创建的Cat对象上。我们最终利用这个Cat对象创建出返回的CatBuilder对象。实现的另一个方法CreateServiceProvider返回的是调用CatBuilder对象的CreateServiceProvider方法得到的IServiceProvider对象。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid #cccccc; border-image: none; background-color: #f5f5f5;"><pre><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span> CatServiceProviderFactory : IServiceProviderFactory&lt;CatBuilder&gt;<span style="color: #000000;">
+{
+    </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> CatBuilder CreateBuilder(IServiceCollection services)
+    {
+        </span><span style="color: #0000ff;">var</span> cat = <span style="color: #0000ff;">new</span><span style="color: #000000;"> Cat();
+        </span><span style="color: #0000ff;">foreach</span> (<span style="color: #0000ff;">var</span> service <span style="color: #0000ff;">in</span><span style="color: #000000;"> services)
+        {
+            </span><span style="color: #0000ff;">if</span> (service.ImplementationFactory != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+            {
+                cat.Register(service.ServiceType, provider ) </span>=&gt;<span style="color: #000000;"> service.ImplementationFactory(provider),   service.Lifetime.AsCatLifetime());
+            }
+            </span><span style="color: #0000ff;">else</span> <span style="color: #0000ff;">if</span> (service.ImplementationInstance != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+            {
+                cat.Register(service.ServiceType, service.ImplementationInstance);
+            }
+            </span><span style="color: #0000ff;">else</span><span style="color: #000000;">
+            {
+                cat.Register(service.ServiceType, service.ImplementationType,    service.Lifetime.AsCatLifetime());
+            }
+        }
+        </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> CatBuilder(cat);
+    }
+    </span><span style="color: #0000ff;">public</span> IServiceProvider CreateServiceProvider(CatBuilder containerBuilder) =&gt;<span style="color: #000000;"> containerBuilder.BuildServiceProvider();
+}</span></pre></div><p>Cat具有.NET Core依赖注入框架一致的服务生命周期表达方式，所以我们在将服务注册从ServiceDescriptor类型转化成ServiceRegistry类型时，可以实现直接完成两种生命周期模式的转换，具体的转换实现在如下这个AsCatLifetime扩展方法中。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid #cccccc; border-image: none; background-color: #f5f5f5;"><pre><span style="color: #0000ff;">internal</span> <span style="color: #0000ff;">static</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> Extensions
+{
+    </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">static</span> Lifetime AsCatLifetime(<span style="color: #0000ff;">this</span><span style="color: #000000;"> ServiceLifetime lifetime)
+    {
+        </span><span style="color: #0000ff;">return</span> lifetime <span style="color: #0000ff;">switch</span><span style="color: #000000;">
+        {
+            ServiceLifetime.Scoped </span>=&gt;<span style="color: #000000;"> Lifetime.Self,
+            ServiceLifetime.Singleton </span>=&gt;<span style="color: #000000;"> Lifetime.Root,
+            _ </span>=&gt;<span style="color: #000000;"> Lifetime.Transient,
+        };
+    }
+}</span></pre></div><p>接下来我们演示如何利用CatServiceProviderFactory来创建作为依赖注入容器的IServiceProvider对象。我们定义了如下的接口和对应的实现类型，其中Foo、Bar、Baz和Qux类型分别实现了对应的接口IFoo、IBar、IBaz和IQux，其中Qux类型上标注了一个MapToAttribute特性注册了与对应接口IQux之间的映射。为了反映Cat对服务实例生命周期的控制，我们让它们派生于同一个基类Base。Base实现了IDisposable接口，我们在其构造函数和实现的Dispose方法中输出相应的文本以确定对应的实例何时被创建和释放。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid #cccccc; border-image: none; background-color: #f5f5f5;"><pre><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">interface</span><span style="color: #000000;"> IFoo {}
+</span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">interface</span><span style="color: #000000;"> IBar {}
+</span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">interface</span><span style="color: #000000;"> IBaz {} 
+</span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">interface</span><span style="color: #000000;"> IQux {}
+</span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">interface</span> IFoobar&lt;T1, T2&gt;<span style="color: #000000;"> {}
+</span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> Base : IDisposable
+{
+    </span><span style="color: #0000ff;">public</span> Base()  =&gt; Console.WriteLine($<span style="color: #800000;">"</span><span style="color: #800000;">Instance of {GetType().Name} is created.</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+    </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span> Dispose()  =&gt; Console.WriteLine($<span style="color: #800000;">"</span><span style="color: #800000;">Instance of {GetType().Name} is disposed.</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+}
+
+</span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> Foo : Base, IFoo{ }
+</span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> Bar : Base, IBar{ }
+</span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> Baz : Base, IBaz{ } 
+[MapTo(</span><span style="color: #0000ff;">typeof</span><span style="color: #000000;">(IQux), Lifetime.Root)]
+</span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> Qux : Base, IQux { }
+</span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span> Foobar&lt;T1, T2&gt;: IFoobar&lt;T1,T2&gt;<span style="color: #000000;">
+{
+    </span><span style="color: #0000ff;">public</span> IFoo Foo { <span style="color: #0000ff;">get</span><span style="color: #000000;">; }
+    </span><span style="color: #0000ff;">public</span> IBar Bar { <span style="color: #0000ff;">get</span><span style="color: #000000;">; }
+    </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> Foobar(IFoo foo, IBar bar)
+    {
+        Foo </span>=<span style="color: #000000;"> foo;
+        Bar </span>=<span style="color: #000000;"> bar;
+    }
+}</span></pre></div><p>在如下所示的演示程序中，我们创建了一个ServiceCollection集合，并采用三种不同的生命周期模式分别添加了针对IFoo、IBar和IBaz接口的服务注册。我们接下来根据这个ServiceCollection集合创建了一个CatServiceProviderFactory对象，并调用其CreateBuilder方法创建出对应的CatBuilder对象。我们随后调用了CatBuilder对象的Register方法完成了针对当前入口程序集的批量服务注册，其目的在于添加针对IQux/Qux的服务注册。</p><div class="cnblogs_code" style="padding: 5px; border: 1px solid #cccccc; border-image: none; background-color: #f5f5f5;"><pre><span style="color: #0000ff;">class</span><span style="color: #000000;"> Program
+{
+    </span><span style="color: #0000ff;">static</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> Main()
+    {
+        </span><span style="color: #0000ff;">var</span> services = <span style="color: #0000ff;">new</span><span style="color: #000000;"> ServiceCollection()
+            .AddTransient</span>&lt;IFoo, Foo&gt;<span style="color: #000000;">()
+            .AddScoped</span>&lt;IBar&gt;(_ =&gt; <span style="color: #0000ff;">new</span><span style="color: #000000;"> Bar())
+            .AddSingleton</span>&lt;IBaz&gt;(<span style="color: #0000ff;">new</span><span style="color: #000000;"> Baz());
+
+        </span><span style="color: #0000ff;">var</span> factory = <span style="color: #0000ff;">new</span><span style="color: #000000;"> CatServiceProviderFactory();
+        </span><span style="color: #0000ff;">var</span> builder =<span style="color: #000000;"> factory.CreateBuilder(services)
+            .Register(Assembly.GetEntryAssembly());
+        </span><span style="color: #0000ff;">var</span> container =<span style="color: #000000;"> factory.CreateServiceProvider(builder);
+
+        GetServices();
+        GetServices();
+        Console.WriteLine(</span><span style="color: #800000;">"</span><span style="color: #800000;">\nRoot container is disposed.</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+        (container </span><span style="color: #0000ff;">as</span> IDisposable)?<span style="color: #000000;">.Dispose();
+
+        </span><span style="color: #0000ff;">void</span><span style="color: #000000;"> GetServices()
+        {
+            </span><span style="color: #0000ff;">using</span> (<span style="color: #0000ff;">var</span> scope =<span style="color: #000000;"> container.CreateScope())
+            {
+                Console.WriteLine(</span><span style="color: #800000;">"</span><span style="color: #800000;">\nService scope is created.</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+                </span><span style="color: #0000ff;">var</span> child =<span style="color: #000000;"> scope.ServiceProvider;
+
+                child.GetService</span>&lt;IFoo&gt;<span style="color: #000000;">();
+                child.GetService</span>&lt;IBar&gt;<span style="color: #000000;">();
+                child.GetService</span>&lt;IBaz&gt;<span style="color: #000000;">();
+                child.GetService</span>&lt;IQux&gt;<span style="color: #000000;">();
+
+                child.GetService</span>&lt;IFoo&gt;<span style="color: #000000;">();
+                child.GetService</span>&lt;IBar&gt;<span style="color: #000000;">();
+                child.GetService</span>&lt;IBaz&gt;<span style="color: #000000;">();
+                child.GetService</span>&lt;IQux&gt;<span style="color: #000000;">();                     
+                Console.WriteLine(</span><span style="color: #800000;">"</span><span style="color: #800000;">\nService scope is disposed.</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+            }
+        }
+    }
+}</span></pre></div><p>在调用CatServiceProviderFactory对象的CreateServiceProvider方法创建出作为依赖注入容器的IServiceProvider对象之后，我们先后两次调用了本地方法GetServices方法。GetServices方法会利用这个IServiceProvider对象创建一个服务范围，并利用此服务范围内的IServiceProvider提供两组服务实例。通过CatServiceProviderFactory创建的IServiceProvider对象在最终通过调用其Dispose方法进行释放。该程序运行之后会在控制台上输出如图4-16所示的结果，输出结果体现的服务生命周期与演示程序体现的是完全一致的。</p><p><a href="https://img2018.cnblogs.com/blog/19327/201911/19327-20191118081619008-1656141611.png"><img width="228" height="454" title="image" style="border: 0px currentcolor; border-image: none; display: inline; background-image: none;" alt="image" src="https://img2018.cnblogs.com/blog/19327/201911/19327-20191118081619343-18603764.png" border="0" /></a></p><p><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-01.html">[ASP.NET Core 3框架揭秘] 依赖注入[1]：控制反转</a><br /><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-02.html">[ASP.NET Core 3框架揭秘] 依赖注入[2]：IoC模式</a><br /><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-03.html">[ASP.NET Core 3框架揭秘] 依赖注入[3]：依赖注入模式</a><br /><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-04.html">[ASP.NET Core 3框架揭秘] 依赖注入[4]：一个迷你版DI框架</a><br /><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-05.html">[ASP.NET Core 3框架揭秘] 依赖注入[5]：利用容器提供服务</a><br /><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-06.html">[ASP.NET Core 3框架揭秘] 依赖注入[6]：服务注册</a><br /><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-07.html">[ASP.NET Core 3框架揭秘] 依赖注入[7]：服务消费</a><br /><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-08.html">[ASP.NET Core 3框架揭秘] 依赖注入[8]：服务实例的生命周期</a><br /><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-09.html">[ASP.NET Core 3框架揭秘] 依赖注入[9]：实现概述</a><br /><a href="https://www.cnblogs.com/artech/p/inside-asp-net-core-03-10.html">[ASP.NET Core 3框架揭秘] 依赖注入[10]：与第三方依赖注入框架的适配</a> </p>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2019-11-18 08:16</span>&nbsp;
+<a href="https://www.cnblogs.com/artech/">Artech</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=11880104" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(11880104);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 22886, cb_blogApp = 'artech', cb_blogUserGuid = '9f65360b-63cf-dd11-9e4d-001cf0cd104b';
+    var cb_entryId = 11880104, cb_entryCreatedDate = '2019-11-18 08:16', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 Artech
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <script type="text/javascript">
+    $(document).ready(function () {
+        var html = '作者：蒋金楠 <br />微信公众账号：大内老A<br/>微博：<a href="http://www.weibo.com/artech">www.weibo.com/artech</a><br/>如果你想及时得到个人撰写文章以及著作的消息推送，或者想看看个人推荐的技术资料，可以扫描左边二维码（或者长按识别二维码）关注个人公众号）。<br/>本文版权归作者和博客园共有，欢迎转载，但未经作者同意必须保留此段声明，且在文章页面明显位置给出原文连接，否则保留追究法律责任的权利。<div style="clear:both"/>';
+        $("body").prepend($("#div_digg").css({ "position": "fixed", "right": "0px", "bottom": "0px", "z-index": "10", "background-color": "white", "margin": "10px", "padding": "10px", "border": "1px solid #cccccc" }));
+        if ($("#cnblogs_post_body").next().attr("id") == "MySignature") {
+            $("#cnblogs_post_body #MySignature").hide();
+            $("#cnblogs_post_body").next().show().html(html);
+        }
+        else {
+            $("#cnblogs_post_body #MySignature").show().html(html);
+        }
+    });
+</script>
+    </div>
+</body>
+</html>

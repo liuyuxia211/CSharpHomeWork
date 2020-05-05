@@ -1,0 +1,553 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="前段时间由于项目上的需求，要在.Net平台下实现把HTML内容生成图片或PDF文件的功能，特意在网上研究了几种方案，这里记录一下以备日后再次使用。当时想着找一种开发部署都比较清爽并且运行稳定的方案，但" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>【工具篇】在.Net中实现HTML生成图片或PDF的几种方式 - balahoho - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=BKtyzabbeYJEVOaELkxmRjHbp7LT-v37GzrU5S24bJk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/simplememory/bundle-simplememory.min.css?v=OL4qeo1LNGlN1rKIhv5UctANvt0M6Nx6kLzr_ffx3Xk" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/hohoa/custom.css?v=bvCfrzb5j5f5sKZquyvoKkCcF8w=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/hohoa/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/hohoa/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/hohoa/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=VSP5rTXbJNpNidklGdgoLgwCGyUPITrcsmlgoaMKz3w"></script>
+    <script>
+        var currentBlogId = 294354;
+        var currentBlogApp = 'hohoa';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'SimpleMemory';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    <div id="page_begin_html">
+        <script src="https://files.cnblogs.com/files/hohoa/TweenMax.min.js" defer></script>
+<a href="https://github.com/hey-hoho" target="_blank"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://files.cnblogs.com/files/hohoa/github.ico" alt="Fork me on GitHub" data-evernote-hover-show="true"></a>
+    </div>
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/hohoa/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/hohoa/">HOHO</a>
+</h1>
+<h2>
+你简单，世界就是童话；心复杂，世界就是迷宫。
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/hohoa/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/balahoho">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/hohoa/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+19&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+220</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/hohoa/p/11087198.html">【工具篇】在.Net中实现HTML生成图片或PDF的几种方式</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body ">
+    <p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">前段时间由于项目上的需求，要在.Net平台下实现把HTML内容生成图片或PDF文件的功能，特意在网上研究了几种方案，这里记录一下以备日后再次使用。当时想着找一种开发部署都比较清爽并且运行稳定的方案，但实际上两者同时满足基本不可能，只能做一个自己觉得合适的取舍，下面从两个维度（清爽指数和功能指数）逐一对比。</span></p>
+<p style="line-height: 1.75em; text-indent: 2em;"> <span style="font-family: 微软雅黑, 'Microsoft YaHei';"><br /></span>
+</p>
+<h3 style="margin-left: 28px; line-height: 1.75em;">
+    <strong><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 18px;">1.<span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-style: normal; font-variant: normal; font-weight: normal; font-stretch: normal; line-height: normal;">&nbsp;&nbsp;&nbsp;</span>WebBrowser</span></strong>
+</h3>
+<p style="margin-left: 58px; text-indent: 0px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;"> 这种方案在开发时不依赖任务外部程序集和nuget包，部署时也不需要安装额外的工具和服务，可以说是非常清爽了。它借助了WinForm下的WebBrowser控件实现HTML内容渲染，并把渲染结果绘制在Bitmap中，进而保存成图片或PDF文件。这种方案简单粗暴，是C#中最基础的实现方式，也是网上搜索结果最多的一种，下面看它的核心代码（从网上拼凑得来）：</span></p>
+<div class="cnblogs_code" style="margin-left: 60px;" onclick="cnblogs_code_show('0606267e-ebb9-4b57-ad38-3d006b073fea')"><img id="code_img_closed_0606267e-ebb9-4b57-ad38-3d006b073fea" class="code_img_closed" src="https://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt="" /><img id="code_img_opened_0606267e-ebb9-4b57-ad38-3d006b073fea" class="code_img_opened" style="display: none;" onclick="cnblogs_code_hide('0606267e-ebb9-4b57-ad38-3d006b073fea',event)" src="https://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt="" />
+<div id="cnblogs_code_open_0606267e-ebb9-4b57-ad38-3d006b073fea" class="cnblogs_code_hide">
+<pre><span style="color: #008080;"> 1</span>     <span style="color: #0000ff;">class</span><span style="color: #000000;"> WebBrowserPage2Image
+</span><span style="color: #008080;"> 2</span> <span style="color: #000000;">    {
+</span><span style="color: #008080;"> 3</span> <span style="color: #000000;">        Bitmap m_Bitmap;
+</span><span style="color: #008080;"> 4</span> 
+<span style="color: #008080;"> 5</span>         <span style="color: #0000ff;">string</span><span style="color: #000000;"> m_Url;               
+</span><span style="color: #008080;"> 6</span> 
+<span style="color: #008080;"> 7</span>         <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span> Convert(<span style="color: #0000ff;">string</span> pageUrl, <span style="color: #0000ff;">string</span><span style="color: #000000;"> fileName)
+</span><span style="color: #008080;"> 8</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;"> 9</span>             m_Url =<span style="color: #000000;"> pageUrl;
+</span><span style="color: #008080;">10</span>             Thread m_thread = <span style="color: #0000ff;">new</span> Thread(<span style="color: #0000ff;">new</span><span style="color: #000000;"> ThreadStart(HtmlDrawToBitmap));
+</span><span style="color: #008080;">11</span> <span style="color: #000000;">            m_thread.SetApartmentState(ApartmentState.STA);
+</span><span style="color: #008080;">12</span>             m_thread.IsBackground = <span style="color: #0000ff;">true</span><span style="color: #000000;">;
+</span><span style="color: #008080;">13</span> <span style="color: #000000;">            m_thread.Start();
+</span><span style="color: #008080;">14</span> <span style="color: #000000;">            m_thread.Join();
+</span><span style="color: #008080;">15</span>             MemoryStream stream = <span style="color: #0000ff;">new</span><span style="color: #000000;"> MemoryStream();
+</span><span style="color: #008080;">16</span> <span style="color: #000000;">            m_Bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+</span><span style="color: #008080;">17</span>             <span style="color: #0000ff;">byte</span>[] buff =<span style="color: #000000;"> stream.ToArray();
+</span><span style="color: #008080;">18</span>             FileStream fs = <span style="color: #0000ff;">new</span><span style="color: #000000;"> FileStream(fileName, FileMode.Create);
+</span><span style="color: #008080;">19</span> <span style="color: #000000;">            stream.WriteTo(fs);
+</span><span style="color: #008080;">20</span> <span style="color: #000000;">            stream.Dispose();
+</span><span style="color: #008080;">21</span> <span style="color: #000000;">            stream.Close();
+</span><span style="color: #008080;">22</span> <span style="color: #000000;">            fs.Close();
+</span><span style="color: #008080;">23</span> <span style="color: #000000;">        }
+</span><span style="color: #008080;">24</span> 
+<span style="color: #008080;">25</span>         <span style="color: #0000ff;">private</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> HtmlDrawToBitmap()
+</span><span style="color: #008080;">26</span> <span style="color: #000000;">        {
+</span><span style="color: #008080;">27</span>             WebBrowser browser = <span style="color: #0000ff;">new</span><span style="color: #000000;"> WebBrowser();
+</span><span style="color: #008080;">28</span>             browser.ScrollBarsEnabled = <span style="color: #0000ff;">false</span><span style="color: #000000;">;
+</span><span style="color: #008080;">29</span> <span style="color: #000000;">            browser.Navigate(m_Url);
+</span><span style="color: #008080;">30</span>             browser.DocumentCompleted += <span style="color: #0000ff;">new</span> WebBrowserDocumentCompletedEventHandler(<span style="color: #0000ff;">delegate</span> (<span style="color: #0000ff;">object</span><span style="color: #000000;"> sender, WebBrowserDocumentCompletedEventArgs bdce)
+</span><span style="color: #008080;">31</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">32</span>                 <span style="color: #0000ff;">if</span> (browser.ReadyState ==<span style="color: #000000;"> WebBrowserReadyState.Complete)
+</span><span style="color: #008080;">33</span> <span style="color: #000000;">                {
+</span><span style="color: #008080;">34</span>                     <span style="color: #008000;">//</span><span style="color: #008000;">myWebBrowser.Document.Body.Style = "zoom:180%";</span>
+<span style="color: #008080;">35</span>                     Rectangle r =<span style="color: #000000;"> browser.Document.Body.ScrollRectangle;
+</span><span style="color: #008080;">36</span>                     browser.Height =<span style="color: #000000;"> r.Height;
+</span><span style="color: #008080;">37</span>                     browser.Width =<span style="color: #000000;"> r.Width;
+</span><span style="color: #008080;">38</span>                     m_Bitmap = <span style="color: #0000ff;">new</span><span style="color: #000000;"> Bitmap(browser.Width, browser.Height);
+</span><span style="color: #008080;">39</span> <span style="color: #000000;">                    browser.BringToFront();
+</span><span style="color: #008080;">40</span>                     browser.DrawToBitmap(m_Bitmap, <span style="color: #0000ff;">new</span> Rectangle() { Width = browser.Width, Height =<span style="color: #000000;"> browser.Height });
+</span><span style="color: #008080;">41</span> <span style="color: #000000;">                }
+</span><span style="color: #008080;">42</span> <span style="color: #000000;">            });
+</span><span style="color: #008080;">43</span>             <span style="color: #0000ff;">while</span> (browser.ReadyState !=<span style="color: #000000;"> WebBrowserReadyState.Complete)
+</span><span style="color: #008080;">44</span> <span style="color: #000000;">            {
+</span><span style="color: #008080;">45</span> <span style="color: #000000;">                Application.DoEvents();
+</span><span style="color: #008080;">46</span> <span style="color: #000000;">            }
+</span><span style="color: #008080;">47</span> <span style="color: #000000;">            browser.Dispose();
+</span><span style="color: #008080;">48</span> <span style="color: #000000;">        }
+</span><span style="color: #008080;">49</span>     }</pre>
+</div>
+<span class="cnblogs_code_collapse">View Code</span></div>
+<p style="margin-left: 58px; text-indent: 0px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;"> 虽然开发起来非常简洁，但是问题也很明显。WebBrowser是Winform下的一个组件，在非Winform项目中运行会出现不可知的异常，即使在Winform项目中，数据量比较大的时候依然会出现卡死的情况。我做过500次循环的测试，在执行到100多次的时候程序出现假死不动也无异常抛出。除此之外，生成的图片失真也比较严重，特殊字体和部分CSS样式无法渲染。总的来说，基本无法达到生成环境需求。</span></p>
+<p style="margin-left: 58px; text-indent: 0px; line-height: 1.75em;"><strong><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">清爽指数：★★★★★　　　　功能指数：★</span></strong></p>
+<p style="margin-left: 28px; text-indent: 0px; line-height: 1.75em;"> <span style="font-family: 微软雅黑, 'Microsoft YaHei';"><br /></span>
+</p>
+<h3 style="margin-left: 28px; line-height: 1.75em;">
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei';">2.<span style="font: 9px 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Wkhtmltox</span>
+</h3>
+<p style="margin-left: 58px; text-indent: 0px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">
+    这也是网上广泛流传的一个方案，wkhtmltox是一套开源的命令行工具，提供了图片和PDF的转换能力，它采用C++编写，使用Webkit作为渲染引擎，开源地址是<a style="font-family: 微软雅黑, 'Microsoft YaHei'; text-decoration: underline;" href="https://github.com/wkhtmltopdf/wkhtmltopdf" target="_blank">https://github.com/wkhtmltopdf/wkhtmltopdf</a>。使用方法就是在命令行工具中执行命令，例如：
+</span></p>
+<div class="cnblogs_code">
+<pre>wkhtmltopdf --grayscale  https://www.baidu.com  baidu.pdf</pre>
+</div>
+<p style="margin-left: 58px; text-indent: 0px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">如果要在.Net项目中使用的话，核心问题就是用程序唤起命令行，同时指定参数执行即可，类似于下面的代码：</span></p>
+<div class="cnblogs_code">
+<pre>       System.Diagnostics.ProcessStartInfo Info = <span style="color: #0000ff;">new</span><span style="color: #000000;"> System.Diagnostics.ProcessStartInfo();
+       Info.FileName </span>= <span style="color: #800000;">@"</span><span style="color: #800000;">D:\dev\wkhtmltox\bin\wkhtmltopdf.exe</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+       Info.WindowStyle </span>=<span style="color: #000000;"> System.Diagnostics.ProcessWindowStyle.Hidden;
+       Info.CreateNoWindow </span>= <span style="color: #0000ff;">true</span><span style="color: #000000;">;
+       Info.Arguments </span>= <span style="color: #800000;">@"</span><span style="color: #800000;">-q --orientation Landscape https://www.baidu.com D:\\baidu.pdf</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+       System.Diagnostics.Process proc </span>=<span style="color: #000000;"> System.Diagnostics.Process.Start(Info);
+       proc.WaitForExit();
+       proc.Close();</span></pre>
+</div>
+<p style="margin-left: 58px; text-indent: 0px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">更多强大的功能例如加水印、分页、改样式等可以参考这篇文章：</span><span style="font-family: 'Microsoft YaHei'; font-size: 16px;"><a style="font-family: 微软雅黑, 'Microsoft YaHei'; text-decoration: underline;" href="https://www.cnblogs.com/82xb/p/7837597.html" target="_blank">https://www.cnblogs.com/82xb/p/7837597.html</a></span></p>
+<p style="margin-left: 58px; text-indent: 0px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">详细的参数说明可以查看文档：<a style="font-family: 微软雅黑, 'Microsoft YaHei'; text-decoration: underline;" href="https://wkhtmltopdf.org/usage/wkhtmltopdf.txt" target="_blank">https://wkhtmltopdf.org/usage/wkhtmltopdf.txt</a></span></p>
+<p style="margin-left: 58px; text-indent: 0px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">GitHub上有很多针对各个开发语言的封装，使用起来比较方便，唯一不爽的是部署项目前要先安装好这个工具。</span></p>
+<p style="margin-left: 58px; text-indent: 0px; line-height: 1.75em;"><strong><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">清爽指数：★★★★　　　　功能指数：★★★★</span></strong></p>
+<p style="margin-left: 28px; text-indent: 0px; line-height: 1.75em;"> <span style="font-family: 微软雅黑, 'Microsoft YaHei';"><br /></span>
+</p>
+<h3 style="margin-left: 28px; line-height: 1.75em;">
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei';">3.<span style="font: 9px 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>PuppeteerSharp</span>
+</h3>
+<p style="margin-left: 58px; text-indent: 0px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">
+    这个就更厉害了，说到这个就不得不先介绍下Puppeteer，因为PuppeteerSharp正是从Puppeteer衍生而来。
+</span></p>
+<p style="margin-left: 58px; text-indent: 0px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">
+    Puppeteer是由谷歌开源的一个Node项目，它提供了和Chrome DevTools的通信能力，基本上我们能在Chrome实现的操作通过它的API都可以实现，强大到让你不敢相信。主要的应用有：
+</span></p>
+<ul>
+<li style="margin-left: 56px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">生成页面快照（图片、PDF）
+</span></li>
+<li style="margin-left: 56px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">爬虫，网站内容抓取
+</span></li>
+<li style="margin-left: 56px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">自动化测试（模拟键盘鼠标输入，表单提交，UI测试等）
+</span></li>
+<li style="margin-left: 56px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">网站性能分析（追踪，时间线捕获等）
+</span></li>
+
+
+
+
+
+
+</ul>
+<p style="margin-left: 58px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">
+    开源地址是<a style="font-family: 微软雅黑, 'Microsoft YaHei'; text-decoration: underline;" href="https://github.com/GoogleChrome/puppeteer" target="_blank">https://github.com/GoogleChrome/puppeteer</a>
+</span></p>
+<p style="margin-left: 58px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">
+    在Node项目中使用Puppeteer非常简单，先安装npm包：
+</span></p>
+<div class="cnblogs_code">
+<pre>npm i puppeteer</pre>
+</div>
+<p style="margin-left: 58px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">安装过程可能会有点慢，因为在安装的时候会下载一个最近版本的Chromium（Mac下大概170M，Linux下大概282M，Windows下大概280M）。当然，如果你本地已经有一个Chromium，可以设置npm的全局配置<code><span style="color: #24292e; background-color: #bfbfbf;">PUPPETEER_SKIP_CHROMIUM_DOWNLOAD</span></code><span style="color: #24292e; background: white; font-variant-ligatures: normal; font-variant-caps: normal; orphans: 2; widows: 2; -webkit-text-stroke-width: 0px; float: none; word-spacing: 0px;">&nbsp;</span><span style="color: #24292e; background: white;">跳过下载，然后在程序中手动指定</span>Chromium的位置。</span></p>
+<p style="margin-left: 58px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">生成图片和PDF文件例子：</span></p>
+<div class="cnblogs_code">
+<pre>const puppeteer = require('puppeteer'<span style="color: #000000;">);
+
+(async () </span>=&gt;<span style="color: #000000;"> {
+  const browser </span>=<span style="color: #000000;"> await puppeteer.launch();
+  const page </span>=<span style="color: #000000;"> await browser.newPage();
+  await page.goto(</span>'https://www.baidu.com'<span style="color: #000000;">);
+  await page.screenshot({path: </span>'baidu.png'<span style="color: #000000;">});
+  await page.pdf({path: </span>'baidu.pdf', format: 'A4'<span style="color: #000000;">});
+  await browser.close();
+})();</span>&nbsp;</pre>
+</div>
+<p style="margin-left: 58px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">Puppeteer默认使用无界面模式（headless：true），如果想看到完整的浏览器界面，可以通过下面的设置开启：</span></p>
+<div class="cnblogs_code">
+<pre>  const browser = await puppeteer.launch({headless: <span style="color: #0000ff;">false</span>});</pre>
+</div>
+<p style="margin-left: 58px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">Puppeteer提供了丰富的选择器接口，可以轻松实现模拟输入和鼠标点击，例如：</span></p>
+<div class="cnblogs_code">
+<pre>  await page.type('#index-kw', 'cnblogs'<span style="color: #000000;">);
+  await page.click(</span>'#index-bn');</pre>
+</div>
+<p style="line-height: 1.75em; margin-left: 30px;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;还支持指定使用设备：</span></p>
+<div class="cnblogs_code">
+<pre>  const devices = require('puppeteer/DeviceDescriptors'<span style="color: #000000;">);
+  await page.emulate(devices[</span>'iPhone 8']);</pre>
+</div>
+<p style="line-height: 1.75em; margin-left: 30px;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;"><span style="color: #2f2f2f; background: white;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 详细的API文档可以参考：</span><a style="font-family: 微软雅黑, 'Microsoft YaHei';" href="https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md" target="_blank">https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md</a></span></p>
+<p style="margin-left: 58px; text-indent: 0px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">Puppeteer确实非常强大，但由于它是一个Node包无法直接在C#项目中使用，那怎么办呢？好在有国外的大神把Puppeteer移植到了.Net平台，也就是PuppeteerSharp。</span></p>
+<p style="margin-left: 58px; text-indent: 0px; line-height: 1.75em;"><span style="font-family: 楷体, 楷体_GB2312, SimKai; font-size: 14px;"><em>注意：PuppeteerSharp是基于NetStandard 2.0开发的，所以项目的平台最低版本要是.NET Framework 4.6.1和.NET Core 2.0。</em></span></p>
+<p style="margin-left: 58px; text-indent: 0px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">首先通过nuget安装：</span></p>
+<div class="cnblogs_code">
+<pre>PM &gt; Install-Package PuppeteerSharp</pre>
+</div>
+<p style="margin-left: 58px; text-indent: 0px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">导入命名空间：</span></p>
+<div class="cnblogs_code">
+<pre>  <span style="color: #0000ff;">using</span> PuppeteerSharp;</pre>
+</div>
+<p style="margin-left: 58px; text-indent: 0px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;"> 下面是我在ASP.NET Core 2.1下封装的测试方法：</span></p>
+<div class="cnblogs_code">
+<pre>        [HttpPost, Route(<span style="color: #800000;">"</span><span style="color: #800000;">page2img</span><span style="color: #800000;">"</span><span style="color: #000000;">)]
+        </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">async</span> Task&lt;<span style="color: #0000ff;">string</span>&gt; PageToImage(<span style="color: #0000ff;">string</span> url, <span style="color: #0000ff;">int</span>? width, <span style="color: #0000ff;">int</span>?<span style="color: #000000;"> height)
+        {
+            </span><span style="color: #0000ff;">await</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
+            </span><span style="color: #0000ff;">var</span> browser = <span style="color: #0000ff;">await</span> Puppeteer.LaunchAsync(<span style="color: #0000ff;">new</span><span style="color: #000000;"> LaunchOptions
+            {
+                Headless </span>= <span style="color: #0000ff;">true</span><span style="color: #000000;">,
+                </span><span style="color: #008000;">//</span><span style="color: #008000;">ExecutablePath="",</span>
+                Args = <span style="color: #0000ff;">new</span> <span style="color: #0000ff;">string</span>[] { <span style="color: #800000;">"</span><span style="color: #800000;">--no-sandbox</span><span style="color: #800000;">"</span><span style="color: #000000;"> }
+            });
+            </span><span style="color: #0000ff;">var</span> page = <span style="color: #0000ff;">await</span><span style="color: #000000;"> browser.NewPageAsync();
+            </span><span style="color: #0000ff;">bool</span> fullPage = <span style="color: #0000ff;">true</span><span style="color: #000000;">;
+            </span><span style="color: #0000ff;">if</span> (width.HasValue &amp;&amp;<span style="color: #000000;"> height.HasValue)
+            {
+                </span><span style="color: #0000ff;">await</span> page.SetViewportAsync(<span style="color: #0000ff;">new</span><span style="color: #000000;"> ViewPortOptions
+                {
+                    Width </span>=<span style="color: #000000;"> width.Value,
+                    Height </span>=<span style="color: #000000;"> height.Value
+                });
+                fullPage </span>= <span style="color: #0000ff;">false</span><span style="color: #000000;">;
+            }
+            </span><span style="color: #0000ff;">await</span><span style="color: #000000;"> page.GoToAsync(System.Web.HttpUtility.UrlDecode(url));
+            </span><span style="color: #0000ff;">string</span> fileName = $<span style="color: #800000;">"</span><span style="color: #800000;">/Files/{Guid.NewGuid().ToString()}.png</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+            </span><span style="color: #0000ff;">await</span> page.ScreenshotAsync($<span style="color: #800000;">"</span><span style="color: #800000;">{AppDomain.CurrentDomain.BaseDirectory}{fileName}</span><span style="color: #800000;">"</span>, <span style="color: #0000ff;">new</span> ScreenshotOptions { FullPage =<span style="color: #000000;"> fullPage });
+            </span><span style="color: #0000ff;">return</span> $<span style="color: #800000;">"</span><span style="color: #800000;">{Request.Host.ToString()}{fileName}</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+        }</span></pre>
+</div>
+<p style="margin-left: 58px; text-indent: 0px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">上面方法的第一行：</span></p>
+<div class="cnblogs_code">
+<pre>  <span style="color: #0000ff;">await</span> <span style="color: #0000ff;">new</span> BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);</pre>
+</div>
+<p style="margin-left: 58px; text-indent: 0px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">程序会判断本地环境有没有可用的Chromium，如果没有的话会自动下载一个默认版本的Chromium，这个过程可能会有点长，下载成功后会在项目根目录多一个这样的文件夹：</span></p>
+<p style="margin-left: 58px; text-indent: 0px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;"><img src="https://img2018.cnblogs.com/blog/614524/201906/614524-20190625224504954-708510700.png" alt="" /></span></p>
+<p style="margin-left: 58px; text-indent: 0px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">和前面说的一样，如果本地已经下载过Chromium，可以通过<span style="background-color: #d8d8d8;">LaunchOptions</span>的<span style="background-color: #d8d8d8;">ExecutablePath</span>字段指定一个目录。目前PuppeteerSharp在网上的资料还不是很多，但是得益于它与Puppeteer高度完整和相似的API，Puppeteer的文档对它基本都能适用。</span></p>
+<p style="margin-left: 58px; text-indent: 0px; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">总体来说，这个工具功能强大并且比较稳定（我在Windows和Linux下都测试通过），是一个不错的选择，但是由于它必须依赖于Chromium来运行，打包部署并不是很方便，我建议把它作为一个独立的web服务。</span></p>
+<p style="margin-left: 58px; text-indent: 0px; line-height: 1.75em;"><strong><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">清爽指数：★★★　　　　功能指数：★★★★★</span></strong></p>
+<p style="margin-left: 28px; text-indent: 0px; line-height: 1.75em;"> <span style="font-family: 微软雅黑, 'Microsoft YaHei';"><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><span style="font-family: 微软雅黑, 'Microsoft YaHei';"><br /></span></span></span></span>
+</p>
+<h3 style="margin-left: 28px; line-height: 1.75em;">
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei';">4.<span style="font: 9px 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>IronPdf</span>
+</h3>
+<p style="line-height: 1.75em; margin-left: 30px;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">
+    &nbsp;&nbsp;&nbsp;&nbsp;除了一些开源的项目和工具能提供HTML转图片或PDF的功能，很多商业软件公司也提供了这样的产品，IronPdf算是里面比较有代表性的一个。和其他收费软件不同的是，IronPdf有一个对开发者免费试用的license：</span></p>
+<p style="line-height: 1.75em; margin-left: 30px;"><img src="https://img2018.cnblogs.com/blog/614524/201906/614524-20190625224538965-311804791.png" alt="" /></p>
+<p style="line-height: 1.75em; margin-left: 30px;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">
+    &nbsp;&nbsp;&nbsp;&nbsp;IronPdf的主要特性包括：
+</span></p>
+<ul>
+<li style="margin-left: 56px; white-space: normal; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;"><span style="font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; line-height: normal;"><span style="font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; line-height: normal;">任何类型的HTML文件、代码片段、URL生成PDF</span></span></span></li>
+<li style="margin-left: 56px; white-space: normal; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">PDF编辑</span></li>
+<li style="margin-left: 56px; white-space: normal; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">图片与PDF互转
+</span></li>
+<li style="margin-left: 56px; white-space: normal; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">支持HTML5和CSS3，支持响应式布局，支持JS脚本，丰富的配置选项
+</span></li>
+<li style="margin-left: 56px; white-space: normal; line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;"><span style="font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; line-height: normal;"><span style="font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; line-height: normal;">支持C#、VB、Webform、ASP.NET MVC、.NET CORE</span></span>
+</span></li>
+
+
+
+
+
+
+</ul>
+<p style="line-height: 1.75em; margin-left: 30px;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">
+    &nbsp;&nbsp;&nbsp;&nbsp;我们可以在官网下载DLL文件直接引用到项目，也可以通过nuget来安装：</span><br />
+</p>
+<div class="cnblogs_code">
+<pre>PM &gt; Install-Package IronPdf</pre>
+</div>
+<p style="line-height: 1.75em; margin-left: 30px;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;"> &nbsp;&nbsp;&nbsp;&nbsp;导入命名空间：</span><br />
+</p>
+<div class="cnblogs_code">
+<pre>  <span style="color: #0000ff;">using</span> IronPdf;</pre>
+</div>
+<p style="line-height: 1.75em; margin-left: 30px;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;"> &nbsp;&nbsp;&nbsp;&nbsp;一个最简单的例子：</span><br />
+</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008000;">//</span><span style="color: #008000;"> Create a PDF from any existing web page</span>
+<span style="color: #0000ff;">var</span> Renderer = <span style="color: #0000ff;">new</span><span style="color: #000000;"> IronPdf.HtmlToPdf();
+Renderer.PrintOptions.EnableJavaScript </span>= <span style="color: #0000ff;">true</span><span style="color: #000000;">;
+Renderer.PrintOptions.PaperOrientation </span>=<span style="color: #000000;"> IronPdf.PdfPrintOptions.PdfPaperOrientation.Landscape;
+</span><span style="color: #0000ff;">var</span> PDF = Renderer.RenderUrlAsPdf(<span style="color: #800000;">"</span><span style="color: #800000;">https://www.baidu.com</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+PDF.SaveAs(</span><span style="color: #800000;">"</span><span style="color: #800000;">baidu.pdf</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> This neat trick opens our PDF file so we can see the result</span>
+System.Diagnostics.Process.Start(<span style="color: #800000;">"</span><span style="color: #800000;">baidu.pdf</span><span style="color: #800000;">"</span>);</pre>
+</div>
+<p style="white-space: normal; line-height: 1.75em; margin-left: 30px;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;"> &nbsp; &nbsp; 添加水印：</span><br />
+</p>
+<div class="cnblogs_code">
+<pre>  pdf.WatermarkAllPages(<span style="color: #800000;">"</span><span style="color: #800000;">&lt;h2 style='color:red'&gt;SAMPLE&lt;/h2&gt;</span><span style="color: #800000;">"</span>, PdfDocument.WaterMarkLocation.MiddleCenter, <span style="color: #800080;">50</span>, -<span style="color: #800080;">45</span>, <span style="color: #800000;">"</span><span style="color: #800000;">https://www.baidu.com</span><span style="color: #800000;">"</span>);</pre>
+</div>
+<p style="white-space: normal; line-height: 1.75em; margin-left: 30px;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;"> &nbsp; &nbsp; 用图片生成PDF文档：</span><br />
+</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008000;">//</span><span style="color: #008000;"> Select one or more images.  This example selects all JPEG images in a specific folder.</span>
+<span style="color: #0000ff;">var</span> ImageFiles = Directory.EnumerateFiles(<span style="color: #800000;">@"</span><span style="color: #800000;">C:\project\assets</span><span style="color: #800000;">"</span>).Where(f =&gt; f.EndsWith(<span style="color: #800000;">"</span><span style="color: #800000;">.jpg</span><span style="color: #800000;">"</span>) || f.EndsWith(<span style="color: #800000;">"</span><span style="color: #800000;">.jpeg</span><span style="color: #800000;">"</span><span style="color: #000000;">));
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> Convert the images to a PDF and save it.</span>
+ImageToPdfConverter.ImageToPdf(ImageFiles).SaveAs(<span style="color: #800000;">@"</span><span style="color: #800000;">C:\project\composite.pdf</span><span style="color: #800000;">"</span>);</pre>
+</div>
+<p style="line-height: 1.75em; margin-left: 30px;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">&nbsp;&nbsp;&nbsp;&nbsp;更多高级功能和配置可以参考官网例子：<a href="https://ironpdf.com/examples/image-to-pdf/" target="_blank">https://ironpdf.com/examples/image-to-pdf/</a></span></p>
+<p style="line-height: 1.75em; margin-left: 30px;"><strong><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">　清爽指数：★★★★　　　　功能指数：★★★★</span></strong></p>
+<p> &nbsp;&nbsp;&nbsp;&nbsp;<br />
+</p>
+<h3>
+    <span style="font-family: 微软雅黑, 'Microsoft YaHei';">写在最后</span>
+</h3>
+<p style="line-height: 1.75em; margin-left: 30px;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">&nbsp; &nbsp; 以上几种方式，都是我在本次实践中总结出来的，可能不是很全面，欢迎大家不吝补充。
+</span></p>
+<p style="line-height: 1.75em; margin-left: 30px;"><span style="font-family: 'Microsoft YaHei'; font-size: 16px;">&nbsp; &nbsp; 遗憾的是，最终项目没有用上面的任何一种方式，而是抓取到HTML内容后用正则解析，然后用Bitmap一点一点重新画图生成图片文件保存。因为我要截取的页面内容很少，就是一个简单的电子处方笺，需求上也没有要求必须完全和原网页100%一致，绘图也算是一个不错的方案，但是缺点是一旦HTML结构或样式发生变化，那这套东西就失效了，好在这个不会轻易变更，也算是一个折中方案。</span></p>
+<p style="line-height: 1.75em; margin-left: 30px;">&nbsp;</p>
+<p style="line-height: 1.75em; margin-left: 30px;">&nbsp;</p>
+<p style="line-height: 1.75em; margin-left: 30px;">&nbsp;</p>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2019-06-25 23:11</span>&nbsp;
+<a href="https://www.cnblogs.com/hohoa/">balahoho</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=11087198" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(11087198);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 294354, cb_blogApp = 'hohoa', cb_blogUserGuid = '86b892cb-79ae-e311-8d02-90b11c0b17d6';
+    var cb_entryId = 11087198, cb_entryCreatedDate = '2019-06-25 23:11', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 balahoho
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <!-- 右侧图标返回顶部 -->
+<span id="gotop1"><img src="https://files.cnblogs.com/files/hohoa/huojian.ico" alt="返回顶部"></span>
+<script src="https://cdn.bootcss.com/bootstrap/3.2.0/js/transition.js"></script>
+<script src="https://blog-static.cnblogs.com/files/hohoa/zoom.js"></script>
+ <!--鼠标特效-->
+ <script src="https://blog-static.cnblogs.com/files/zouwangblog/mouse-click.js"></script>
+ <canvas width="1777" height="841" style="position: fixed; left: 0px; top: 0px; z-index: 2147483647; pointer-events: none;"></canvas>
+ <!--鼠标特效 end-->
+<script>
+   $('#cnblogs_post_body img').attr('data-action', 'zoom');
+    // scroll body to 0px on click
+    $('#gotop1').click(function() {
+       TweenMax.to(window, 1.5, {scrollTo:0, ease: Expo.easeInOut});
+      var huojian = new TimelineLite();
+      huojian.to("#gotop1", 1, {rotationY:720, scale:0.6, y:"+=40", ease:  Power4.easeOut})
+	.to("#gotop1", 1, {y:-1000, opacity:0, ease:  Power4.easeOut}, 0.6)
+	.to("#gotop1", 1, {y:0, rotationY:0, opacity:1, scale:1, ease: Expo.easeOut, clearProps: "all"}, "1.4");
+        $('body,html').animate({
+            scrollTop: 0
+        }, 1500);
+        return false;
+    });
+    window.onload = function () {
+        if ($("#div_digg") != null) {
+            //添加快速评论按钮
+            $("#div_digg").append("<a href='#tbCommentAuthor' id='quickReply'>快速评论</a>");
+            //快速评论动画
+            $('#quickReply').click(function () {
+                $('html, body').animate({
+                    scrollTop: $($.attr(this, 'href')).offset().top
+                }, 500);
+                return false;
+            });
+        }
+    }
+</script>
+    </div>
+</body>
+</html>

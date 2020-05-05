@@ -1,0 +1,366 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="never" />
+    <meta property="og:description" content="文章背景 微软6月26号发布core 1.0版本后，园子里关于这方面的文章就更加火爆了，不管是从文章数量还是大家互动的热情来看，绝对是最热门的技术NO.1。我从去年底开始接触.net core到现在也" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>【新手出发】从搭虚拟机开始，一步一步在CentOS上跑起来.Net Core程序 - balahoho - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=BKtyzabbeYJEVOaELkxmRjHbp7LT-v37GzrU5S24bJk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/simplememory/bundle-simplememory.min.css?v=OL4qeo1LNGlN1rKIhv5UctANvt0M6Nx6kLzr_ffx3Xk" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/hohoa/custom.css?v=bvCfrzb5j5f5sKZquyvoKkCcF8w=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/hohoa/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/hohoa/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/hohoa/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=VSP5rTXbJNpNidklGdgoLgwCGyUPITrcsmlgoaMKz3w"></script>
+    <script>
+        var currentBlogId = 294354;
+        var currentBlogApp = 'hohoa';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'SimpleMemory';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    <div id="page_begin_html">
+        <script src="https://files.cnblogs.com/files/hohoa/TweenMax.min.js" defer></script>
+<a href="https://github.com/hey-hoho" target="_blank"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://files.cnblogs.com/files/hohoa/github.ico" alt="Fork me on GitHub" data-evernote-hover-show="true"></a>
+    </div>
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/hohoa/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/hohoa/">HOHO</a>
+</h1>
+<h2>
+你简单，世界就是童话；心复杂，世界就是迷宫。
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/hohoa/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/balahoho">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/hohoa/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+19&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+220</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/hohoa/p/5691071.html">【新手出发】从搭虚拟机开始，一步一步在CentOS上跑起来.Net Core程序</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body ">
+    <h3><span style="font-family: 'Microsoft YaHei';">文章背景</span></h3>
+<p><span style="font-family: 'Microsoft YaHei';">&nbsp; &nbsp; &nbsp; &nbsp;<span style="font-size: 14px;">微软6月26号发布core 1.0版本后，园子里关于这方面的文章就更加火爆了，不管是从文章数量还是大家互动的热情来看，绝对是最热门的技术NO.1。我从去年底开始接触.net core到现在也大半年了，一直停留在浏览各种帖子上，偶尔新建个项目敲几行代码练习一下。可是对于core最大的卖点&mdash;&mdash;跨平台，一直没法实际体验一回，因为压根没接触过Linux，完全不会那些命令，甚至虚拟机都没玩过​<img src="http://kindeditor.net/ke4/plugins/emoticons/images/36.gif" alt="" border="0" data-ke-src="http://kindeditor.net/ke4/plugins/emoticons/images/36.gif" />，想在Linux上实战操作一下可想有多困难。虽然园子里很多文章都有教程，但大神们一开始直接就上各种命令代码，看不懂啊<img src="http://kindeditor.net/ke4/plugins/emoticons/images/10.gif" alt="" border="0" data-ke-src="http://kindeditor.net/ke4/plugins/emoticons/images/10.gif" />，不知道怎么下手。。。可是这些都不是阻挡自己的理由，那就从装虚拟机开始一步一步来吧，中间各种蒙逼踩坑请教，于是有了这次的总结记录<img src="http://kindeditor.net/ke4/plugins/emoticons/images/30.gif" alt="" border="0" data-ke-src="http://kindeditor.net/ke4/plugins/emoticons/images/30.gif" />。</span></span></p>
+<p>&nbsp;</p>
+<p><span style="font-family: 'Microsoft YaHei';">　　[特别感谢大学宿舍的基友涛哥和公司的架构师allen倾力助攻！]</span></p>
+<p><span style="font-family: 'Microsoft YaHei';">&nbsp;</span></p>
+<h3><span style="font-family: 'Microsoft YaHei';">废话有点多，下面正式开撸。。。</span></h3>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">1、激活windows系统中的Hyper-V虚拟机管理工具(微软党当然首选自家的东西啊<img src="http://kindeditor.net/ke4/plugins/emoticons/images/44.gif" alt="" border="0" data-ke-src="http://kindeditor.net/ke4/plugins/emoticons/images/44.gif" />)。</span></p>
+<p>&nbsp;</p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">2、下载CentOS系统的镜像文件，地址：</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">http://mirrors.aliyun.com/centos/7.2.1511/isos/x86_64/CentOS-7-x86_64-DVD-1511.iso</span></p>
+<p>&nbsp;</p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">3、在Hyper-V中创建一个虚拟机（命名为centos），设置好虚拟机的各项参数，然后启动虚拟机安装系统，配置系统用户（默认为root）。</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;<img src="https://images2015.cnblogs.com/blog/614524/201607/614524-20160721104915247-1172648711.png" alt="" /></span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">4、安装成功后连接上centos，出现下面的登录请求：</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;<img src="https://images2015.cnblogs.com/blog/614524/201607/614524-20160721104922310-589171356.png" alt="" /></span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">用上一部设置的账号登陆到系统(我这里是root)，登录成功后会显示上次登录的信息：</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;<img src="https://images2015.cnblogs.com/blog/614524/201607/614524-20160721104929326-492316878.png" alt="" /></span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">5、这时候虚拟机是没有网络的，我们需要新建一个网络适配器，然后分给虚拟机：</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;<img src="https://images2015.cnblogs.com/blog/614524/201607/614524-20160721104938529-560570304.png" alt="" /></span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">然后本地网络连接里会新增一个虚拟交换机：</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;<img src="https://images2015.cnblogs.com/blog/614524/201607/614524-20160721104946497-1598593185.png" alt="" /></span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">指定一个同网段的ip，然后重启虚拟机。登陆后开始设置网络参数，输入命令：</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">#vi&nbsp; /etc/sysconfig/network-scripts/ifcfg-eth0 &nbsp; &nbsp; &nbsp; &nbsp; //编辑配置文件</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;<img src="https://images2015.cnblogs.com/blog/614524/201607/614524-20160721104958654-549000249.png" alt="" /></span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">根据各自情况设定，然后按&ldquo;ESC&rdquo;退出编辑，输入命令&ldquo;：wq&rdquo;保存本次编辑。然后输入命令重启网络（实在不行重启虚拟机）：</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;"># service&nbsp; network&nbsp; restart</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">然后ping一下百度的域名，看是否能连上网络。一定要能上网，因为后面restore的时候要从网上下载依赖的程序集。</span></p>
+<p>&nbsp;</p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">6、自带的黑白屏非常不好用啊，这时候一个神奇的工具就要登场了-XShell，自行下载安装，然后新建连接连到虚拟机，连接成功后：</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;<img src="https://images2015.cnblogs.com/blog/614524/201607/614524-20160721105234091-1375647241.png" alt="" /></span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">7、机器准备完毕了，接下来就要配dotNet Core 的环境，也就是装个SDK，我们去官网下载最新的，地址：<a href="https://go.microsoft.com/fwlink/?LinkID=809131" data-ke-src="https://go.microsoft.com/fwlink/?LinkID=809131">https://go.microsoft.com/fwlink/?LinkID=809131</a>，下载下来的文件名是dotnet-dev-centos-x64.1.0.0-preview2-003121.tar.gz。在虚拟机下载文件有两种方式，第一种是使用wget命令（推荐，可以感受一下用命令操作的快感，hhhh~），机器需要装wget工具。第二种是使用ftp传，这时候需要使用Xshell的搭档Xftp，下载安装后从这里打开ftp：</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;<img src="https://images2015.cnblogs.com/blog/614524/201607/614524-20160721105248669-297564073.png" alt="" /></span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">使用过ftp工具的就太熟悉那个界面了，而且自动帮我们连接上了虚拟机，这样对虚拟机的文件操作就方便多了，对不熟悉linux命令的我简直太爽啊。</span></p>
+<p>&nbsp;</p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">8、在root下新建一个文件夹&ldquo;dotnet&rdquo;用来放SDK，然后用ftp从本机把SDK压缩包传过来，接下来要用命令解压，打开xshell依次输入：</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;"># cd dotnet&nbsp;&nbsp; //进入到dotnet目录</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;"># tar zxf dotnet-dev-centos-x64.1.0.0-preview2-003121.tar.gz&nbsp;&nbsp; //解压文件</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">解压完设置一下环境变量，输入命令：</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;"># vi /etc/profile&nbsp;&nbsp; //打开文件进行编辑</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">最后面加上：</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">PATH=~/dotnet:$PATH&nbsp; //dotnet为SDK的目录</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">export PATH</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">然后按&ldquo;ESC&rdquo;退出编辑，输入命令&ldquo;：wq&rdquo;保存本次编辑。执行如下命令使配置即时生效(不行的话重启一下虚拟机)：</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;"># source /etc/profile</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">这样环境就配置好了，测试一下&ldquo;dotnet&rdquo;命令能不能用，输入：</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;"># dotnet --version&nbsp;&nbsp; //查看dotnet版本</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">安装成功的会打印出版本号：</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;<img src="https://images2015.cnblogs.com/blog/614524/201607/614524-20160721105305669-1524108000.png" alt="" /></span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">9、万事具备只欠程序啊！马上新建个控制台程序来爽一下。在根目录下依次输入：</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;"># mkdir dotnetcore_app&nbsp;&nbsp;&nbsp;&nbsp; //创建文件夹</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;"># cd dotnetcore_app&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //进入文件</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;"># dotnet new&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //新建一个core的控制台项目</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;<img src="https://images2015.cnblogs.com/blog/614524/201607/614524-20160721105311388-895044442.png" alt="" /></span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;"># dotnet restore&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //从nuget下载程序的依赖包</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;<img src="https://images2015.cnblogs.com/blog/614524/201607/614524-20160721105316419-976112410.png" alt="" /></span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;"># dotnet build&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //编译项目</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;<img src="https://images2015.cnblogs.com/blog/614524/201607/614524-20160721105321435-1119717179.png" alt="" /></span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;"># dotnet run&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //运行项目</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;<img src="https://images2015.cnblogs.com/blog/614524/201607/614524-20160721105326857-305070648.png" alt="" /></span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">看到&ldquo;hello world&rdquo;出来心里真是好激动啊。</span></p>
+<p>&nbsp;</p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">10、&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 接下来就想跑一个web项目玩玩，查了一下用命令创建web项目的话还要装Yeoman和npm，就先不装了，只用ftp把本地创建好的项目传到虚拟机上，然后restore：</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;<img src="https://images2015.cnblogs.com/blog/614524/201607/614524-20160721105335794-161061437.png" alt="" /></span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">然后build：</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;<img src="https://images2015.cnblogs.com/blog/614524/201607/614524-20160721105340544-1582126739.png" alt="" /></span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">然后run起来：</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;<img src="https://images2015.cnblogs.com/blog/614524/201607/614524-20160721105345294-157457772.png" alt="" /></span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">可以看到监听端口5000（程序默认的）已经打开了，表示程序已经跑起来了，用虚拟机可以访问这个地址，但是物理机是识别不了虚拟机的localhost，所以直接在物理机的浏览器中是访问不了的，那怎么办呢？</span></p>
+<p>&nbsp;</p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">11、&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 找到程序中program的main方法，给host绑上虚拟机的地址和端口即可，一定要带上http：//，否则编译报错：</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;<img src="https://images2015.cnblogs.com/blog/614524/201607/614524-20160721105354904-404001190.png" alt="" /></span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">12、&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 然后重新build一下，最后再run起来：</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;<img src="https://images2015.cnblogs.com/blog/614524/201607/614524-20160721105359576-424748863.png" alt="" /></span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">&nbsp;</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">13、&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 本机浏览器访问网站，搞定：</span></p>
+<p><span style="font-family: 'Microsoft YaHei';">&nbsp;<img src="https://images2015.cnblogs.com/blog/614524/201607/614524-20160721105416685-494567117.png" alt="" /></span></p>
+<p>&nbsp;前后花了差不多一天的时间，以上只记录了操作顺利的步骤，中间太多坎坷实在说不完，但最开心的是最终达到了自己的目标。</p>
+<p><span style="font-family: 'Microsoft YaHei';">&nbsp;</span></p>
+<h3><span style="font-family: 'Microsoft YaHei';">总结</span></h3>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">1、一步一个脚印，总会看到曙光。</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">2、多踩坑，会让自己更有经验，印象更深刻。</span></p>
+<p><span style="font-family: 'Microsoft YaHei'; font-size: 14px;">3、重启系统有时候是非常有效的排错方式。</span></p>
+<p><span style="font-family: 'Microsoft YaHei';">&nbsp;</span></p>
+<p><span style="font-family: 'Microsoft YaHei';">第一次在博客园发文章，好激动~<img src="http://kindeditor.net/ke4/plugins/emoticons/images/98.gif" alt="" border="0" data-ke-src="http://kindeditor.net/ke4/plugins/emoticons/images/98.gif" /><img src="http://kindeditor.net/ke4/plugins/emoticons/images/43.gif" alt="" border="0" data-ke-src="http://kindeditor.net/ke4/plugins/emoticons/images/43.gif" /></span></p>
+<p>&nbsp;</p>
+<p><span style="font-family: 'Microsoft YaHei';">最后，希望能帮到很多像我这样不懂linux但又想尝试.net core的.net程序猿，大家一起学习进步！</span></p>
+<p>&nbsp;</p>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2016-07-21 11:36</span>&nbsp;
+<a href="https://www.cnblogs.com/hohoa/">balahoho</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=5691071" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(5691071);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 294354, cb_blogApp = 'hohoa', cb_blogUserGuid = '86b892cb-79ae-e311-8d02-90b11c0b17d6';
+    var cb_entryId = 5691071, cb_entryCreatedDate = '2016-07-21 11:36', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 balahoho
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <!-- 右侧图标返回顶部 -->
+<span id="gotop1"><img src="https://files.cnblogs.com/files/hohoa/huojian.ico" alt="返回顶部"></span>
+<script src="https://cdn.bootcss.com/bootstrap/3.2.0/js/transition.js"></script>
+<script src="https://blog-static.cnblogs.com/files/hohoa/zoom.js"></script>
+ <!--鼠标特效-->
+ <script src="https://blog-static.cnblogs.com/files/zouwangblog/mouse-click.js"></script>
+ <canvas width="1777" height="841" style="position: fixed; left: 0px; top: 0px; z-index: 2147483647; pointer-events: none;"></canvas>
+ <!--鼠标特效 end-->
+<script>
+   $('#cnblogs_post_body img').attr('data-action', 'zoom');
+    // scroll body to 0px on click
+    $('#gotop1').click(function() {
+       TweenMax.to(window, 1.5, {scrollTo:0, ease: Expo.easeInOut});
+      var huojian = new TimelineLite();
+      huojian.to("#gotop1", 1, {rotationY:720, scale:0.6, y:"+=40", ease:  Power4.easeOut})
+	.to("#gotop1", 1, {y:-1000, opacity:0, ease:  Power4.easeOut}, 0.6)
+	.to("#gotop1", 1, {y:0, rotationY:0, opacity:1, scale:1, ease: Expo.easeOut, clearProps: "all"}, "1.4");
+        $('body,html').animate({
+            scrollTop: 0
+        }, 1500);
+        return false;
+    });
+    window.onload = function () {
+        if ($("#div_digg") != null) {
+            //添加快速评论按钮
+            $("#div_digg").append("<a href='#tbCommentAuthor' id='quickReply'>快速评论</a>");
+            //快速评论动画
+            $('#quickReply').click(function () {
+                $('html, body').animate({
+                    scrollTop: $($.attr(this, 'href')).offset().top
+                }, 500);
+                return false;
+            });
+        }
+    }
+</script>
+    </div>
+</body>
+</html>

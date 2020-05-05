@@ -1,0 +1,357 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="在web开发中必不可少的会遇到表单验证的问题，为避免数据在写入到数据库时出现异常，一般比较安全的做法是前端会先做一次验证，通过后把数据提交到后端再验证一次，因为仅仅靠前端验证是不安全的，有太多的htt" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>由表单验证说起，关于在C#中尝试链式编程的实践 - balahoho - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=BKtyzabbeYJEVOaELkxmRjHbp7LT-v37GzrU5S24bJk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/simplememory/bundle-simplememory.min.css?v=OL4qeo1LNGlN1rKIhv5UctANvt0M6Nx6kLzr_ffx3Xk" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/hohoa/custom.css?v=bvCfrzb5j5f5sKZquyvoKkCcF8w=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/hohoa/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/hohoa/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/hohoa/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=VSP5rTXbJNpNidklGdgoLgwCGyUPITrcsmlgoaMKz3w"></script>
+    <script>
+        var currentBlogId = 294354;
+        var currentBlogApp = 'hohoa';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'SimpleMemory';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    <div id="page_begin_html">
+        <script src="https://files.cnblogs.com/files/hohoa/TweenMax.min.js" defer></script>
+<a href="https://github.com/hey-hoho" target="_blank"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://files.cnblogs.com/files/hohoa/github.ico" alt="Fork me on GitHub" data-evernote-hover-show="true"></a>
+    </div>
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/hohoa/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/hohoa/">HOHO</a>
+</h1>
+<h2>
+你简单，世界就是童话；心复杂，世界就是迷宫。
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/hohoa/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/balahoho">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/hohoa/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+19&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+220</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/hohoa/p/5808216.html">由表单验证说起，关于在C#中尝试链式编程的实践</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body ">
+    <p style="line-height: 1.75em; text-indent: 2em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">在web开发中必不可少的会遇到表单验证的问题，为避免数据在写入到数据库时出现异常，一般比较安全的做法是前端会先做一次验证，通过后把数据提交到后端再验证一次，因为仅仅靠前端验证是不安全的，有太多的http请求工具可以轻松绕过你的前端验证把危险数据提交到后端，所以，之前不做后端参数验证的同学赶快检查一下你的代码~别中招了</span></p>
+<p style="line-height: 1.75em; text-indent: 2em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">&nbsp;</span></p>
+<p style="line-height: 1.75em; text-indent: 2em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">那么，故事就是有关于后端验证。</span></p>
+<p style="line-height: 1.75em; text-indent: 2em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';"><span style="font-size: 14px;">这里举一个项目中真实的注册场景，账号注册主要包含</span>2<span style="font-size: 14px;">个信息：手机号和验证码，因为我这里是用</span>webapi<span style="font-size: 14px;">的</span>post<span style="font-size: 14px;">方式从前端拿数据，所以封装成了一个</span>MemberRegister<span style="font-size: 14px;">对象。以最基础的非空验证为例，通常要写如下代码：</span></span></p>
+<p style="line-height: 1.75em; text-indent: 2em;"><img src="https://images2015.cnblogs.com/blog/614524/201608/614524-20160825200031976-1336289362.png" alt="" /></p>
+<p style="line-height: 1.75em; text-indent: 2em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';"><span style="font-size: 14px;">如果还要加上手机号格式验证，还得再来一个</span>if<span style="font-size: 14px;">。一旦要验证的信息多的话代码行就会很多，看着很冗余。想着既然做的都是同一件事，那能不能封装一下减少代码行？架构师</span>allen<span style="font-size: 14px;">说可以试一下链式编程，也就是类似</span>Jquery<span style="font-size: 14px;">的</span>xxxx.attr().css().html().show()<span style="font-size: 14px;">这样，看起来还不错的样子，那就干吧。</span></span></p>
+<p style="line-height: 1.75em; text-indent: 2em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';"><span style="font-size: 14px;">其实</span>C#<span style="font-size: 14px;">里也有类似的用法，比如</span>Linq<span style="font-size: 14px;">里面的</span>xxxx.Where().OrderBy().Select()<span style="font-size: 14px;">这种，但是这种实际上每次返回的都是不同的对象，然后执行对象里的方法，这并不适合我的需求，因为我执行的验证方法肯定都是同一个，比如</span>validate().validate().validate()<span style="font-size: 14px;">这种，于是决定用扩展方法来实现。先定义一个被扩展的对象：</span></span></p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span> ValidateResult&lt;T&gt;<span style="color: #000000;">
+    {
+        </span><span style="color: #0000ff;">public</span> List&lt;<span style="color: #0000ff;">string</span>&gt; Errors { <span style="color: #0000ff;">get</span>; <span style="color: #0000ff;">set</span><span style="color: #000000;">; }
+        </span><span style="color: #0000ff;">public</span> T Entity { <span style="color: #0000ff;">get</span>; <span style="color: #0000ff;">private</span> <span style="color: #0000ff;">set</span><span style="color: #000000;">; }
+ 
+        </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> ValidateResult(T entity)
+        {
+            Errors </span>= <span style="color: #0000ff;">new</span> List&lt;<span style="color: #0000ff;">string</span>&gt;<span style="color: #000000;">();
+            Entity </span>=<span style="color: #000000;"> entity;
+        }
+}</span></pre>
+</div>
+<p style="text-indent: 28px; line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">定义扩展方法：</span></p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">static</span> ValidateResult&lt;T&gt; Validate&lt;T&gt;(<span style="color: #0000ff;">this</span> ValidateResult&lt;T&gt; target, Predicate&lt;T&gt; predicate, <span style="color: #0000ff;">string</span><span style="color: #000000;"> errorMessage)
+        {
+            </span><span style="color: #0000ff;">if</span> (!<span style="color: #000000;">predicate(target.Entity))
+            {
+                target.Errors.Add(errorMessage) ;
+            }
+            </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> target;
+        }</span></pre>
+</div>
+<p style="text-indent: 28px; line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">使用办法：</span></p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">var</span> error = <span style="color: #0000ff;">new</span> ValidateResult&lt;MemberRegister&gt;<span style="color: #000000;">(model)
+                .Validate(m </span>=&gt; m != <span style="color: #0000ff;">null</span><span style="color: #000000;">, ResponseTip.ParamError)
+                .Validate(m </span>=&gt; !<span style="color: #0000ff;">string</span><span style="color: #000000;">.IsNullOrEmpty(m.Phone), ResponseTip.PhoneRequired)
+                .Validate(m </span>=&gt; !<span style="color: #0000ff;">string</span><span style="color: #000000;">.IsNullOrEmpty(m.CodeValue), ResponseTip.ValidateCodeRequired)
+                .Errors;</span></pre>
+</div>
+<p style="text-indent: 28px; line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';"><span style="font-size: 14px;">理想中的情况是，可以判断</span>error<span style="font-size: 14px;">里面有没有错误信息，如果有的话就返回错误信息，没有就做后面的操作。但实际上碰到一个问题，当</span>model<span style="font-size: 14px;">为</span>null<span style="font-size: 14px;">的时候，第一步验证没有问题，但第二步的时候就报错了，未将对象引用到实例，原因是</span>model<span style="font-size: 14px;">已经是</span>null<span style="font-size: 14px;">了再取</span>model.Phone<span style="font-size: 14px;">不出错才怪。问题找到了，那就想着如果</span>model<span style="font-size: 14px;">为</span>null<span style="font-size: 14px;">就不执行后面的验证了，想法不错但想了很久就是没找到办法实现。不知所措的时候，断点跟了一下出错的代码，发现报错的地方是在执行</span>if (!predicate(target.Entity))<span style="font-size: 14px;">的时候，于是换了一个思路，改进一下代码：</span></span></p>
+<div class="cnblogs_code">
+<pre>    <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span> ValidateResult&lt;T&gt;<span style="color: #000000;">
+    {
+        </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">string</span> Error { <span style="color: #0000ff;">get</span>; <span style="color: #0000ff;">set</span><span style="color: #000000;">; }
+        </span><span style="color: #0000ff;">public</span> T Entity { <span style="color: #0000ff;">get</span>; <span style="color: #0000ff;">private</span> <span style="color: #0000ff;">set</span><span style="color: #000000;">; }
+ 
+        </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> ValidateResult(T entity)
+        {
+            Entity </span>=<span style="color: #000000;"> entity;
+        }
+    }</span></pre>
+</div>
+<p style="text-indent: 28px; line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">扩展方法：</span></p>
+<div class="cnblogs_code">
+<pre>        <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">static</span> ValidateResult&lt;T&gt; Validate&lt;T&gt;(<span style="color: #0000ff;">this</span> ValidateResult&lt;T&gt; target, Predicate&lt;T&gt; predicate, <span style="color: #0000ff;">string</span><span style="color: #000000;"> errorMessage)
+        {
+            </span><span style="color: #0000ff;">if</span> (<span style="color: #0000ff;">string</span><span style="color: #000000;">.IsNullOrEmpty(target.Error))
+            {
+                </span><span style="color: #0000ff;">if</span> (!<span style="color: #000000;">predicate(target.Entity))
+                {
+                    target.Error </span>=<span style="color: #000000;"> errorMessage;
+                }
+            }
+            </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> target;
+        }</span></pre>
+</div>
+<p style="text-indent: 28px; line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';"><span style="font-size: 14px;">改进后的代码把</span>ValidateResult<span style="font-size: 14px;">里的</span>Errors<span style="font-size: 14px;">取消了换成了</span>string<span style="font-size: 14px;">类型的</span>Error<span style="font-size: 14px;">（要那么多错误提示也没什么用，一个就够了），然后验证失败后就更新这个属性，验证的时候如果这个属性</span>string.IsNullOrEmpty(target.Error)<span style="font-size: 14px;">就表示前面的验证都通过了本次可以继续验证，如果</span>! string.IsNullOrEmpty(target.Error)<span style="font-size: 14px;">就表示前面的验证已经失败了本次不用验证，要验证的对象原封不动的返回。这样子就不会报错了，然后调用结果判断</span>Error<span style="font-size: 14px;">是否</span>NullOrEmpty<span style="font-size: 14px;">再做相应操作。测试一下，没有问题。代码演变为：</span></span></p>
+<p style="text-indent: 28px; line-height: 1.75em;"><img src="https://images2015.cnblogs.com/blog/614524/201608/614524-20160825200042788-1851643045.png" alt="" /></p>
+<p style="text-indent: 28px; line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">&nbsp;</span></p>
+<p style="text-indent: 28px; line-height: 1.75em;"><strong><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 16px;">优点</span></strong></p>
+<p style="text-indent: 28px; line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';"><span style="font-size: 14px;">可读性个人觉得并不比直接</span>if<span style="font-size: 14px;">差，分行显示的话还是能很清晰看出具体的验证项。</span></span></p>
+<p style="text-indent: 28px; line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';"><span style="font-size: 14px;">省去了每次判断的</span>if<span style="font-size: 14px;">语句和</span>return<span style="font-size: 14px;">，支持自定义验证规则和错误提示。</span></span></p>
+<p style="text-indent: 28px; line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">减少了代码的行数。</span></p>
+<p style="text-indent: 28px; line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">&nbsp;</span></p>
+<p style="text-indent: 28px; line-height: 1.75em;"><strong><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 16px;">缺点</span></strong></p>
+<p style="text-indent: 28px; line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';"><span style="font-size: 14px;">某次验证失败不能中断后面的验证，多执行了不必要的代码，这点用</span>if<span style="font-size: 14px;">可以避免。</span></span></p>
+<p style="text-indent: 28px; line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">&nbsp;</span></p>
+<p style="text-indent: 28px; line-height: 1.75em;"><strong><span style="font-family: 微软雅黑, 'Microsoft YaHei'; font-size: 16px;">总结</span></strong></p>
+<p style="text-indent: 28px; line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';"><span style="font-size: 14px;">完了以后去网上找了一些</span>C#<span style="font-size: 14px;">链式编程的问题，有支持的也有反对的，反对的人说代码可读性不太好、简单的问题复杂化等等。经过实际实践，我觉得这个问题偏向于个人喜好，谈不上好坏，怎样用着爽、开发效率高就行。不喜欢的还请轻点拍砖。</span></span></p>
+<p style="text-indent: 28px; line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">当然，关于这个问题有更好解决方案的希望能交流一下。</span></p>
+<p style="text-indent: 28px; line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">&nbsp;</span></p>
+<p> <br />
+</p>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2016-08-26 09:10</span>&nbsp;
+<a href="https://www.cnblogs.com/hohoa/">balahoho</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=5808216" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(5808216);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 294354, cb_blogApp = 'hohoa', cb_blogUserGuid = '86b892cb-79ae-e311-8d02-90b11c0b17d6';
+    var cb_entryId = 5808216, cb_entryCreatedDate = '2016-08-26 09:10', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 balahoho
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <!-- 右侧图标返回顶部 -->
+<span id="gotop1"><img src="https://files.cnblogs.com/files/hohoa/huojian.ico" alt="返回顶部"></span>
+<script src="https://cdn.bootcss.com/bootstrap/3.2.0/js/transition.js"></script>
+<script src="https://blog-static.cnblogs.com/files/hohoa/zoom.js"></script>
+ <!--鼠标特效-->
+ <script src="https://blog-static.cnblogs.com/files/zouwangblog/mouse-click.js"></script>
+ <canvas width="1777" height="841" style="position: fixed; left: 0px; top: 0px; z-index: 2147483647; pointer-events: none;"></canvas>
+ <!--鼠标特效 end-->
+<script>
+   $('#cnblogs_post_body img').attr('data-action', 'zoom');
+    // scroll body to 0px on click
+    $('#gotop1').click(function() {
+       TweenMax.to(window, 1.5, {scrollTo:0, ease: Expo.easeInOut});
+      var huojian = new TimelineLite();
+      huojian.to("#gotop1", 1, {rotationY:720, scale:0.6, y:"+=40", ease:  Power4.easeOut})
+	.to("#gotop1", 1, {y:-1000, opacity:0, ease:  Power4.easeOut}, 0.6)
+	.to("#gotop1", 1, {y:0, rotationY:0, opacity:1, scale:1, ease: Expo.easeOut, clearProps: "all"}, "1.4");
+        $('body,html').animate({
+            scrollTop: 0
+        }, 1500);
+        return false;
+    });
+    window.onload = function () {
+        if ($("#div_digg") != null) {
+            //添加快速评论按钮
+            $("#div_digg").append("<a href='#tbCommentAuthor' id='quickReply'>快速评论</a>");
+            //快速评论动画
+            $('#quickReply').click(function () {
+                $('html, body').animate({
+                    scrollTop: $($.attr(this, 'href')).offset().top
+                }, 500);
+                return false;
+            });
+        }
+    }
+</script>
+    </div>
+</body>
+</html>

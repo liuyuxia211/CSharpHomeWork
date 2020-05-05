@@ -1,0 +1,472 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="从何说起 前些天和朋友讨论一个问题，他们的应用有几十万会员然后对应有积分，现在想做积分排名的需求，问有没有什么好方案。这个问题也算常见，很多地方都能看到，常规做法一般是数据定时跑批把计算结果到中间表然" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>在C#中使用二叉树实时计算海量用户积分排名的实现 - balahoho - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=BKtyzabbeYJEVOaELkxmRjHbp7LT-v37GzrU5S24bJk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/simplememory/bundle-simplememory.min.css?v=OL4qeo1LNGlN1rKIhv5UctANvt0M6Nx6kLzr_ffx3Xk" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/hohoa/custom.css?v=bvCfrzb5j5f5sKZquyvoKkCcF8w=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/hohoa/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/hohoa/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/hohoa/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=VSP5rTXbJNpNidklGdgoLgwCGyUPITrcsmlgoaMKz3w"></script>
+    <script>
+        var currentBlogId = 294354;
+        var currentBlogApp = 'hohoa';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'SimpleMemory';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    <div id="page_begin_html">
+        <script src="https://files.cnblogs.com/files/hohoa/TweenMax.min.js" defer></script>
+<a href="https://github.com/hey-hoho" target="_blank"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://files.cnblogs.com/files/hohoa/github.ico" alt="Fork me on GitHub" data-evernote-hover-show="true"></a>
+    </div>
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/hohoa/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/hohoa/">HOHO</a>
+</h1>
+<h2>
+你简单，世界就是童话；心复杂，世界就是迷宫。
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/hohoa/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/balahoho">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/hohoa/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+19&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+220</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/hohoa/p/12145689.html">在C#中使用二叉树实时计算海量用户积分排名的实现</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+    <h3 id="从何说起">从何说起</h3>
+<p>前些天和朋友讨论一个问题，他们的应用有几十万会员然后对应有积分，现在想做积分排名的需求，问有没有什么好方案。这个问题也算常见，很多地方都能看到，常规做法一般是数据定时跑批把计算结果到中间表然后直接查表就行，或者只显示个TOP N的排行榜，名次高的计算真实名次，名次比较低的直接显示在xxx名开外这种。但是出于探索问题的角度，我还是想找一下有没有实时计算的办法，并且效率能够接受。<br>
+在博客园搜到一篇不错的<a href="https://www.cnblogs.com/weidagang2046/archive/2012/03/01/massive-user-ranking.html">文章</a>，基本罗列了常用的方案，每种算法详细介绍了具体思路，其中基于二叉树的算法是个非常不错的方案，文章中只给了思路没有给出代码，于是我决定自己用C#实现出来。</p>
+<blockquote>
+<p>这里只讨论具体算法实现，不考虑业务需求是否合理。</p>
+</blockquote>
+<br/>
+<h3 id="思路解析">思路解析</h3>
+<p>关于算法核心思想前面的文章中写的很详细，我不再重复描述，这里只用一个具体示例演示这个过程。<br>
+假设积分范围是0-5，我们对它不断进行中位分区直到不能分为止，形成如下一棵二叉树：<br>
+<img src="https://img2018.cnblogs.com/blog/614524/202001/614524-20200103184337264-1885116443.png" alt=""></p>
+<p>其中每个树节点包含2个信息：节点范围<code> range[min，max)</code> 和命中数量计数器<code> count</code> ，可以看到叶子节点的range一定是相邻的2个数。<br>
+假如现在有一个积分3要插入到树中，该如何操作呢？当前节点从根节点开始，分别判断是否包含于左右子节点，如果包含的话当前节点改为这个子节点，同时计数器加1，然后再次进行相同判断，直到遍历到叶子节点为止，遍历顺序如下：<br>
+<img src="https://img2018.cnblogs.com/blog/614524/202001/614524-20200103184353277-1570821731.png" alt=""></p>
+<p>再依次插入1和4，二叉树的演变情况为：<br>
+<img src="https://img2018.cnblogs.com/blog/614524/202001/614524-20200103184402947-1906744073.png" alt=""><br>
+<img src="https://img2018.cnblogs.com/blog/614524/202001/614524-20200103184412039-1759368184.png" alt=""></p>
+<p>数据放进去后怎么判断它是排名多少呢？还是从根节点开始，判断它是否包含于左子节点，如果包含的话说明它比右子节点中count个数小（在count名之外），然后再往下一级做同样的判断；如果包含于右子节点那就继续往下判断，直到碰到叶子节点为止。依次累加count最后加上叶子节点占的一位就得到了它在这棵树里的排名，以1为例演示判断步骤（排名为2+1=3）：<br>
+<img src="https://img2018.cnblogs.com/blog/614524/202001/614524-20200103184525127-488768439.png" alt=""></p>
+<p>好了，一切就绪，只欠代码。</p>
+<br/>
+<h3 id="撸码实现">撸码实现</h3>
+<p>树结构由节点构成，那首先设计一个节点类：</p>
+<pre><code class="language-c#">    /// &lt;summary&gt;
+    /// 树节点对象
+    /// &lt;/summary&gt;
+    public class TreeNode
+    {
+        /// &lt;summary&gt;
+        /// 节点的最小值
+        /// &lt;/summary&gt;
+        public int ValueFrom { get; set; }
+
+        /// &lt;summary&gt;
+        /// 节点的最大值
+        /// &lt;/summary&gt;
+        public int ValueTo { get; set; }
+
+        /// &lt;summary&gt;
+        /// 在节点范围内的数量
+        /// &lt;/summary&gt;
+        public int Count { get; set; }
+
+        /// &lt;summary&gt;
+        /// 节点高度（树的层级）
+        /// &lt;/summary&gt;
+        public int Height { get; set; }
+
+        /// &lt;summary&gt;
+        /// 父节点
+        /// &lt;/summary&gt;
+        public TreeNode Parent { get; set; }
+
+        /// &lt;summary&gt;
+        /// 左子节点
+        /// &lt;/summary&gt;
+        public TreeNode LeftChildNode { get; set; }
+
+        /// &lt;summary&gt;
+        /// 右子节点
+        /// &lt;/summary&gt;
+        public TreeNode RightChildNode { get; set; }
+    }
+</code></pre>
+<p>树节点的属性主要包含范围值<code>ValueFrom、ValueTo</code>、计数器<code>Count</code>、左子节点<code>LeftChildNode</code>和右子节点<code>RightChildNode</code>，由此组成一个有层次的树结构。<br>
+然后就是定义我们的树对象了，它的核心字段就是代表源头的根节点：</p>
+<pre><code class="language-c#">    public class RankBinaryTree
+    {
+        /// &lt;summary&gt;
+        /// 根节点
+        /// &lt;/summary&gt;
+        private TreeNode _root;
+
+    }
+</code></pre>
+<p>根据前面的算法思想，创建树的时候要用积分范围初始化所有节点，这里约定了最小积分为0，通过构造函数传入最大值并创建树结构：</p>
+<pre><code class="language-c#">        /// &lt;summary&gt;
+        /// 构造函数初始化根节点
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;max&quot;&gt;&lt;/param&gt;
+        public RankBinaryTree(int max)
+        {
+            _root = new TreeNode() { ValueFrom = 0, ValueTo = max+1, Height = 1 };
+            _root.LeftChildNode = CreateChildNode(_root, 0, max / 2);
+            _root.RightChildNode = CreateChildNode(_root, max / 2, max);
+        }
+
+        /// &lt;summary&gt;
+        /// 遍历创建子节点
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;current&quot;&gt;&lt;/param&gt;
+        /// &lt;param name=&quot;min&quot;&gt;&lt;/param&gt;
+        /// &lt;param name=&quot;max&quot;&gt;&lt;/param&gt;
+        /// &lt;returns&gt;&lt;/returns&gt;
+        private TreeNode CreateChildNode(TreeNode current, int min, int max)
+        {
+            if (min == max) return null;
+            var node = new TreeNode() { ValueFrom = min, ValueTo = max, Height = current.Height + 1 };
+            node.Parent = current;
+            int center = (min + max) / 2;
+            if (min &lt; max - 1)
+            {
+                node.LeftChildNode = CreateChildNode(node, min, center);
+                node.RightChildNode = CreateChildNode(node, center, max);
+            }
+            return node;
+        }
+</code></pre>
+<p>有了树以后下一步就是往里面插入数据，根据前面介绍的逻辑：</p>
+<pre><code class="language-c#">        /// &lt;summary&gt;
+        /// 往树中插入一个值
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;value&quot;&gt;&lt;/param&gt;
+        public void Insert(int value)
+        {
+            InnerInsert(_root, value);
+            _data.Add(value);
+        }
+
+        /// &lt;summary&gt;
+        /// 子节点判断范围遍历插入
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;node&quot;&gt;&lt;/param&gt;
+        /// &lt;param name=&quot;value&quot;&gt;&lt;/param&gt;
+        private void InnerInsert(TreeNode node, int value)
+        {
+            if (node == null) return;
+            //判断是否在这个节点范围内
+            if (value &gt;= node.ValueFrom &amp;&amp; value &lt; node.ValueTo)
+            {
+                //更新节点总数信息
+                node.Count++;
+                //更新左子节点
+                InnerInsert(node.LeftChildNode, value);
+                //更新右子节点
+                InnerInsert(node.RightChildNode, value);
+            }
+        }
+</code></pre>
+<p>下一步提供方法获取指定值在树中的排名：</p>
+<pre><code class="language-c#">        /// &lt;summary&gt;
+        /// 从树中获取总排名
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;value&quot;&gt;&lt;/param&gt;
+        /// &lt;returns&gt;&lt;/returns&gt;
+        public int GetRank(int value)
+        {
+            if (value &lt; 0) return 0;
+            return InnerGet(_root, value);
+        }
+
+        /// &lt;summary&gt;
+        /// 遍历子节点获取累计排名
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;node&quot;&gt;&lt;/param&gt;
+        /// &lt;param name=&quot;value&quot;&gt;&lt;/param&gt;
+        /// &lt;returns&gt;&lt;/returns&gt;
+        private int InnerGet(TreeNode node, int value)
+        {
+            if (node.LeftChildNode == null || node.RightChildNode == null) return 1;
+            if (value &gt;= node.LeftChildNode.ValueFrom &amp;&amp; value &lt; node.LeftChildNode.ValueTo)
+            {
+                //当这个值存在于左子节点中时，要累加右子节点的总数（表示这个数在多少名之后）
+                return node.RightChildNode.Count + InnerGet(node.LeftChildNode, value);
+            }
+            else
+            {
+                //如果在右子节点中就继续遍历
+                return InnerGet(node.RightChildNode, value);
+            }
+        }
+</code></pre>
+<p>到这里，核心功能已经实现了。考虑到有积分更新的情况，我们可以加上节点更新和删除的方法。删除很容易，和插入逆向操作就行，更新就更容易了，把旧节点删除再计算出新值插入即可，完整代码已经上传到Github。<br>
+这棵树究竟效率如何，下面我们跑个分看看。</p>
+<br/>
+<h3 id="测试走起来">测试走起来</h3>
+<p>在测试程序中，我模拟了积分范围0-1000000的场景，这个范围几乎覆盖了真实业务中90%的积分值，100万积分以上的会员系统应该比较少见了。<br>
+而会员的积分值分布也是不均匀的，一般来说拥有小额积分的用户比例最大，积分值越高所占用户比例越小。<br>
+在程序中我假设有100万个会员，其中50W用户积分都在100以内，30W用户积分在100-10000，15W用户积分在10000-50000，5W用户积分在50000以上。<br>
+下面是各个操作的耗时时间：<br>
+<img src="https://img2018.cnblogs.com/blog/614524/202001/614524-20200106083945608-277471910.png" alt=""></p>
+<p>可以看到，这个效率不是一般的快啊，其中获取排名的查询时间几乎可以忽略不计。<br>
+这时候有人问了，这么多数据会不会非常吃内存，下面用任务管理器分别查看不使用树和使用树的内存情况：<br>
+<img src="https://img2018.cnblogs.com/blog/614524/202001/614524-20200106084001275-181085370.png" alt=""><br>
+<img src="https://img2018.cnblogs.com/blog/614524/202001/614524-20200106084009141-469295215.png" alt=""></p>
+<p>运行环境是.NetCore3.0 Console，测试主机配置情况：<br>
+<img src="https://img2018.cnblogs.com/blog/614524/202001/614524-20200106084108112-926316417.png" alt=""></p>
+<p>100万数据只有130M内存占用，对现代计算机来说简直是洒洒水~</p>
+<blockquote>
+<p><strong>业务环境中使用务必注意线程安全问题！！！</strong></p>
+</blockquote>
+<br/>
+<h3 id="写在最后">写在最后</h3>
+<p>以上的二叉树算法处理排名问题确实比较巧妙，实现起来也不算特别复杂，如果上述代码有缺陷或有其他更好的方案，欢迎探讨，也算抛砖引玉了~</p>
+<blockquote>
+<p>完整代码及测试用例请戳这里<a href="https://github.com/hey-hoho/NetCoreDemo/tree/master/ConsoleApp/ScoreRank" target="_blank">https://github.com/hey-hoho/NetCoreDemo/tree/master/ConsoleApp/ScoreRank</a></p>
+</blockquote>
+<br/>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2020-01-06 08:50</span>&nbsp;
+<a href="https://www.cnblogs.com/hohoa/">balahoho</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12145689" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(12145689);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 294354, cb_blogApp = 'hohoa', cb_blogUserGuid = '86b892cb-79ae-e311-8d02-90b11c0b17d6';
+    var cb_entryId = 12145689, cb_entryCreatedDate = '2020-01-06 08:50', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 balahoho
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <!-- 右侧图标返回顶部 -->
+<span id="gotop1"><img src="https://files.cnblogs.com/files/hohoa/huojian.ico" alt="返回顶部"></span>
+<script src="https://cdn.bootcss.com/bootstrap/3.2.0/js/transition.js"></script>
+<script src="https://blog-static.cnblogs.com/files/hohoa/zoom.js"></script>
+ <!--鼠标特效-->
+ <script src="https://blog-static.cnblogs.com/files/zouwangblog/mouse-click.js"></script>
+ <canvas width="1777" height="841" style="position: fixed; left: 0px; top: 0px; z-index: 2147483647; pointer-events: none;"></canvas>
+ <!--鼠标特效 end-->
+<script>
+   $('#cnblogs_post_body img').attr('data-action', 'zoom');
+    // scroll body to 0px on click
+    $('#gotop1').click(function() {
+       TweenMax.to(window, 1.5, {scrollTo:0, ease: Expo.easeInOut});
+      var huojian = new TimelineLite();
+      huojian.to("#gotop1", 1, {rotationY:720, scale:0.6, y:"+=40", ease:  Power4.easeOut})
+	.to("#gotop1", 1, {y:-1000, opacity:0, ease:  Power4.easeOut}, 0.6)
+	.to("#gotop1", 1, {y:0, rotationY:0, opacity:1, scale:1, ease: Expo.easeOut, clearProps: "all"}, "1.4");
+        $('body,html').animate({
+            scrollTop: 0
+        }, 1500);
+        return false;
+    });
+    window.onload = function () {
+        if ($("#div_digg") != null) {
+            //添加快速评论按钮
+            $("#div_digg").append("<a href='#tbCommentAuthor' id='quickReply'>快速评论</a>");
+            //快速评论动画
+            $('#quickReply').click(function () {
+                $('html, body').animate({
+                    scrollTop: $($.attr(this, 'href')).offset().top
+                }, 500);
+                return false;
+            });
+        }
+    }
+</script>
+    </div>
+</body>
+</html>

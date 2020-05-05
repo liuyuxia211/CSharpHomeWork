@@ -1,0 +1,500 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="概述 ScheduleMaster 是一个开源的分布式任务调度系统，它基于Asp.Net Core平台构建，支持跨平台多节点部署运行。 它的项目主页在这里： &amp;quot;https://github." />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Asp.Net Core下的开源任务调度平台ScheduleMaster—快速上手 - balahoho - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=BKtyzabbeYJEVOaELkxmRjHbp7LT-v37GzrU5S24bJk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/simplememory/bundle-simplememory.min.css?v=OL4qeo1LNGlN1rKIhv5UctANvt0M6Nx6kLzr_ffx3Xk" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/hohoa/custom.css?v=bvCfrzb5j5f5sKZquyvoKkCcF8w=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/hohoa/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/hohoa/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/hohoa/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=VSP5rTXbJNpNidklGdgoLgwCGyUPITrcsmlgoaMKz3w"></script>
+    <script>
+        var currentBlogId = 294354;
+        var currentBlogApp = 'hohoa';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'SimpleMemory';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    <div id="page_begin_html">
+        <script src="https://files.cnblogs.com/files/hohoa/TweenMax.min.js" defer></script>
+<a href="https://github.com/hey-hoho" target="_blank"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://files.cnblogs.com/files/hohoa/github.ico" alt="Fork me on GitHub" data-evernote-hover-show="true"></a>
+    </div>
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/hohoa/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/hohoa/">HOHO</a>
+</h1>
+<h2>
+你简单，世界就是童话；心复杂，世界就是迷宫。
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/hohoa/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/balahoho">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/hohoa/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+19&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+220</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/hohoa/p/12197518.html">Asp.Net Core下的开源任务调度平台ScheduleMaster—快速上手</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+    <h3 id="概述">概述</h3>
+<p><strong>ScheduleMaster</strong>是一个开源的分布式任务调度系统，它基于Asp.Net Core平台构建，支持跨平台多节点部署运行。</p>
+<p>它的项目主页在这里：</p>
+<blockquote>
+<p><a href="https://github.com/hey-hoho/ScheduleMasterCore">https://github.com/hey-hoho/ScheduleMasterCore</a></p>
+</blockquote>
+<p>关于它的简单介绍可以看这里：</p>
+<blockquote>
+<p><a href="https://www.cnblogs.com/hohoa/p/12162581.html">https://www.cnblogs.com/hohoa/p/12162581.html</a></p>
+</blockquote>
+<br/>
+<h3 id="本地部署">本地部署</h3>
+<blockquote>
+<p>使用前请准备好所需环境：<code>Visual Studio 2019</code>、<code>.Net Core3.0 SDK</code>、<code>Mysql 5.7</code>、<code>Centos(可选)</code>、<code>Docker(可选)</code>。</p>
+</blockquote>
+<p>下载源码到本地，然后用VS2019打开解决方案并编译通过。</p>
+<p>打开项目Hos.ScheduleMaster.Web根目录下的<code>appsettings.json</code>文件，先修改Mysql数据库连接字符串以保证数据库正常访问，再找到<code>NodeSetting</code>节点，修改<code>IP</code>字段为master将要部署的ip地址（master端口为30000不用修改），在项目上右击选择发布...，发布到本地文件夹。</p>
+<p>打开项目Hos.ScheduleMaster.QuartzHost根目录下的<code>appsettings.json</code>文件，同样先修改Mysql连接字符串，再找到<code>NodeSetting</code>节点，设置worker的名称<code>IdentityName</code>，修改<code>IP</code>字段为将要部署的ip地址，<code>Port</code>字段为要监听的地址（推荐为30001），在项目上右击选择发布...，发布到本地文件夹。如果要新增worker，按同样方式配置<code>IdentityName、IP、Port</code>即可，worker在启动后会把自己的信息注入到数据库中，在master中可以看到。</p>
+<p>其他发布方式亦可。下面以运行2个worker节点为例：</p>
+<h4 id="在windows中运行">在Windows中运行</h4>
+<ul>
+<li>找到master的发布目录，执行命令<code>dotnet Hos.ScheduleMaster.Web.dll</code>启动程序，<strong>首次启动会自动迁移生成数据库结构并初始化种子数据，不需要执行脚本创建数据库</strong>，打开浏览器输入ip和端口访问即可（初始用户名<code>admin</code>，密码<code>111111</code>）。</li>
+<li>找到worker的发布目录，执行命令<code>dotnet Hos.ScheduleMaster.QuartzHost.dll --urls http://*:30001</code>启动程序，打开浏览器输入ip和端口会看到一个欢迎页面，表示worker已启动成功。</li>
+<li>修改worker下的<code>appsettings.json</code>文件为worker2的配置（如果发布前已经修改可跳过），执行命令<code>dotnet Hos.ScheduleMaster.QuartzHost.dll --urls http://*:30002</code>启动程序.</li>
+<li>登录到master中，可以看到<strong>节点管理</strong>菜单下各节点的运行状态。</li>
+</ul>
+<h4 id="在linuxcentos中运行">在Linux(Centos)中运行</h4>
+<blockquote>
+<p>运行前请确保机器已经安装好<code>.Net Core3.0</code>运行时环境。</p>
+</blockquote>
+<p>把发布文件复制到Centos中，操作步骤同Windows。</p>
+<h4 id="在docker中运行">在Docker中运行</h4>
+<ul>
+<li>在master的发布目录中执行<code>docker build -t ms_master .</code>命令生成master镜像，再执行<code>docker run -d -p 30000:30000 --name=&quot;mymaster&quot; ms_master</code>运行容器。</li>
+<li>在worker的发布目录中执行<code>docker build -t ms_worker .</code>命令生成worker镜像，再执行<code>docker run --env identity=docker-worker1 --env port=30001 -d -p 30001:80 --name=&quot;myworker1&quot; ms_worker</code>运行容器启动worker1。</li>
+<li>继续执行<code>docker run --env identity=docker-worker2 --env port=30002 -d -p 30002:80 --name=&quot;myworker2&quot; ms_worker</code>运行容器启动worker2。</li>
+<li>执行<code>docker ps</code>查看各容器运行状态。</li>
+</ul>
+<br/>
+<h3 id="接入一个任务">接入一个任务</h3>
+<p>我们看一下如何编写业务代码以及怎么创建和启动一个任务。</p>
+<h4 id="编写业务代码">编写业务代码</h4>
+<p>框架提供了统一的接入口，可以使用如下3种方式：</p>
+<ul>
+<li>
+<p>编译项目后手动添加引用程序集文件<code>Hos.ScheduleMaster.Base.dll</code>。</p>
+</li>
+<li>
+<p>在nuget中搜索<code>ScheduleMaster</code>直接安装到项目中。</p>
+</li>
+<li>
+<p>在命令行中使用<code>dotnet add package ScheduleMaster</code>或程序包管理控制台中使用<code>install-package ScheduleMaster</code>安装。</p>
+</li>
+</ul>
+<p>然后新建一个业务类，集成自<code>Hos.ScheduleMaster.Base.TaskBase</code>，实现它的抽象方法<code>Run</code>就可以了，这个方法就是任务的入口。<br>
+下面是项目中最简单的一个Demo：</p>
+<pre><code class="language-c#">using System;
+using Hos.ScheduleMaster.Base;
+
+namespace Hos.ScheduleMaster.Demo
+{
+    public class Simple : TaskBase
+    {
+        public override void Run(TaskContext context)
+        {
+            context.WriteLog($&quot;当前时间是：{DateTime.Now}&quot;);
+        }
+    }
+}
+</code></pre>
+<blockquote>
+<p>据有些朋友反馈，希望能加入单纯的http调度功能，这个将会作为重点功能在后面开发。</p>
+</blockquote>
+<h4 id="使用控制台创建任务">使用控制台创建任务</h4>
+<p>我以内置到系统中的demo任务为例子。首先登录到master控制台中进入到任务列表页面，选择创建任务，填写好配置信息：<br>
+<img src="https://img2018.cnblogs.com/blog/614524/202001/614524-20200115162450903-1741093746.png" alt=""><br>
+如果需要指定参数，可以按如下方法设置：<br>
+<img src="https://img2018.cnblogs.com/blog/614524/202001/614524-20200115162702628-1484117544.png" alt=""></p>
+<p>在代码中使用如下代码读取自定义参数：</p>
+<pre><code class="language-c#">    public override void Run(TaskContext context)
+    {
+        context.GetArgument&lt;string&gt;(&quot;param1&quot;);
+        context.GetArgument&lt;int&gt;(&quot;param2&quot;);
+    }
+</code></pre>
+<p>如果需要指定监护人，可以按如下方法设置：<br>
+<img src="https://img2018.cnblogs.com/blog/614524/202001/614524-20200115162532949-1791444435.png" alt=""></p>
+<p>如果在执行完成后要自动触发其他的任务，可以通过如下方式设置（拖拽选择）：<br>
+<img src="https://img2018.cnblogs.com/blog/614524/202001/614524-20200115162550900-1706190610.png" alt=""></p>
+<p>前面的任务可以通过如下代码把结果传给后面的任务：</p>
+<pre><code class="language-c#">    public override void Run(TaskContext context)
+    {
+ 		context.Result = new { success = true, message = &quot;后面的兄弟大家好~&quot; };
+    }
+</code></pre>
+<p>后面的任务获取前面的结果：</p>
+<pre><code class="language-c#">    public override void Run(TaskContext context)
+    {
+		object pr=context.PreviousResult;
+    }
+</code></pre>
+<p><strong>这里重点说一下程序包的问题，因为程序包是以程序集名称来打包并管理的，如果多个任务属于同一个程序集中，那么就不需要每个任务都重复上传程序包，同名的程序包重复上传会把已有的覆盖掉。这样子的话程序集的版本问题就要特别注意下，要避免同一程序包里的任务互相影响。</strong></p>
+<blockquote>
+<p>如果你想跑一个示例看看效果，可以按上面截图中配置基础信息即可，不需要再上传程序包。</p>
+</blockquote>
+<h4 id="使用api创建任务">使用API创建任务</h4>
+<p>除了使用控制台页面操作任务，系统还提供了几个简单的WebApi来操作，目前包括创建任务、查询任务详情、查询任务列表。<br>
+下面主要介绍创建任务API，接口定义如下：<br>
+访问地址：<a href="http://localhost:30000/api/task/create">http://localhost:30000/api/task/create</a><br>
+请求类型：POST<br>
+主要参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th>参数类型</th>
+<th>是否必填</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Title</td>
+<td>string</td>
+<td>是</td>
+<td>任务名称</td>
+</tr>
+<tr>
+<td>RunLoop</td>
+<td>bool</td>
+<td>是</td>
+<td>是否按周期执行</td>
+</tr>
+<tr>
+<td>CronExpression</td>
+<td>string</td>
+<td>否</td>
+<td>cron表达式，如果RunLoop为true则必填</td>
+</tr>
+<tr>
+<td>AssemblyName</td>
+<td>string</td>
+<td>是</td>
+<td>程序集名称</td>
+</tr>
+<tr>
+<td>ClassName</td>
+<td>string</td>
+<td>是</td>
+<td>执行类名称，包含完整命名空间</td>
+</tr>
+<tr>
+<td>StartDate</td>
+<td>DateTime</td>
+<td>是</td>
+<td>任务开始时间</td>
+</tr>
+<tr>
+<td>EndDate</td>
+<td>DateTime</td>
+<td>否</td>
+<td>任务停止时间，为空表示不限停止时间</td>
+</tr>
+<tr>
+<td>Remark</td>
+<td>string</td>
+<td>否</td>
+<td>任务描述说明</td>
+</tr>
+<tr>
+<td>CreateUserName</td>
+<td>string</td>
+<td>是</td>
+<td>创建人用户名</td>
+</tr>
+<tr>
+<td>Keepers</td>
+<td>List&lt;int&gt;</td>
+<td>否</td>
+<td>监护人id</td>
+</tr>
+<tr>
+<td>Params</td>
+<td>List&lt;ScheduleParam&gt;</td>
+<td>否</td>
+<td>自定义参数列表</td>
+</tr>
+</tbody>
+</table>
+<p>对接流程：</p>
+<ul>
+<li>在控制台中创建好专用的API对接用户账号。</li>
+<li>使用对接账号的用户名设置为http header中的<code>ms_auth_user</code>值。</li>
+<li>使用加密过的秘钥设置为http header中的<code>ms_auth_secret</code>值，加密规则：按<code>{用户名}{密码}{用户名}</code>的格式拼接，然后用32位的MD5算法进行加密，最后转换成小写字符串得到秘钥。</li>
+<li>使用form格式发起http调用，如果非法用户会返回401-Unauthorized。</li>
+</ul>
+<blockquote>
+<p>接口验签这块设计的比较简陋，因为考虑到这个场景使用的不多而且基本是内部系统调用，所以只做了简单验证。具体实现代码在<code>Hos.ScheduleMaster.Web.Filters.AccessControlFilter</code>。</p>
+</blockquote>
+<p>创建成功会返回任务id。</p>
+<blockquote>
+<p>要提一下的是，使用API创建任务的方式不支持上传程序包，所以在任务需要启动时要确保程序包已通过其他方式上传，否则会启动失败。</p>
+</blockquote>
+<h4 id="启动流程">启动流程</h4>
+<p><img src="https://img2018.cnblogs.com/blog/614524/202001/614524-20200115163045712-1984919064.png" alt=""></p>
+<br/>
+<h3 id="日志跟踪">日志跟踪</h3>
+<p>在设计上，我把任务的每次运行定义为一个<code>Trace</code>并为之分配一个<code>traceid</code>，这样的话就能对产生的日志进行归类，区分哪一条是哪次运行产生的。<br>
+写入日志的方法为：</p>
+<pre><code class="language-c#">    public override void Run(TaskContext context)
+    {
+		context.WriteLog(&quot;xxxxxxx&quot;);
+		context.WriteError(exception);
+    }
+</code></pre>
+<p>页面上在这里查看：<br>
+<img src="https://img2018.cnblogs.com/blog/614524/202001/614524-20200115162631637-1872822511.png" alt=""></p>
+<p>单击左边的运行记录可以看到与之关联的详细日志信息：<br>
+<img src="https://img2018.cnblogs.com/blog/614524/202001/614524-20200115162642963-1215298238.png" alt=""></p>
+<p>好了，这篇先就这么多~</p>
+<br/>
+<h3 id="结尾">结尾</h3>
+<p>如果有疑问，可以加入交流QQ群：824535095。<br>
+如果有优化建议或者发现了bug，欢迎提issue：<a href="https://github.com/hey-hoho/ScheduleMasterCore/issues">https://github.com/hey-hoho/ScheduleMasterCore/issues</a><br>
+<br/></p>
+
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2020-01-15 17:06</span>&nbsp;
+<a href="https://www.cnblogs.com/hohoa/">balahoho</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12197518" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(12197518);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 294354, cb_blogApp = 'hohoa', cb_blogUserGuid = '86b892cb-79ae-e311-8d02-90b11c0b17d6';
+    var cb_entryId = 12197518, cb_entryCreatedDate = '2020-01-15 17:06', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 balahoho
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <!-- 右侧图标返回顶部 -->
+<span id="gotop1"><img src="https://files.cnblogs.com/files/hohoa/huojian.ico" alt="返回顶部"></span>
+<script src="https://cdn.bootcss.com/bootstrap/3.2.0/js/transition.js"></script>
+<script src="https://blog-static.cnblogs.com/files/hohoa/zoom.js"></script>
+ <!--鼠标特效-->
+ <script src="https://blog-static.cnblogs.com/files/zouwangblog/mouse-click.js"></script>
+ <canvas width="1777" height="841" style="position: fixed; left: 0px; top: 0px; z-index: 2147483647; pointer-events: none;"></canvas>
+ <!--鼠标特效 end-->
+<script>
+   $('#cnblogs_post_body img').attr('data-action', 'zoom');
+    // scroll body to 0px on click
+    $('#gotop1').click(function() {
+       TweenMax.to(window, 1.5, {scrollTo:0, ease: Expo.easeInOut});
+      var huojian = new TimelineLite();
+      huojian.to("#gotop1", 1, {rotationY:720, scale:0.6, y:"+=40", ease:  Power4.easeOut})
+	.to("#gotop1", 1, {y:-1000, opacity:0, ease:  Power4.easeOut}, 0.6)
+	.to("#gotop1", 1, {y:0, rotationY:0, opacity:1, scale:1, ease: Expo.easeOut, clearProps: "all"}, "1.4");
+        $('body,html').animate({
+            scrollTop: 0
+        }, 1500);
+        return false;
+    });
+    window.onload = function () {
+        if ($("#div_digg") != null) {
+            //添加快速评论按钮
+            $("#div_digg").append("<a href='#tbCommentAuthor' id='quickReply'>快速评论</a>");
+            //快速评论动画
+            $('#quickReply').click(function () {
+                $('html, body').animate({
+                    scrollTop: $($.attr(this, 'href')).offset().top
+                }, 500);
+                return false;
+            });
+        }
+    }
+</script>
+    </div>
+</body>
+</html>

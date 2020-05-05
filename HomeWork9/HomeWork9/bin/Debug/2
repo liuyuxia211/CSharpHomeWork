@@ -1,0 +1,378 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="写在前面 前两天看到张善友老师的一篇文章《先定个小目标, 使用C# 开发的千万级应用》，里面给出了一张腾讯OA基础服务中redis运行情况的一张监控图，然后想到自己的项目中前不久也上了redis缓存，" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>在Centos中部署redis运行状态图形化监控工具 — RedisLive - balahoho - 博客园</title>
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=BKtyzabbeYJEVOaELkxmRjHbp7LT-v37GzrU5S24bJk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/simplememory/bundle-simplememory.min.css?v=OL4qeo1LNGlN1rKIhv5UctANvt0M6Nx6kLzr_ffx3Xk" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/hohoa/custom.css?v=bvCfrzb5j5f5sKZquyvoKkCcF8w=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/hohoa/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/hohoa/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/hohoa/wlwmanifest.xml" />
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=VSP5rTXbJNpNidklGdgoLgwCGyUPITrcsmlgoaMKz3w"></script>
+    <script>
+        var currentBlogId = 294354;
+        var currentBlogApp = 'hohoa';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'SimpleMemory';
+    </script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    <div id="page_begin_html">
+        <script src="https://files.cnblogs.com/files/hohoa/TweenMax.min.js" defer></script>
+<a href="https://github.com/hey-hoho" target="_blank"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://files.cnblogs.com/files/hohoa/github.ico" alt="Fork me on GitHub" data-evernote-hover-show="true"></a>
+    </div>
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/hohoa/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/hohoa/">HOHO</a>
+</h1>
+<h2>
+你简单，世界就是童话；心复杂，世界就是迷宫。
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/hohoa/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/balahoho">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/hohoa/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+19&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+220</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/hohoa/p/5860896.html">在Centos中部署redis运行状态图形化监控工具 — RedisLive</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body ">
+    <p style="line-height: 1.75em;"><span style="font-size: 18px;"><strong><span style="font-family: 微软雅黑, 'Microsoft YaHei';">写在前面</span></strong></span></p>
+<p style="line-height: normal;">&nbsp;</p>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">前两天看到张善友老师的一篇文章《</span><a href="http://mp.weixin.qq.com/s?__biz=MzAwNTMxMzg1MA==&amp;mid=2654067903&amp;idx=1&amp;sn=b7dbc68796950b27a69acea973b414bc&amp;scene=0#wechat_redirect"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">先定个小目标, 使用C# 开发的千万级应用</span></a><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">》，里面给出了一张腾讯OA基础服务中redis运行情况的一张监控图，然后想到自己的项目中前不久也上了redis缓存，所以也想找个监控工具。搜索一番，决定使用RedisLive来做监控。</span></p>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">&nbsp;</span></p>
+<p style="line-height: 1.75em;"><span style="font-size: 18px;"><strong><span style="font-size: 18px; font-family: 微软雅黑, 'Microsoft YaHei';">和RedisLive有关的信息</span></strong></span></p>
+<p style="line-height: normal;">&nbsp;</p>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">RedisLive是由python编写的并且开源的图形化监控工具，非常轻量级，核心服务部分只包含一个web服务和一个基于redis自带的info命令以及monitor命令的监控服务，界面上只有一个基于BootStrap的web界面，非常简洁明了。除此之外，它还支持多实例监控，切换方便，而且配置起来也非常容易。监控信息支持redis存储和持久化存储(sqlite)两种方式。开源地址为：</span><a href="https://github.com/nkrode/RedisLive"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">https://github.com/nkrode/RedisLive</span></a><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">。</span></p>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">&nbsp;</span></p>
+<p style="line-height: 1.75em;"><span style="font-size: 18px;"><strong><span style="font-size: 18px; font-family: 微软雅黑, 'Microsoft YaHei';">部署过程</span></strong></span></p>
+<p style="line-height: normal;">&nbsp;</p>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">这里继续使用之前配置好的centos环境，配置步骤点<a href="http://www.cnblogs.com/hohoa/p/5691071.html" target="_blank">这里</a>。Linux系统通常都已经装好了python环境，所以我们就不用额外再装一次，运行命令：</span></p>
+<div class="cnblogs_code">
+<pre>python &ndash;V </pre>
+</div>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">可以查看系统中的python版本。由于RedisLive是依赖于redis服务和web服务的，所以我们要先安装一些依赖包。</span></p>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">Python中的包管理工具是pip，默认情况下centos是没有安装pip的，所以先装好pip这个工具方便后面使用。</span></p>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">打开Xshell，连接上虚拟机，输入命令下载安装包：</span></p>
+<div class="cnblogs_code">
+<pre>wget --no-check-certificate https:<span style="color: #008000;">//</span><span style="color: #008000;">github.com/pypa/pip/archive/1.5.5.tar.gz</span></pre>
+</div>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">解压压缩包：</span></p>
+<div class="cnblogs_code">
+<pre>tar zvxf 1.5.5.tar.gz    #解压文件</pre>
+</div>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">进入到pip文件目录：</span></p>
+<div class="cnblogs_code">
+<pre>cd pip-1.5.5</pre>
+</div>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">执行安装命令：</span></p>
+<div class="cnblogs_code">
+<pre>python setup.py install</pre>
+</div>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">然后会看到一大堆的安装信息快速闪过，看到最后输出</span></p>
+<div class="cnblogs_code">
+<pre>Finished processing dependencies <span style="color: #0000ff;">for</span> pip==1.5.5</pre>
+</div>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">就表示安装成功了。</span></p>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">如果看到安装失败输出错误信息：</span></p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">Traceback (most recent call last):  
+
+File </span><span style="color: #ff0000;">"setup.py"</span>, line 31, <span style="color: #0000ff;">in</span> &lt;module&gt;<span style="color: #000000;">  
+
+ from setuptools </span><span style="color: #0000ff;">import</span><span style="color: #000000;"> setup, find_packages  
+
+ImportError: No module named setuptools</span></pre>
+</div>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">说明有一个依赖工具setuptools缺失，返回根目录下载setuptools安装包：</span></p>
+<div class="cnblogs_code">
+<pre>cd ~          <span style="color: #008000;">//</span><span style="color: #008000;">返回根目录</span>
+<span style="color: #000000;">
+wget http:</span><span style="color: #008000;">//</span><span style="color: #008000;">pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg  //下载安装包</span></pre>
+</div>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">然后执行：</span></p>
+<div class="cnblogs_code">
+<pre>sh setuptools-0.6c11-py2.7.egg</pre>
+</div>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">安装完setuptools后，再次运行&ldquo;python setup.py install&rdquo;就能成功安装pip了。</span></p>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">&nbsp;</span></p>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">然后开始安装RedisLive的依赖项。先装好python中的web服务器tornado：</span></p>
+<div class="cnblogs_code">
+<pre>pip install tornado</pre>
+</div>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">再安装redis的python版SDK：</span></p>
+<div class="cnblogs_code">
+<pre>pip install redis</pre>
+</div>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">最后安装一个时间工具：</span></p>
+<div class="cnblogs_code">
+<pre>pip install python-dateutil</pre>
+</div>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">如果你的python版本小于2.7，还需要安装argparse&nbsp;：</span></p>
+<div class="cnblogs_code">
+<pre>pip install argparse</pre>
+</div>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">到现在为止，准备工作已经完成了，然后开始正式部署RedisLive。</span></p>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">先下载好RedisLive的源码，可以直接在虚拟机上使用git命令从github上下载(推荐)：</span></p>
+<div class="cnblogs_code">
+<pre>git clone https:<span style="color: #008000;">//</span><span style="color: #008000;">github.com/kumarnitin/RedisLive.git</span></pre>
+</div>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">也可以在本地下载好压缩包然后传到虚拟机上，下载地址：</span></p>
+<p style="line-height: 1.75em;"><a href="https://codeload.github.com/nkrode/RedisLive/legacy.zip/master"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">https://codeload.github.com/nkrode/RedisLive/legacy.zip/master</span></a></p>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">下载完成后可以看到源码结构为：</span></p>
+<p style="line-height: 1.75em;"><img src="https://images2015.cnblogs.com/blog/614524/201609/614524-20160911031709973-829848889.png" alt="" /></p>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">其中redis-live.conf.example是作者给出的一个示例配置文件，启动服务之前把.example后缀删掉变成.conf文件（因为官网给的信息是编辑redis-live.conf来做配置，实际上从github上clone的代码里并没有redis-live.conf这个文件，当时一直找.cong结尾的文件始终找不到，仔细一看原来是redis-live.conf.example，有点坑啊~），打开redis-live.conf，配置好redis实例的信息：</span></p>
+<p style="line-height: 1.75em;"><img src="https://images2015.cnblogs.com/blog/614524/201609/614524-20160911031718410-1420970183.png" alt="" /></p>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">整个配置实际上是一个json对象，RedisServers是redis服务器的信息，由于是数组类型所以配置多个redis实例。DataStoreType是监控信息的存储方式，有&rdquo;redis&rdquo;和&rdquo; sqlite&rdquo;两种方式，分别对应下面RedisStatsServer和SqliteStatsStore，编辑完成后保存。</span></p>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">redis-live.py是用来启动web服务的，默认端口是8888 。redis-monitor.py就是redis监控的核心服务。</span></p>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">&nbsp;</span></p>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">到此为止所有准备工作都完成了，最后来启动服务：</span></p>
+<div class="cnblogs_code">
+<pre>.<span style="color: #ff0000;">/</span>redis-monitor.py --duration=30     <span style="color: #ff0000;">//</span>启动监控，duration是心跳时间
+<span style="color: #000000;">
+.</span><span style="color: #ff0000;">/</span>redis-live.py                    <span style="color: #ff0000;">//</span>启动web服务，默认监听8888端口</pre>
+</div>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">然后在浏览器中打开</span><a href="http://192.168.3.222:8888/index.html"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">http://192.168.3.222:8888/index.html</span></a><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">，就可以看到监控信息了：</span></p>
+<p style="line-height: 1.75em;"><img src="https://images2015.cnblogs.com/blog/614524/201609/614524-20160911031735535-306953620.png" alt="" /></p>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">数据会30秒刷新一次，因为我们在启动了时候设置了心跳时间。在页面右上角有一个下拉列表，里面是在配置文件里设置好的redis实例，可以轻松切换。其他功能可以在页面中慢慢感受。</span></p>
+<p style="line-height: 1.75em;"><span style="font-size: 14px; font-family: 微软雅黑, 'Microsoft YaHei';">由于我的项目现在没有具体业务在跑所以监控数据不是很多，最后再来一张官网给出的效果图：</span></p>
+<p style="line-height: 1.75em;"><img src="https://images2015.cnblogs.com/blog/614524/201609/614524-20160911031744348-1210582679.png" alt="" /></p>
+<p style="line-height: 1.75em;"><span style="font-family: 'Microsoft YaHei';">至此，部署成功！</span></p>
+<p style="line-height: 1.75em;">&nbsp;</p>
+<p style="line-height: 1.75em;"><span style="font-size: 18px;"><strong><span style="font-family: 微软雅黑, 'Microsoft YaHei';">总结</span></strong></span></p>
+<p><span style="font-family: 'Microsoft YaHei';">虽然并不懂python语言也从来没有接触过，但凭借着这三年写代码的感觉丝毫不影响整个部署过程，打开python源码文件有些代码也能大致猜到是什么意思。再次让我感受到在编程世界，用什么语言并不重要，重要的是什么语言能满足实际需要，编程语言虽然不是完全相通的，但还是有太多相似的。</span></p>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2016-09-12 11:31</span>&nbsp;
+<a href="https://www.cnblogs.com/hohoa/">balahoho</a>&nbsp;
+阅读(<span id="post_view_count">...</span>)&nbsp;
+评论(<span id="post_comment_count">...</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=5860896" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(5860896);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/9.12.0/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 294354, cb_blogApp = 'hohoa', cb_blogUserGuid = '86b892cb-79ae-e311-8d02-90b11c0b17d6';
+    var cb_entryId = 5860896, cb_entryCreatedDate = '2016-09-12 11:31', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;"></div>
+    </div>
+    <div id="under_post_news"></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        </div>
+    </div>
+    <div id="under_post_kb"></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2020 balahoho
+<br /><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <!-- 右侧图标返回顶部 -->
+<span id="gotop1"><img src="https://files.cnblogs.com/files/hohoa/huojian.ico" alt="返回顶部"></span>
+<script src="https://cdn.bootcss.com/bootstrap/3.2.0/js/transition.js"></script>
+<script src="https://blog-static.cnblogs.com/files/hohoa/zoom.js"></script>
+ <!--鼠标特效-->
+ <script src="https://blog-static.cnblogs.com/files/zouwangblog/mouse-click.js"></script>
+ <canvas width="1777" height="841" style="position: fixed; left: 0px; top: 0px; z-index: 2147483647; pointer-events: none;"></canvas>
+ <!--鼠标特效 end-->
+<script>
+   $('#cnblogs_post_body img').attr('data-action', 'zoom');
+    // scroll body to 0px on click
+    $('#gotop1').click(function() {
+       TweenMax.to(window, 1.5, {scrollTo:0, ease: Expo.easeInOut});
+      var huojian = new TimelineLite();
+      huojian.to("#gotop1", 1, {rotationY:720, scale:0.6, y:"+=40", ease:  Power4.easeOut})
+	.to("#gotop1", 1, {y:-1000, opacity:0, ease:  Power4.easeOut}, 0.6)
+	.to("#gotop1", 1, {y:0, rotationY:0, opacity:1, scale:1, ease: Expo.easeOut, clearProps: "all"}, "1.4");
+        $('body,html').animate({
+            scrollTop: 0
+        }, 1500);
+        return false;
+    });
+    window.onload = function () {
+        if ($("#div_digg") != null) {
+            //添加快速评论按钮
+            $("#div_digg").append("<a href='#tbCommentAuthor' id='quickReply'>快速评论</a>");
+            //快速评论动画
+            $('#quickReply').click(function () {
+                $('html, body').animate({
+                    scrollTop: $($.attr(this, 'href')).offset().top
+                }, 500);
+                return false;
+            });
+        }
+    }
+</script>
+    </div>
+</body>
+</html>
